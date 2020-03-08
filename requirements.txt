@@ -2,7 +2,7 @@ Django==1.9.5
 Fabric==1.10.2
 Jinja2==2.8
 MarkupSafe==0.23
-Pillow==2.8.2
+Pillow==6.2.0
 PyYAML==3.11
 SQLAlchemy==1.0.8
 Scrapy==1.0.5
