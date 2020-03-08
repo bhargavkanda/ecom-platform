@@ -1,0 +1,59 @@
+<html>    
+<head>    
+ <script type="text/javascript">  	
+	var globaldata;      
+	function setdata() {   
+	       
+		globaldata = document.getElementById("demo").innerHTML;
+		// console.log(globaldata);      
+	}      
+	function postResponseiOS() {          
+		// console.log(globaldata,"kkkkk");  
+		return globaldata;
+
+	}      
+	function postResponse() {          
+		CitrusResponse.pgResponse(globaldata);   
+		// return globaldata; 
+	}    
+// </script>  
+
+</head>     
+<body>    
+
+  <!-- {% if data != "error" %} -->
+  
+  	<!-- hey -->
+  	
+    
+    <!-- hey -->
+    <div id="demo" style="display:none;"> {{ data }} </div> 
+   
+  <!-- {% endif %} -->
+
+
+  <script type="text/javascript">
+
+  	// console.log({{ data }})
+  	{% autoescape off %}
+	  	// globaldata = {{ data }}
+	  	// document.getElementById("demo").innerHTML = globaldata;
+
+	  	// var fso = new ActiveXObject("Scripting.FileSystemObject");
+	  	// var a = fso.CreateTextFile("/home/zapyle/server_codes/newhtml.txt", true);
+	  	// a.WriteLine(String(da));
+	  	
+
+	  	// json_data = JSON.stringify(da)
+	  	// a.WriteLine("-----"+String(da));
+	  	// a.Close();
+	  	// console.log(json_data)
+	  	// globaldata = da;
+	  	setdata();
+	  	postResponseiOS();
+	  	postResponse();
+	  	{% endautoescape %}
+	  	
+    </script>   
+</body>     
+</html>  

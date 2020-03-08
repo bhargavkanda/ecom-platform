@@ -1,0 +1,32 @@
+Total Number of Orders : [[order_dict.total]]<br>
+    Average Value Of Orders : [[order_dict.avg_price]]<br>
+    Average Delivery Time : [[order_dict.avg_delivery]]<br>
+    Order With Coupons : [[order_dict.withCoupon]]<br>
+    Average Discount On Orders : [[order_dict.avg_disc]]<br>
+    Total Transactions from Yesterday : [[order_dict.transCount]]<button ng-show="ud.joined" ng-click="trans_flag=true">Show</button><br>
+    <b><u>Segmentation</u></b><br>
+    <select ng-model="o_type" ng-init="o_type='origin'" ng-change="change_table_flag()">
+        <option value="origin">By Origin City</option>
+        <option value="destination">By Destination City</option>
+    </select>
+    <button ng-click="load_filtered_orders(o_type,'segmentation')">Load</button><br>
+    <table ng-show="table_flag==true">
+        <tr ng-repeat="uc in orderCount">
+            <td>[[uc.city]]</td>
+            <td>[[uc.cnt]]</td>
+        </tr>
+    </table>
+
+    <div class="pri-overlay size-guide is_visible" ng-show="trans_flag">
+        <div class="glass"></div>
+        <div class="content">
+            <div class="header">New Transaction<span class="close" ng-click="trans_flag=false">x</span></div>
+            <div class="body">
+                <table>
+                <tr ng-repeat="trans in order_dict.transDetails">
+                    <td align="left">[[trans]]</td></tr>
+                </table>
+
+            </div>
+        </div>
+    </div>

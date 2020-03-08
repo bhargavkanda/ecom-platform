@@ -1,0 +1,274 @@
+<script type="text/javascript">
+    function onReady(callback) {
+        var intervalID = window.setInterval(checkReady, 1000);
+        function checkReady() {
+            if (document.getElementsByTagName('body')[0] !== undefined) {
+                window.clearInterval(intervalID);
+                callback.call(this);
+            }
+        }
+    }
+    function show_loader(id, value) {
+        document.getElementById(id).style.display = value ? 'block' : 'none';
+    }
+    // onReady(function () {
+    //     show('page', true);
+    //     show('loading', false);
+    // });
+</script>
+<div id="loading"></div>
+<div class="main-content">
+    <div class="pri-overlay size-guide">
+        <div class="glass"></div>
+        <div class="content">
+            <div class="header">Size Guide<span class="close" ng-click="open_size_guide('close')"></span></div>
+            <div class="body">
+                <img style="max-width: 400px;" ng-if="selectedProduct.size[0].category_type!='FW'" src="/zapstatic/frontend/images/size_guide.jpg">
+                <img style="max-width: 400px;" ng-if="selectedProduct.size[0].category_type=='FW'" src="/zapstatic/frontend/images/size_guide_shoe.jpg">
+            </div>
+        </div>
+    </div>
+    <div class="pri-overlay condition-guide">
+        <div class="glass"></div>
+        <div class="content">
+          <div class="close"></div>
+        <div class="header">
+            <b>Condition Guide</b>
+          </div>
+          <div class="body">
+            <b>New with Tag: </b>
+            <ul>
+                <li>This is an authentic, pre-owned piece</li>
+                <li>This is a new item that has not been used and shows no signs of wear</li>
+                <li>Original tags or labels are attached to the items</li>
+                <li>There may be natural imperfections from the manufacturer</li>
+            </ul>
+            <b>Mint Condition:</b>
+            <ul>
+                <li>This is an authentic, pre-owned piece</li>
+                <li>There must be imperfections as it is a pre-owned item</li>
+                <li>This item is in a good condition but shows some signs of gentle-to-normal wear</li>
+            </ul>
+            <b>Gently Loved:</b>
+            <ul>
+                <li>This is an authentic, pre-owned piece</li>
+                <li>There must be imperfections as it is a pre-owned item</li>
+                <li>This item is in a "loved" condition and may have obvious signs of wear</li>
+                <li>We see these flaws and blemishes as unique characteristics that are exclusive to vintage or previously owned items</li>
+            </ul>
+            <b>Worn out:</b>
+            <ul>
+                <li>This is an authentic, pre-owned piece</li>
+                <li>There must be imperfections as it is pre-owned item</li>
+                <li>This item is in “worn out” condition and may have obvious signs of wear</li>
+                <li>This item might be worn between 5-10 times but it brings in a story and a memory along with it.</li>
+            </ul>
+          </div>
+          </div>
+  </div>
+    <div class="content" id="page">
+
+        <div class="size6of12">
+
+            <div class="product-images">
+                <ul class="thumbnails">
+                    <!-- <li class="size2of12 is_current"><img src="[[selectedProduct.thumbnails[0].url]]"></li> -->
+                    <li class="size2of12 img_class" id="img[[thumbs.id]]" ng-class="{'is_current':$index==0}" ng-click="get_big_size(thumbs.id,thumbs.url)" ng-repeat="thumbs in selectedProduct.thumbnails"><img ng-src="[[thumbs.url]]"></li>
+                </ul>
+                <div class="large">
+                    <div class="product-love icon-heart-empty" ng-if="selectedProduct.liked_by_user == false" ng-click="product_like(selectedProduct.id,'like')" data="[[selectedProduct.id]]" id="P[[selectedProduct.id]]"></div>
+
+                    <div class="product-love icon-heart" ng-if="selectedProduct.liked_by_user == true" ng-click="product_like(selectedProduct.id,'unlike')" data="[[selectedProduct.id]]" id="P[[selectedProduct.id]]"></div>
+                    <img src="[[selectedProduct.image1]]">
+                </div>
+                
+            </div>
+            <div class="engagement">
+                <div class="headers">
+                    <span class="loves" ng-click="sub_tab='loves';get_loves(selectedProduct.id);" ng-class="{'is_current':sub_tab=='loves'}">[[selectedProduct.likesCount]] Loves</span>
+                    <span class="comments" ng-click="getComments(selectedProduct.id);sub_tab='comments'" ng-class="{'is_current':sub_tab=='comments'}">[[selectedProduct.commentCount]] Comments</span>
+                    <span class="seller-name" ng-click="get_loves();sub_tab='seller_snipet'" ng-class="{'is_current':sub_tab=='seller_snipet'}">@[[selectedProduct.user.zap_username]]</span>
+                </div>
+                <div class="info">
+                    <div class="loves-all" ng-class="{'is_visible':sub_tab=='loves'}">
+                        <ul class="users-list">
+                            <li class="user" ng-repeat="user in liked_users">
+                                <a href="#profile/[[user.loved_by.id]]">
+                                    <span class="user-dp"><img src="[[user.loved_by.profile_pic]]"></span>
+                                    <span class="name">[[user.loved_by.zap_username]]</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="comments-all" ng-class="{'is_visible':sub_tab=='comments'}">
+                        <ul class="comments-list">
+                            <li class="compose comment">
+                                <span class="user-dp">
+                                    <img ng-show="profilePic" src="[[profilePic]]">
+                                    <img ng-hide="profilePic" src="/zapstatic/frontend/images/default_avatar.jpg"></span>
+                                <span class="comment-content">
+                                    <span class="text-wrapper"><textarea ng-model="commentText" class="comment-text"></textarea></span>
+                                <a class="post" ng-click="postComment()"><span class="up"></span><span class="down"></span></a>
+                                </span>
+                            </li>
+
+                            <li class="comment" ng-repeat="c in Comments | reverse">
+                                <span class="user-dp"><img src="[[c.commented_by.profile_pic]]"></span>
+                                <a ng-click="deleteComment(c)" ng-if="user_id == c.commented_by.id || user_id == selectedProduct.user.id" class="close"></a>
+                                <!-- <a ng-click="deleteComment(c)" ng-class="{'close':true}" style="font-family:'zapyle';">\e82c</a>  -->
+
+                                <span class="comment-content">
+                                    <div class="name"><a href="#/profile/[[c.commented_by.id]]">[[ c.commented_by.zap_username ]]</a></div>
+                                    <div class="comment-text">[[c.comment]]</div> 
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="seller-snippet" ng-init="sub_tab='seller_snipet'" ng-class="{'is_visible':sub_tab=='seller_snipet'}">
+                        <div class="seller-info">
+                            <a href="#/profile/[[selectedProduct.user.id]]">
+                                <img ng-src="[[selectedProduct.user.profile_pic]]">
+                                <span class="name">[[selectedProduct.user.zap_username]]
+</span>
+                                <span class="style">[[selectedProduct.admires_count]] Admirers</span><span class="closet-size">[[selectedProduct.num_products_of_user]] Products</span></a>
+                        </div>
+
+
+
+                        <button ng-click="admire(selectedProduct)" class="pri-button" ng-class="{'admiring':selectedProduct.admire_or_not==true}" ng-hide="selectedProduct.user.id == user_id"></button>
+                        <ul class="products-list">
+                            <li ng-repeat="p in selectedProduct.user.product_images">
+                                <a href="#/product/[[p.id]]"><img src="[[p.url]]"></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="product-details size6of12">
+            <h1 class="product-title">[[selectedProduct.title]]</h1>
+            <div class="product-description">[[selectedProduct.description]].</div>
+            <div class="attributes">
+                <div class="brand attribute">
+                    <span>Brand: </span>
+                    <span id="product-brand">[[selectedProduct.brand.brand]]</span>
+                </div>
+                <div class="size attribute">
+                    <span>SIZE: <a ng-click="open_size_guide('open')" class="guide_link">Guide</a></span>
+                    <div class="normal-sizes" ng-hide="item_size.category_type == 'FS'">
+                        <span class="size-item" ng-class="{'is_selected':selectedProduct.size.length == 1 && !s.quantity==0, 'buy-button sold-out': s.quantity==0}" ng-repeat="s in selectedProduct.size" data-id="[[s.id]]"><span class="size-type">[[selectedProduct.size_type]]</span><span class="size">[[selectedProduct.size_type == 'US' ? s.us_size : (selectedProduct.size_type == 'UK' ? s.uk_size : (selectedProduct.size_type == 'EU' ? s.eu_size : ''))]]</span>
+                        <!-- <span class="size-type">UK</span><span class="size">[[s.uk_size]]</span> --></span>
+                    </div>
+                    <div class="free-size" ng-show="item_size.category_type == 'FS'">Free Size</div>
+                </div>
+
+                <div ng-hide="selectedProduct.user.user_type == 'store_front'">
+                <div class="age attribute" ng-show="selectedProduct.age">
+                    <span>AGE: </span>
+                    <span>[[selectedProduct.age]]</span>
+                </div>
+                <div class="condition attribute" ng-show="selectedProduct.condition">
+                    <span>CONDITION: <a ng-click="open_condition_guide('open')" class="guide_link">Guide</a></span>
+                    <span>[[selectedProduct.condition]]</span>
+                </div> 
+                </div>
+            </div>
+
+            <div class="price" ng-if="selectedProduct.sale == '2'">
+                <span class="new icon-rupee">[[selectedProduct.listing_price | number:0]]</span>
+                <span class="old icon-rupee"> [[selectedProduct.original_price | number:0]]</span>
+                <span class="discount">[[selectedProduct.discount*100| limitTo : limit : begin | number:0]]</span>
+                <span class="get_app_link">*Download the App and get Rs. 200 off. <a target="_blank" href="https://geo.itunes.apple.com/us/app/zapyle/id1032735636?mt=8">iPhone</a><a target="_blank" href="https://play.google.com/store/apps/details?id=com.zapyle.zapyle">Android</a><span>
+                    </span></span>
+            </div>
+            <div class="quantity" ng-if="selectedProduct.sale == '2'" ng-hide="$scope.totalQuantity==0 || selectedProduct.user.user_type == 'zap_user'">
+                <span>Quantity: </span>
+                <p id="quantity" ng-if="QuantityCheck == true">Product is not available</p>
+                <span class="change" ng-click="decrement_quantity()">-</span>
+                <span>[[item_quantity]]</span>
+                <span class="change" ng-click="increment_quantity()">+</span>
+                <span class="error-msg" ng-class="{'is_visible':quantity_over_try==true}">Sorry! We have only [[available_quantity]] available.</span>
+            </div>
+            <div ng-if="user_id!=selectedProduct.user.id && selectedProduct.sale == '2'">
+                <a ng-show="!buy_pleasewait" class="buy-button" ng-hide="totalQuantity==0" ng-click="Buy()">Buy</a>
+                <!-- <span style="color:red;" ng-show="select_size_flag==true">Please select a size</span> -->
+                <a ng-show="buy_pleasewait" class="buy-button">Please wait</a>
+                <a class="buy-button sold-out" ng-show="totalQuantity==0">SOLD OUT</a>
+                <p class="error-msg">Please select a size for the product.</p>
+            </div>
+            <div ng-if="user_id==selectedProduct.user.id">
+                <span class='buy-button' ng-if="selectedProduct.can_delete==true"><a href="#/editproduct/[[selectedProduct.id]]">Edit</a></span>
+                <a class="buy-button" ng-if="selectedProduct.can_delete==true" ng-click="deleteProduct(selectedProduct.id)">Delete
+                </a>
+            </div>
+            <div class="pincode-check" ng-if="selectedProduct.sale == '2'">
+                <a class="info-link">Check payment and delivery options at your location</a>
+                <div class="check pincode">
+                    <input ng-model="pin" type="text" placeholder="Pincode"><a ng-click="check_pincode(pin)">></a>
+                    <!-- <a class="close" ng-click="check_pin_flag=0"></a> -->
+                    <span class="error-msg pincode" ng-class="{'is_visible':pin_flag==404}">Sorry! This pincode is not available with us now.</span>
+                    <span class="info-msg delivery" ng-class="{'is_visible':pin_flag==200}">We deliver to this location.</span><span class="info-msg both">Both pickup and delivery available.</span>
+                </div>
+            </div>
+                
+
+            <div class="accordion" ng-init="header1=1">
+                <div class="item" ng-class="{'open':header1==1}">
+                    <a ng-click="header1=!header1;header2=header3=0"><h6 class="header">Product Details</h6></a>
+                    <div class="content product-parameters">
+                        <div class="attribute" ng-show="selectedProduct.occasion">
+                            <span>Occasion: </span>
+                            <span>[[selectedProduct.occasion.name]]</span>
+                        </div>
+                        <div class="attribute" ng-show="selectedProduct.style">
+                            <span>Style: </span>
+                            <span id="product-style">[[selectedProduct.style.style_type]]</span>
+                        </div>
+
+                        <div class="attribute" ng-show="selectedProduct.color">
+                            <span>Color: </span>
+                            <span>[[selectedProduct.color.name]]</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="item" ng-class="{'open':header2==1}">
+                    <a ng-click="header2=!header2;header1=header3=0"><h6 class="header">Buyer Protection</h6></a>
+                    <div class="content">
+                        <b>Guaranteed Authenticity</b>
+                        <ul>
+                            <li>Zapyle guarantees authenticity of its items.</li>
+                            <li>Each item goes through a rigorous authentication process with industry leading protocols and Zapyle is in constant contact with brands and fashion houses to guarantee authenticity.</li>
+                            <li>Zapyle protects its buyer by giving you 24 hours return period. If you are not happy with the product, we accept the return with no questions asked. In the event you wish to return your product, Zapyle will reimburse the entire amount as store credit in your Zap wallet.</li>
+                        </ul>
+                        <b>Credit Card Checkout</b>
+                        <ul>
+                            <li>Zapyle accepts credit and debit cards including Visa, Mastercard, American Express and Discover, as well as payments through Net Banking accounts. For your protection, all transactions are powered by Citrus.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="item" ng-class="{'open':header3==1}">
+                    <a ng-click="header3=!header3;header1=header2=0"><h6 class="header">Shipping and Returns</h6></a>
+                    <div class="content">
+                        <p>Once the order is placed we will get the product delivered to you within 14 days depending on your location. The product can be returned within 24 hours after you've received it. Just head to My Orders on the Zapyle app and choose to Return.</p>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+    </div>
+
+
+</div>
+<script type="text/javascript">
+    ga('send', {
+        'hitType' : 'event',
+        'eventCategory' : 'Product View',
+        'dimension5' : $('.product-title').html(),
+        'metric1' : $('.price .new').html(),
+    });
+</script>

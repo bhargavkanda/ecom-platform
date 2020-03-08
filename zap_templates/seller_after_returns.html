@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>A Simple Responsive HTML Email</title>
+        <style type="text/css">
+        body {margin: 0; padding: 0; min-width: 100%!important;}
+        .content {width: 100%; max-width: 600px;}
+        @media only screen and (max-width: 480px){
+            .templateColumnContainer{
+                display:block !important;
+                width:100% !important;
+            }.vertical-spacer-container {
+                height: 0 !important;
+            }.text-on-girl{
+                padding-top: 340px !important;
+            }
+            
+        }
+        
+        </style>
+    </head>
+    <body yahoo bgcolor="#f6f8f1" >
+        <table width="100%" bgcolor="#f2f2f2" border="0" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;" >
+            <tr class="logo" bgcolor="#000000">
+                <td>
+                    <table class="content" align="center" cellpadding="7" cellspacing="0" border="0">
+                        <tr>
+                            <td style="text-align:center;">
+                                <img alt="ZAPYLE" src="http://zapmob.cloudapp.net/media/email/welcome/logo.png" style="height: 46px;" style="font-size:40px; color:#fff;">
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class="green-bar">
+                <td height="10" bgcolor="#52FDB9"></td>
+            </tr>
+            <tr>
+                <td>
+                    <h4 style="text-align:left;margin:10px;">Hi {{seller_name}},</h4>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">This is to confirm that you’ve received your returned item in the same condition.</p>
+                </td>
+            </tr>
+            
+            
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">What this also means? It’s going back up as a listing on your Zapyle Closet! Have a look: <a href={{profile_link}}>{{zap_username}}</a></p>
+                </td>
+            </tr>
+            <tr class="user_type" >
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;"> We also noticed you haven’t listed lately – want to do it now? It’s as easy as CLICK, CHECK and LIST! <a href="http://www.zapyle.com/#/sell">Start Listing</a></p>
+                </td>
+            </tr>
+            
+        
+            
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">Fashionably Yours,</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">Love,<br>The Zapyle Team</p>
+                </td>
+            </tr>
+
+        </table>
+    </body>
+</html>

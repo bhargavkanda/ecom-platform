@@ -1,0 +1,139 @@
+{% extends "account/base.html" %}
+{% block extra_head %}
+	<title>Discover Vintage and Designer Fashion Online India</title>
+	<meta name="description" content="A beautiful collection of Vintage Luxury and Designer Handbags, Shoes, Clothes & Accessories for women online India. Safe shipping and easy returns. Limited quantity.">
+    <script src="/zapstatic/discover/discover.js"></script>
+{% endblock %}
+{% block body %}   	
+       	<main ng-controller="DiscoverController">
+		<div class="top_banner discover_banner">
+			<div class="parallax-container">
+               <div class="parallax">
+               <img src="/zapstatic/website/banners/discover_banner.jpg" class="web_only">
+               <!-- random image -->
+               <div class="caption center-align">
+                   <h3>Stay updated with the latest trends & styles.</h3>
+                    <!-- <h5 class="light grey-text text-lighten-3">Stay updated with the latest trends &amp; styles.</h5> -->
+               </div>
+               <div class="glass absolute"></div>
+               </div>
+       		</div>
+		</div>
+		<div class="page_content">
+			<div ng-repeat="data in discover_data" ng-switch="data.content_data.discover_type">
+				<div class="featured_closet discover_layout" ng-switch-when="closet">
+					<h3 class="title center_align">[[data.content_data.discover_data.title]]</h3>
+					<div class="seller_block">
+						<a ng-href="/profile/[[data.content_data.discover_data.user.id]]/[[data.content_data.discover_data.user.zap_username]]">
+							<img ng-src="[[data.content_data.discover_data.image]]">
+							<h6 class="user_name">[[data.content_data.discover_data.user.full_name]]</h6>
+							<p class="user_handle">[[data.content_data.discover_data.user.zap_username]]</p>
+						</a>
+						<a ng-click="admire(data.content_data.discover_data.user)" class="admire_btn" ng-class="{'admired':data.content_data.discover_data.user.admired}"></a>
+					</div>
+					<div class="products wrapper">
+						<ul class="products_list inline">
+							<li class="product_item" ng-repeat="prod in data.content_data.discover_data.product">
+								<div class="card">
+									<div class="card-image">
+										<a ng-href="/product/[[prod.id]]/[[prod.title | spaceless]]">
+											<img ng-src="[[prod.image]]" src="/zapstatic/frontend/images/512-512.png">
+										</a>
+									</div>
+									<div class="card-content">
+										<h5>[[prod.title]]</h5>
+										<div class="price">
+											<span class="new">[[prod.listing_price]]</span>
+											<span class="old" ng-if="prod.original_price>prod.listing_price">[[prod.original_price]]</span>
+										</div>
+									</div>
+								</div>
+							</li>
+							<li class="view_closet">
+								<a class="btn_link" ng-href="/profile/[[data.content_data.discover_data.user.id]]/[[data.content_data.discover_data.user.zap_username]]">Browse entire closet</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="product_group discover_layout viewport" ng-switch-when="product_collection">
+					<h3 class="title center_align">[[data.content_data.discover_data.title]]</h3>
+					<div class="previous"></div>
+					<div class="next"></div>
+					<div class="products wrapper">
+						<ul class="products_list inline scroller">
+							<li class="product_item slide" ng-repeat="prod in data.content_data.discover_data.product">
+								<div class="card product_card">
+									<a ng-href="/product/[[prod.id]]/[[prod.title | spaceless ]]" class="black">
+										<div class="card-image product_display">
+											<img src="/zapstatic/frontend/images/512-512.png" ng-src="[[prod.image]]">
+										</div>
+										<div class="card-content">
+											<div class="product_details">
+												<h3 class="title">[[prod.title]]</h3>
+												<div class="price">
+													<span class="new">[[prod.listing_price|number]]</span>
+													<span class="old" ng-if="prod.original_price>prod.listing_price">[[prod.original_price|number]]</span>
+												</div>
+											</div>
+											
+										</div>
+									</a>
+								</div>
+								
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="user_group discover_layout viewport" ng-switch-when="user_collection">
+					<h3 class="title center_align">Closets to Admire</h3>
+					<div class="previous"></div>
+					<div class="next"></div>
+					<div class="users wrapper">
+						<ul class="user_list inline scroller">
+							<li class="user_item inline slide" ng-repeat="u in data.content_data.discover_data.user">
+								<div class="picture">
+									<img ng-src="[[u.profile_image]]" src="/zapstatic/frontend/images/512-512.png">
+								</div>
+								<div class="user_details">
+									<a ng-href="/profile/[[u.id]]/[[u.zap_username]]" class="black">
+										<h3 class="name">[[u.full_name]]</h3>
+										<p class="closet_handle">[[u.zap_username]]</p>
+									</a>
+									<div class="inline counts">
+										<div class="size6of12">
+											<h6 class="products_count" ng-class="{'singular':u.outfits==1}">[[u.outfits]]</h6>
+										</div>
+										<div class="size6of12">
+											<h6 class="admirers_count" ng-class="{'singular':u.admirers==1}">[[u.admirers]]</h6>
+										</div>
+									</div>
+									<a ng-click="admire(u)" class="admire_btn" ng-class="{'admired':u.admired}"></a>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div class="collections discover_layout" ng-switch-when="custom_collection">
+					<h3 class="title center_align">[[data.content_data.discover_data.title]]</h3>
+					<ul class="collections_list inline">
+						<li class="collection_item" ng-class="data.content_data.discover_data.number_in_row==2 ? 'size6of12_nomargin' : 'size4of12'" ng-repeat="c in data.content_data.discover_data.collection">
+							<a href="[[c.action.website_target]]">
+								<img ng-src="[[c.image]]" src="/zapstatic/frontend/images/512-512.png">
+							</a>
+						</li>
+					</ul>
+				</div>
+				<!-- <div class="generic_layout discover_layout" ng-switch-when="generic">
+					<div class="banner">
+						<img ng-src="[[data.content_data.discover_data.image]]">
+					</div>
+					<div class="text">
+						<h2 class="title">[[data.content_data.discover_data.title]]</h2>
+						<p class="description">[[data.content_data.discover_data.description]]</p>
+						<a  href="#" class="inverse_btn">Invite and Earn</a>
+					</div>
+				</div> -->
+			</div>
+		</div>
+	</main>
+{% endblock %}

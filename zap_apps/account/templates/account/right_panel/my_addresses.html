@@ -1,0 +1,28 @@
+<div class="screen_header">
+	<div class="screen_title">My Addresses</div>
+	<a class="screen_back" data-activates="#my_account" href="#rp_my_account">Back</a>
+</div>
+<div class="screen_content">
+	<div class="empty_state full_height">
+		<div class="content">
+			<h6 class="title">You haven't added any address yet</h6>
+			<p class="description">Save your addresses here!</p>
+		</div>
+		<a href="#" class="btn waves-effect waves-light" data-activates="#add_address">Add Address</a>
+	</div>
+	<div class="screen_content_inner">
+		<ul class="address_list">
+			<li class="address_item" ng-repeat="ads in addrs">
+				<div class="name">[[ads.name]]</div>
+				<div class="address_line_1">[[ads.address]]</div>
+				<div class="address_line_2">[[ads.address2]]<span class="city">[[ads.city]]</span></div>
+				<div><span class="state">[[ads.state]]</span><span class="pincode">[[ads.pincode]]</span></div>
+				<div class="phone">[[ads.phone]]</div>
+				<a href="#rp_add_address" ng-click="edit_address(ads)" data-activates="#add_address">Edit Address</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<div class="screen_footer">
+	<a href="#rp_add_address" class="btn waves-effect waves-light full_width" data-activates="#add_address" ng-click="add_address()">ADD ADDRESS</a>
+</div>

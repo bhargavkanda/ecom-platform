@@ -1,0 +1,510 @@
+<head>
+  <link rel="stylesheet" type="text/css" href="/zapstatic/frontend/bower_components/sweetalert/dist/sweetalert.css">
+    <script type="text/javascript" src="/zapstatic/frontend/admin_styles/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="/zapstatic/frontend/admin_styles/jquery-migrate-1.2.1.min.js"></script>
+    <script src="/zapstatic/frontend/bower_components/sweetalert/dist/sweetalert.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/zapstatic/frontend/admin_styles/style.css">
+    <script src="/zapstatic/frontend/bower_components/angular/angular.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/zapstatic/frontend/admin_styles/style.css">
+    <script src="/zapstatic/frontend/bower_components/ngstorage/ngStorage.min.js"></script>
+    <!-- <script src="/zapstatic/frontend/bower_components/angular-img-cropper/dist/angular-img-cropper.min.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="/zapstatic/frontend/bower_components/chosen/chosen.css" />
+    <script src="/zapstatic/frontend/bower_components/chosen/chosen.jquery.js"></script>
+    <script type="text/javascript" src="/zapstatic/frontend/admin_styles/scripts/chosen.ajaxaddition.jquery.js"></script>
+
+    <link  href="/zapstatic/frontend/bower_components/cropper/dist/cropper.css" rel="stylesheet">
+    <script src="/zapstatic/frontend/bower_components/cropper/dist/cropper.js"></script>
+    <script type="text/javascript" src="/zapstatic/frontend/admin_styles/scripts/editProductCtrl.js?v={{ZAP_ENV_VERSION}}"></script>
+    <script type="text/javascript" src="/zapstatic/frontend/blog/js/main.js"></script>
+    <script type="text/javascript" src="/zapstatic/frontend/blog/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/shvetsgroup/jquery.multisortable/master/src/jquery.multisortable.js"></script>
+
+
+
+
+
+</head>
+<script type="text/javascript"> 
+   var p_id = "{{p_id}}";
+   var action = "{{action}}"
+</script>
+<style type="text/css">
+    .container .img-container{
+        max-width: 848px;
+        max-height: 516px;
+    }
+</style>
+
+            <div ng-app="EditProductApp" ng-controller="EditProductCtrl">
+                <!-- Uplaod page starts here -->
+                <div id="loading"></div>
+                <script type="text/javascript">
+                    var i = 1;
+
+                    function add_visible_crop() {
+                        $('#inputImage').trigger('click');
+                        $('.crop-image').addClass('is_visible');
+                        $('.img-container').addClass('ng-hide')
+                        $('.clearfix').addClass('ng-hide')
+                    }
+
+                    function hide_crop() {
+                        
+                    }
+                </script>
+                <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+                <div class="main-content">
+                    <div class="content">
+                         <div class="pri-overlay crop-image">
+            <div class="content">
+                <div class="header">Crop Image</div>
+                <div class="body">
+                    <div class="container" ng-init="show_crop=false">
+                        <div class="row">
+                            <div class="col-md-9">
+                            <!-- <h3 class="page-header">Demo:</h3> -->
+                                <div class="img-container" ng-show="show_crop">
+                                    <img id="image" src="/zapstatic/frontend/placeholder.png" alt="Picture">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <!-- <h3 class="page-header">Preview:</h3> -->
+                                <div class="docs-preview clearfix" ng-show="show_crop">
+                                    <div class="img-preview preview-lg"></div>
+                                    <div class="img-preview preview-md"></div>
+                                    <div class="img-preview preview-sm"></div>
+                                    <div class="img-preview preview-xs"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-9 docs-buttons">
+                            <!-- <h3 class="page-header">Toolbar:</h3> -->
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary" data-method="setDragMode" data-option="move" title="Move">
+                                        <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;setDragMode&quot;, &quot;move&quot;)">
+                                            <span class="fa fa-arrows"></span>
+                                        </span>
+                                        Drag
+                                    </button>
+                                    <button type="button" class="btn btn-primary" data-method="setDragMode" data-option="crop" title="Crop">
+                                        <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;setDragMode&quot;, &quot;crop&quot;)">
+                                            <span class="fa fa-crop"></span>
+                                        </span>
+                                        Crop
+                                    </button>
+                                </div>
+
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary" data-method="rotate" data-option="-45" title="Rotate Left">
+                                        <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;rotate&quot;, -45)">
+                                            <span class="fa fa-rotate-left"></span>
+                                        </span>
+                                        rotate -
+                                    </button>
+                                    <button type="button" class="btn btn-primary" data-method="rotate" data-option="45" title="Rotate Right">
+                                        <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;rotate&quot;, 45)">
+                                            <span class="fa fa-rotate-right"></span>
+                                        </span>
+                                        rotate +
+                                    </button>
+                                </div>
+
+                                <div class="btn-group ng-hide">
+                                  <label class="btn btn-primary" for="inputImage" title="Upload image file">
+                                    <input type="file" class="sr-only" id="inputImage" name="file" accept="image/*">
+                                    <span class="docs-tooltip" data-toggle="tooltip" title="Import image with Blob URLs">
+                                      <span class="fa fa-upload"></span>
+                                    Select File
+                                    </span>
+                                  </label>
+                                </div>
+
+                            </div><!-- /.docs-buttons -->
+                        </div>
+                    </div>
+                </div>
+                <div class="footer docs-buttons">
+                    <button type="button" class="btn btn-success" data-method="getCroppedCanvas">
+                        <span class="docs-tooltip" data-toggle="tooltip">
+                        <!--  title="$().cropper(&quot;getCroppedCanvas&quot;)"> -->
+                            Upload
+                        </span>
+                    </button>
+                    <button type="button" class="btn btn-default" ng-click="cancel_crop()">
+                        <span >
+                            Cancel
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <form class="product-upload" ng-submit="submit()">
+          <div class="listing-details">
+            <h5>Listing Details</h5>
+
+
+
+            <div class="pictures">                
+            <ul id="list1" class="sortable">
+              <li class="picture" ng-repeat="i in old_images">
+                <label class="myLabel"><a ng-click="remove_image([[i.id]])">remove</a></label>
+                  <div class="imagePreview"><img data="[[i.id]]" imgid="[[i.id]]" ng-src="[[i.image]]" style="height:151px;width:150px" /></div>
+              </li>
+              </ul>
+              <li ng-show="total_image_count < 6" class="picture" onclick="current_crop=add_visible_crop()">
+                <label class="myLabel">
+                  <span class="plus">+</span>
+                </label>
+              </li>
+            </div>
+            <div class="row">
+                <div class="title-desc">
+                    <div class="title"><input ng-model="product_data.title" type="text" name="title" placeholder="Enter title for the product" required></div>
+                    <div class="description"><textarea ng-model="product_data.description" name="description" placeholder="Product description.." required></textarea></div>
+                </div>
+            </div>
+            <div class="row">
+              <span class="sub-category attribute">
+                <label>User</label>
+               <!--  <select name="sub-category" ng-model="product_data.user" ng-change="change_user(product_data.user)" style="width: 200px;"
+                  ng-options="i.id as i.name for i in all_users" required>
+                <option value="">Select User</option>
+                </select> -->
+
+                <select chosen class="chosen-select"></select>
+
+
+
+              </span>
+              <span class="color attribute">
+                <label>Type</label>
+                <select ng-model="product_data.sale">
+                  <option value="2" selected="true">SALE</option>
+                  <option value="1">SOCIAL</option>
+                </select>
+              </span>
+            </div>
+            
+            <div class="row">
+              <span class="category attribute">
+                <label>Category</label>
+                <select ng-model="product_data.category" ng-options="i as i.name for i in cat" required>
+                <option value="">Please select one</option>
+              </select>
+
+
+              </span>
+                                    <span class="sub-category attribute">
+                <label>Sub Category</label>
+                <select ng-model="product_data.product_category" ng-change="cat_change()" ng-options="i.id as i.name for i in sub_cat | filter:{parent:{id:product_data.category.id}}" required>
+                <option value="">Please select one</option>
+              </select>
+              </span>
+            </div>
+            <div ng-init="show_brands=false;brand_id=0" class="row">
+                                    <span class="brand attribute">
+                <label>Brand</label>
+                <input type="text" name="brand" ng-model="search_word" ng-focus="show_brands=true" class="icon-search" placeholder="Search for a Brand">
+                <div ng-show="show_brands && filtered.length!=0" class="wrapper" style="padding-left: 150px;">
+                  <select size="5" class="selection" ng-options="i.id as i.brand for i in filtered = ( brands | filter:{ brand : search_word})" ng-model="product_data.brand" ng-click="set_brand();show_brands=false" required></select>
+                </div>
+              </span>
+                                    <span class="color attribute">
+                <label>Color</label>
+              <select ng-model="product_data.color"
+                ng-options="i.id as i.name for i in colors" required>
+                <option value="">Please select colors</option>
+              </select>
+              </span>
+            </div>
+
+            <div class="row">
+              <span class="style attribute">
+                <label>Style</label>  
+                <select ng-model="product_data.style"
+                  ng-options="i.id as i.style_type for i in styles" required>
+                  <option value="">Please select style</option>
+                </select> 
+              </span>
+              <span class="occasion attribute">
+                <label>Occasion</label>
+                <select ng-model="product_data.occasion"
+                  ng-options="i.id as i.name for i in occasions" required>
+                  <option value="">Please select occasions</option>
+                </select>
+              </span>
+              <div class="select-size attribute" ng-show="!(current_user.type=='store_front' || current_user.type=='zap_exclusive' || current_user.type=='zap_dummy')">
+                <label style="display:block;">Size</label>
+                <div ng-show="!free_size">
+
+                  <select name="size-type1" ng-model="product_data.size_selected[0].size" ng-required="!free_size">
+                        <option value="">Select</option>
+                        <option value="[[i.id]]" ng-repeat="i in size_list | filter:{category_type:product_data.category.category_type}">[[product_data.size_selected[0].size_type=='UK' ? i.uk_size : (product_data.size_selected[0].size_type=='US' ? i.us_size : (product_data.size_selected[0].size_type=='EU' ? i.eu_size : 'Select'))]]</option>
+                  </select>
+                  <select name="size-type2" ng-model="product_data.size_selected[0].size_type" ng-change="product_data.size_type=product_data.size_selected[0].size_type" ng-required="!free_size">
+                  <option value="">select</option>
+                  <option ng-repeat="type in ['UK','US','EU']" >[[type]]</option>
+                  </select>
+                  <input type="number" ng-model="product_data.size_selected[0].quantity">
+                </div>
+                <div ng-show="free_size" style="padding-top: 10px;padding-left: 99px;">
+                  Free Size<input type="number" ng-model="product_data.size_selected[0].quantity">
+                </div>
+              </div>
+            </div>
+
+            <div ng-show="(current_user.type=='store_front' || current_user.type=='zap_exclusive' || current_user.type=='zap_dummy') && product_data.category && !free_size">
+              <div ng-repeat="i in product_data.size_selected" class="select-size row">
+                <span>
+                  <label style="display:block;">Size[[$index+1]]: </label>
+                  <select ng-model="product_data.size_selected[0].size_type" ng-required="!free_size" ng-change="product_data.size_type=product_data.size_selected[0].size_type">
+                    <option value="">select</option>
+                    <option ng-repeat="type in ['UK','US','EU']">[[type]]</option>
+                  </select>
+                  <select ng-model="i.size" ng-required="!free_size" ng-change="changeSize(i)">
+                    <option value="">Select</option>
+                    <option value="[[j.id]]" ng-repeat="j in size_list | filter:{category_type:product_data.category.category_type}">
+[[product_data.size_selected[0].size_type=='UK' ? j.uk_size+' '+j.size : (product_data.size_selected[0].size_type=='US' ? j.us_size+' '+j.size : (product_data.size_selected[0].size_type=='EU' ? j.eu_size+' '+j.size : 'Select'))]]</option>
+                  </select>
+                  <span class="color attribute">
+                    <label>Quantity</label>
+                    <input type="number" ng-model="i.quantity" ng-required="!free_size">
+                  </span>
+                  <button class="remove" type="button" ng-click="removeChoice(i)" ng-if="!$index==0">-</button>
+                </span>
+              </div>
+              <button class="remove" type="button" ng-click="addChoice()">+</button>
+            </div>
+            <div ng-show="(current_user.type=='store_front' || current_user.type=='zap_exclusive' || current_user.type=='zap_dummy') && product_data.category && free_size">
+              <div style="padding-top: 10px;padding-left: 99px;">Free Size</div>
+              <span class="color attribute">
+                <label>Quantity</label>
+                <input type="number" ng-model="product_data.size_selected[0].quantity" ng-required>
+              </span>
+            </div>
+          </div>
+
+
+
+
+                            <div class="price-account" ng-show="product_data.sale == 2">
+                                <h5>Price</h5>
+                                <span class="original-price attribute">
+              <label>Original Price</label>
+              <input type="number" id="org_price" ng-model="product_data.original_price" ng-required="product_data.sale == 2" ng-change="fasioncalculator()"
+              >
+            </span>
+                                <span class="age attribute">
+              <label>Age: </label>
+              <select ng-model="product_data.age" ng-options="i.id as i.name for i in age" ng-change="fasioncalculator()" ng-required="product_data.sale == 2">
+                <option value="">Select Age</option>
+              </select>
+            </span>
+                                <span class="condition attribute">
+              <label>Condition: </label>
+              <select ng-model="product_data.condition" ng-options="i.id as i.name for i in conditions" ng-change="fasioncalculator()" ng-required="product_data.sale == 2">
+                <option value="">Select Condition</option>
+              </select>
+            </span>
+            <span class="listing-price attribute">
+                <label>Listing Price</label>
+                <input id="slider" type="range"  min="0" max="0" value="0" step="1" ng-model="product_data.listing_price">
+                <input type="number" string-to-number min="0" ng-model="product_data.listing_price">
+                <b id="range" ng-bind="product_data.listing_price"></b>
+                <div id="slider"></div>
+            </span>
+            
+                                <div ng-hide="current_user.type == 'zap_exclusive' || current_user.type == 'zap_dummy'">
+                                    <h5>Account Details</h5>
+                                    <div ng-show="!account_num_edit" new-address="" class="new-address-card acc_height size4of12" style="width: 94.3421%;">
+                                        <p class="name ng-binding"><b>Account Number</b>: [[account_num]]</p>
+                                        <span class="button" ng-click="account_num_edit=!account_num_edit">
+                  <a style="padding: 1px 60px;">Edit</a>
+                </span>
+                                    </div>
+                                    <div ng-show="account_num_edit" class="edit-account">
+                                        <span class="account-number attribute">
+                  <label>Account Number</label>
+                  <input type="text" ng-model="account_num">
+                </span>
+                                        <span class="confirm-number attribute">
+                  <label>Confirm Account Number</label>
+                  <input type="text" name="confirm-number" ng-model="confirm_account_num">
+                </span>
+                <span class="account-number attribute">
+          <label>Account holder</label>
+          <input type="text" name="account-holder" ng-model="account_holder">
+        </span>
+                                        <span class="ifsc attribute">
+                  <label>IFSC Code</label>
+                  <input type="text" name="ifsc" ng-model="ifsc_code">
+                </span>
+                                        <span>
+                  <input type="button" value="Submit" ng-click="post_account_num(user_selected.id)">
+                  <!-- <input type="button" value="Cancel"> -->
+                </span>
+                                    </div>
+                                </div>
+
+                                <div ng-show="current_user.type == 'zap_exclusive' || current_user.type == 'zap_dummy'">
+                                    <h5>Seller Account Details</h5>
+                                    <div class="edit-account">
+                                      <div class="row">
+                                        <span class="account-number attribute">
+                <label>Account</label>
+                <select name="sub-category" ng-model="product_data.email" ng-required="(current_user.type == 'zap_dummy' || current_user.type == 'zap_exclusive') && product_data.sale == 2"
+                  ng-options="i.email as i.email for i in selleraccounts">
+                <option value="">Select An Account</option>
+                </select>
+              </span>
+              </div>
+
+
+                                        <!-- <div class="row">
+              <span class="account-number attribute">
+                <label>Account</label>
+                  <input type="text" ng-model="product_data.account_number">
+              </span>
+                                            <span class="confirm-number attribute">
+                <label>Confirm</label>
+                <input type="text" name="confirm-number" ng-model="product_data.confirm_account_num">
+              </span></div>
+                                        <span class="ifsc attribute">
+                <label>IFSC Code</label>
+                <input type="text" name="ifsc" ng-model="product_data.ifsc_code">
+              </span>
+                                        <span class="ifsc attribute">
+                <label>Name</label>
+                <input type="text" name="username" ng-model="product_data.full_name">
+              </span>
+                                        <span class="ifsc attribute">
+                <label>Phone</label>
+                <input type="number" name="phone" ng-model="product_data.phone_number">
+              </span>
+                                        <span class="ifsc attribute">
+                <label>Email</label>
+                <input type="email" name="phone" ng-model="product_data.email" required>
+              </span> -->
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="pickup-address" ng-show="product_data.sale == 2">
+                                <div>
+                                    <h5>Select Pickup address</h5>
+                                    <!-- ngRepeat: address in addresses -->
+                                    <div select-card="[[address.id]]" id="55" class="address-card size4of12 ng-scope" style="min-width: 280px;" ng-repeat="address in addresses">
+                                        <p class="name ng-binding">[[address.name]]</p>
+                                        <p class="ng-binding">[[address.address]], [[address.city]], [[address.state]], [[address.pincode]].</p>
+                                        <a data="55" ng-click="deleteAddress(address.id)" class="delete"></a>
+                                    </div>
+                                    <!-- end ngRepeat: address in addresses -->
+                                    <div new-address="" class="new-address-card size4of12" ng-click="modal_pop=1" style="min-width: 280px;">
+                                        <div class="add">Add New Address</div>
+                                    </div>
+                                    <input type="checkbox" ng-model="product_data.with_zapyle">
+                                    with zapyle
+                                </div>
+                            </div>
+                            <input type="submit" value="Update" id="updateProduct">
+                        </form>
+                        <input type="button" value="Reset" ng-click="get_product_details()"></input>
+                    </div>
+                </div>
+
+
+                <style>
+                    .modalDialog {
+                        color: black;
+                        position: fixed;
+                        font-family: Arial, Helvetica, sans-serif;
+                        top: 0;
+                        right: 0;
+                        bottom: 0;
+                        left: 0;
+                        background: rgba(0, 0, 0, 0.8);
+                        z-index: 99999;
+                        opacity: 10;
+                    }
+                    
+                    .modalDialog:target {
+                        opacity: 1;
+                        pointer-events: auto;
+                    }
+                    
+                    .modalDialog > div {
+                        width: 400px;
+                        position: relative;
+                        margin: 10% auto;
+                        padding: 5px 20px 13px 20px;
+                        border-radius: 10px;
+                        background: #fff;
+                        background: -moz-linear-gradient(#fff, #999);
+                        background: -webkit-linear-gradient(#fff, #999);
+                        background: -o-linear-gradient(#fff, #999);
+                    }
+                    
+                    .close {
+                        background: #606061;
+                        color: #FFFFFF;
+                        line-height: 25px;
+                        position: absolute;
+                        right: -12px;
+                        text-align: center;
+                        top: -10px;
+                        width: 24px;
+                        text-decoration: none;
+                        font-weight: bold;
+                        -webkit-border-radius: 12px;
+                        -moz-border-radius: 12px;
+                        border-radius: 12px;
+                        -moz-box-shadow: 1px 1px 3px #000;
+                        -webkit-box-shadow: 1px 1px 3px #000;
+                        box-shadow: 1px 1px 3px #000;
+                    }
+                    
+                    .close:hover {
+                        background: #00d9ff;
+                    }
+                    
+                    #range {
+                        font-size: 22px;
+                        line-height: 20px;
+                        float: left;
+                        padding: 0 15px 0 0;
+                        display: block;
+                        width: 25px;
+                    }
+                </style>
+
+
+                <style>
+    .backcolor {
+        background-color: black;
+        color: white;
+    }
+    
+    #page {
+        display: none;
+    }
+    
+    #loading {
+    display: block;
+    top: 4%;
+    left: 50%;
+    position: absolute;
+    z-index: 139 !important;
+    height: 60;
+    background-image: url("/zapstatic/frontend/images/loading.gif");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 50px;
+    width: 53px;
+}
+</style>
+<script>
+
+
+</script>

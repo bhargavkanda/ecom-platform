@@ -1,0 +1,220 @@
+<head>
+    <title>Zapyle - Dashboard</title>
+<link href="/zapstatic/frontend/admin_styles/dashboard/bootstrap.min.css" rel="stylesheet">
+<link href="/zapstatic/frontend/admin_styles/dashboard/beyond.css" rel="stylesheet">   
+<script type="text/javascript" src="/zapstatic/frontend/admin_styles/jquery-1.11.3.min.js"></script>
+<!-- <script type="text/javascript" src="/zapstatic/frontend/blog/js/jquery-ui.min.js"></script>
+ --><script src="/zapstatic/frontend/admin_styles/dashboard/highcharts.js"></script>
+<script src="/zapstatic/frontend/bower_components/angular/angular.min.js"></script>
+<script src="/zapstatic/frontend/admin_styles/dashboard/dashboardctrl.js"></script>
+</head>
+<div ng-app="dashboardApp" ng-controller="DashboardCtrl" class="grid-stack" data-gs-width="12" >
+<div class="page-body">
+
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                <div class="databox bg-white radius-bordered">
+                    <div class="databox-left bg-themesecondary">
+                        <div class="databox-piechart">
+                            <div data-toggle="easypiechart" class="easyPieChart" data-barcolor="#fff" data-linecap="butt" data-percent="50" data-animate="500" data-linewidth="3" data-size="47" data-trackcolor="rgba(255,255,255,0.1)" style="width: 47px; height: 47px; line-height: 47px;"><span class="white font-90">[[total.t_users]]</span></div>
+                        </div>
+                    </div>
+                    <div class="databox-right">
+                        <span class="databox-number themesecondary">[[total.users]]</span>
+                        <div class="databox-text darkgray">TOTAL USERS</div>
+                      
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                <div class="databox bg-white radius-bordered">
+                    <div class="databox-left bg-themethirdcolor">
+                        <div class="databox-piechart">
+                            <div data-toggle="easypiechart" class="easyPieChart" data-barcolor="#fff" data-linecap="butt" data-percent="15" data-animate="500" data-linewidth="3" data-size="47" data-trackcolor="rgba(255,255,255,0.2)" style="width: 47px; height: 47px; line-height: 47px;"><span class="white font-90">[[total.t_products]]</span></div>
+                        </div>
+                    </div>
+                    <div class="databox-right">
+                        <span class="databox-number themethirdcolor">[[total.products]]</span>
+                        <div class="databox-text darkgray">TOTAL PRODUCTS</div>
+                     </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                <div class="databox bg-white radius-bordered">
+                    <div class="databox-left bg-themeprimary">
+                        <div class="databox-piechart">
+                            <div id="users-pie" data-toggle="easypiechart" class="easyPieChart" data-barcolor="#fff" data-linecap="butt" data-percent="76" data-animate="500" data-linewidth="3" data-size="47" data-trackcolor="rgba(255,255,255,0.1)" style="width: 47px; height: 47px; line-height: 47px;"><span class="white font-90">[[total.t_orders]]</span></div>
+                        </div>
+                    </div>
+                    <div class="databox-right">
+                        <span class="databox-number themeprimary">[[total.orders]]</span>
+                        <div class="databox-text darkgray">TOTAL ORDERS</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                <div class="databox bg-white radius-bordered">
+                    <div class="databox-left bg-themethirdcolor">
+                        <div class="databox-piechart">
+                            <div data-toggle="easypiechart" class="easyPieChart" data-barcolor="#fff" data-linecap="butt" data-percent="15" data-animate="500" data-linewidth="3" data-size="47" data-trackcolor="rgba(255,255,255,0.2)" style="width: 47px; height: 47px; line-height: 47px;"><span class="white font-90">[[total.t_returns]]</span></div>
+                        </div>
+                    </div>
+                    <div class="databox-right">
+                        <span class="databox-number themethirdcolor">[[total.returns]]</span>
+                        <div class="databox-text darkgray">TOTAL RETURNS</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+  <div class="col-lg-12"  style="min-height:400px">
+  <div id="container"></div>
+</div>
+</div>
+
+
+<br>
+ <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                <div class="databox bg-white radius-bordered">
+                    <div class="databox-left bg-themesecondary">
+                        <div class="databox-piechart">
+                            <div data-toggle="easypiechart" class="easyPieChart" data-barcolor="#fff" data-linecap="butt" data-percent="50" data-animate="500" data-linewidth="3" data-size="47" data-trackcolor="rgba(255,255,255,0.1)" style="width: 47px; height: 47px; line-height: 47px;"><span class="white font-90">[[device.android_today]]</span></div>
+                        </div>
+                    </div>
+                    <div class="databox-right">
+                        <span class="databox-number themesecondary">[[device.android_total]]</span>
+                        <div class="databox-text darkgray">ANDROID USERS</div>
+                      
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                <div class="databox bg-white radius-bordered">
+                    <div class="databox-left bg-themethirdcolor">
+                        <div class="databox-piechart">
+                            <div data-toggle="easypiechart" class="easyPieChart" data-barcolor="#fff" data-linecap="butt" data-percent="15" data-animate="500" data-linewidth="3" data-size="47" data-trackcolor="rgba(255,255,255,0.2)" style="width: 47px; height: 47px; line-height: 47px;"><span class="white font-90">[[device.ios_today]]</span></div>
+                        </div>
+                    </div>
+                    <div class="databox-right">
+                        <span class="databox-number themethirdcolor">[[device.ios_total]]</span>
+                        <div class="databox-text darkgray">IOS USERS</div>
+                     </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                <div class="databox bg-white radius-bordered">
+                    <div class="databox-left bg-themeprimary">
+                        <div class="databox-piechart">
+                            <div id="users-pie" data-toggle="easypiechart" class="easyPieChart" data-barcolor="#fff" data-linecap="butt" data-percent="76" data-animate="500" data-linewidth="3" data-size="47" data-trackcolor="rgba(255,255,255,0.1)" style="width: 47px; height: 47px; line-height: 47px;"><span class="white font-90">[[device.website_today]]</span></div>
+                        </div>
+                    </div>
+                    <div class="databox-right">
+                        <span class="databox-number themeprimary">[[device.website_total]]</span>
+                        <div class="databox-text darkgray">WEBSITE USERS</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                <div class="databox bg-white radius-bordered">
+                    <div class="databox-left bg-themethirdcolor">
+                        <div class="databox-piechart">
+                            <div data-toggle="easypiechart" class="easyPieChart" data-barcolor="#fff" data-linecap="butt" data-percent="15" data-animate="500" data-linewidth="3" data-size="47" data-trackcolor="rgba(255,255,255,0.2)" style="width: 47px; height: 47px; line-height: 47px;"><span class="white font-90">[[device.fb_today]]</span></div>
+                        </div>
+                    </div>
+                    <div class="databox-right">
+                        <span class="databox-number themethirdcolor">[[device.fb_total]]</span>
+                        <div class="databox-text darkgray">FACEBOOK SIGNUP</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12"  style="min-height:400px">
+  <div id="listing_graph"></div>
+</div>
+</div><br>
+<div class="row">
+  <div class="col-lg-12"  style="min-height:400px">
+  <div id="order_graph"></div>
+</div>
+</div>
+
+<div class="row">
+            <div class="col-lg-12">
+                <div class="widget">
+                    <div class="widget-header bordered-bottom bordered-themesecondary">
+                        <i class="widget-icon fa fa-tags themesecondary"></i>
+                        <span class="widget-caption themesecondary">Recent Users</span>
+                    </div><!--Widget Header-->
+                    <div class="widget-body  no-padding">
+                        <div class="tickets-container">
+                            <ul class="tickets-list">
+                                <li ng-hide="users.length" class="ticket-item">No Users Found</li>
+                                <li ng-show="users" class="ticket-item" ng-repeat="u in users">
+                                    <div class="row">
+                                        <div class="ticket-user col-lg-2 col-sm-12">
+                                            <img src="[[u.image]]" class="user-avatar">
+                                            <span class="user-name">[[u.username]]</span>
+                                          
+                                        </div>
+                                        <div class="ticket-time  col-lg-4 col-sm-6 col-xs-6">
+                                            <div class="divider hidden-md hidden-sm hidden-xs"></div>
+                                            <i class="fa fa-clock-o"></i>
+                                            <span class="time">[[u.email]]</span>
+                                        </div>
+                                        <div class="ticket-time  col-lg-2 col-sm-6 col-xs-6">
+                                            <div class="divider hidden-md hidden-sm hidden-xs"></div>
+                                            <i class="fa fa-clock-o"></i>
+                                            <span class="time">[[u.logged_from]]</span>
+                                        </div>
+                                        <div class="ticket-time  col-lg-2 col-sm-6 col-xs-6">
+                                            <div class="divider hidden-md hidden-sm hidden-xs"></div>
+                                            <i class="fa fa-clock-o"></i>
+                                            <span class="time">[[u.device]]</span>
+                                        </div>
+                                        <div class="ticket-type  col-lg-2 col-sm-6 col-xs-6">
+                                            <span class="divider hidden-xs"></span>
+                                            <span class="type">[[u.time]]</span>
+                                        </div>
+                                        <div ng-show="u.onboarding=='5'" class="ticket-state bg-palegreen">
+                                  
+                                            <i class="fa fa-times">[[u.onboarding]]</i>
+                                        </div> 
+                                        <div ng-show="u.onboarding=='2'" class="ticket-state bg-palered">
+                                  
+                                            <i class="fa fa-times">[[u.onboarding]]</i>
+                                        </div>
+                                    </div>
+                                </li>
+                                
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+</div>
+
+</div>
+
+
+
+
+
+
+
+

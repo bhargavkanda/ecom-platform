@@ -1,0 +1,27 @@
+<div class="screen_header">
+	<div class="screen_title">My Bank Account</div>
+	<a class="screen_back" data-activates="#my_bank_account" href="#rp_my_bank_account" ng-click="my_bank_account()">Back</a>
+</div>
+<div class="screen_content">
+	<div class="input-field text error">
+		<span class="text_input">
+			<label for="name">Name<span class="input_error">[[errors.account_holder]]</span></label>
+			<input type="text" name="name" id="name" ng-model="bk.account_holder">
+		</span>
+	</div>
+	<div class="input-field text error">
+		<span class="text_input">
+			<label for="account">Account Number<span class="input_error">[[errors.account_number]]</span></label>
+			<input type="text" name="account" id="account" ng-model="bk.user_acc">
+		</span>
+	</div>
+	<div class="input-field text error">
+		<span class="text_input">
+			<label for="ifsc">IFSC Code<span class="input_error">[[errors.ifsc_code]]</span></label>
+			<input type="text" name="ifsc" id="ifsc" ng-model="bk.ifsc_code">
+		</span>
+	</div>
+</div>
+<div class="screen_footer">
+	<a ng-click="save_bank_account()" class="btn waves-effect waves-light full_width">ADD AN ACCOUNT</a>
+</div>

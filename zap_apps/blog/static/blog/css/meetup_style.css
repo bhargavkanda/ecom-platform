@@ -1,0 +1,64 @@
+body{
+    background: rgba(0, 0, 0, 0) url("/zapstatic/frontend/blog/meetup_images/bg.jpg") no-repeat scroll center top / 100% auto;
+    margin: 0;
+    font-family: lato, calibri;
+}
+@media only screen and (max-width: 47em) {
+body{
+    background: rgba(0, 0, 0, 0) url("/zapstatic/frontend/blog/meetup_images/bg.jpg") no-repeat scroll center top;
+}
+}
+
+
+header {
+    background: rgba(0, 0, 0, 0.5) none repeat scroll 0 0;
+    padding: 10px 0;
+    text-align: center;
+}
+header img {
+    max-width: 150px;
+}
+.content {
+    color: #fff;
+    margin: 0 auto;
+    max-width: 900px;
+    padding: 100px 0;
+    text-align: center;
+}
+form {
+    margin: 0 auto;
+    max-width: 600px;
+}form span {
+    display: inline-block;
+    margin: 10px 5px;
+    position: relative;
+    width: calc(50% - 22px);
+}
+@media only screen and (max-width: 47em) {
+    form span {
+        margin: 10px 20px;
+        width: calc(100% - 42px);
+    }
+}
+form span > span {
+    color: #01ceb3;
+    font-size: 12px;
+    left: 0;
+    position: absolute;
+    text-align: left;
+    top: 17px;
+    width: 100%;
+}
+input {
+    border: 0 none;
+    padding: 5px;
+    width: calc(100% - 10px);
+}
+input[type="submit"] {
+    background: #01ceb3 none repeat scroll 0 0;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    margin: 10px 0;
+    width: calc(100% - 30px);
+}

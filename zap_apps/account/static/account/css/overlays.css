@@ -1,0 +1,4 @@
+#fashion_is_unfair input {
+	min-width: 130px;
+	width: calc(100% - 160px);
+}

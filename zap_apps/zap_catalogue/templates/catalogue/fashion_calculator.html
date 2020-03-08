@@ -1,0 +1,212 @@
+<div class="fashion_calculator" ng-hide="fashionCheck">
+	<h4 class="center_align">See how much you can make if you start selling.</h4>
+	<div class="item_data center_size8of12">
+		<div class="inline">
+			<div class="input-field size6of12">
+				<select ng-model="fashion.product_category" id="cat">
+						<optgroup label="[[c.title]]" ng-repeat="c in catalogues">
+							<option value="" disabled selected>CATEGORY</option>
+					    	<option value="[[s.id]]" ng-repeat="s in c.sub_cats">[[s.title]]</option>
+					  </optgroup>	
+					 
+					</select>
+				<label>PICK AN ITEM YOU OWN</label>
+			</div>
+			<div class="input-field size6of12">
+				<select ng-model="fashion.age" ng-options="a.id as a.title for a in [{'id':0, 'title':'0-3 months'},{'id':1, 'title':'3-6 months'},{'id':2, 'title':'6-12 months'},{'id':3, 'title':'1-2 years'}]">
+			      <option value="" disabled selected>AGE</option>
+			    </select>
+			    <label>Age</label>
+			</div>
+		</div>
+		<div class="inline">
+			<div class="input-field size6of12">
+	          <input id="original_price" ng-model="fashion.original_price" type="text" class="validate" required placeholder=" ">
+	          <label for="original_price">Original Price</label>
+	        </div>
+	        <div class="input-field size6of12">
+				<select ng-model="fashion.condition" ng-options="c.id as c.title for c in [{'id':0, 'title':'New with tags'},{'id':1, 'title':'Mint Condition'},{'id':2, 'title':'Gently loved'},{'id':3, 'title':'Worn out'}]">
+			      <option value="" disabled selected>CONDITION</option>
+			    </select>
+			    <label>CONDITION</label>
+			</div>
+		</div>
+		<div class="center_align">
+			<a ng-click="calculateFashion(fashion)" class="btn waves-effect waves-light center_align">Calculate</a>
+		</div>
+	</div>
+</div>
+<div class="fashion_calculator_result inline" ng-class="{'center_align':doneUpload}" ng-show="fashionCheck">
+	<div class="zap_curated center_align" ng-class="schedulePickup ? 'size12of12': startSell ? 'is_hidden' : 'size6of12'">
+		<p class="small uppercase"> Sell on</p>
+		<h1 class="title italic">Zap Curated</h1>
+		<div class="info" ng-hide="schedulePickup">
+			<div class="features">
+				<ul class="feature_list list">
+					<li class="feature_item">We pick it up</li>
+					<li class="feature_item">We shoot photos &amp; upload</li>
+					<li class="feature_item">You earn</li>
+				</ul>
+			</div>
+			<div class="separator"></div>
+			<p class="small uppercase">You will make</p>
+			<h1 class="price center_align"><span class="new">[[fashionPrice * 75 / 100 | number:0]]</span></h1>
+			<p class="italic small">@ 75% of order value</p>
+			<a ng-click="setschedulePickup();schedulePickup=true" class="btn waves-effect waves-light">Schedule a Pickup</a>
+			<div class="receommendations" ng-if="cSimilar.length">
+				<h6 class="center_align title">You can buy these for the same price:</h6>
+				<ul class="products_list inline show2inrow center_align">
+					<li class="product_item slide medium" ng-repeat="p in cSimilar">
+						<div class="product_item_inner">
+							<div class="product_display">
+								<a ng-href="/product/[[p.id]]/[[p.title | spaceless]]" class="image_holder">
+									<img ng-src="[[p.images[0].image || p.images[0] ]]" src="/zapstatic/frontend/images/512-512.png">
+								</a>
+							</div>
+							<div class="product_details">
+								<h5>[[ p.title ]]</h5>
+								<div class="price">
+									<span class="new">[[p.listing_price | number ]]</span>
+									<span class="old" ng-if="p.original_price>p.listing_price">[[p.original_price | number ]]</span>
+								</div>
+							</div>
+						 </div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="send_entry" ng-show="schedulePickup && !doneUpload">
+			<div class="inline">
+				<div class="input-field size6of12">
+					<select ng-model="fashion.product_category">
+						<optgroup label="[[c.title]]" ng-repeat="c in catalogues">
+					    <option value="[[s.id]]" ng-repeat="s in c.sub_cats">[[s.title]]</option>
+					  </optgroup>	
+					 
+					</select>
+					<label>PICK AN ITEM YOU OWN</label>
+				</div>
+				<div class="input-field size6of12">
+					<select ng-model="fashion.age" ng-options="a.id as a.title for a in [{'id':0, 'title':'0-3 months'},{'id':1, 'title':'3-6 months'},{'id':2, 'title':'6-12 months'},{'id':3, 'title':'1-2 years'}]">
+				      <option value="" disabled selected>AGE</option>
+				    </select>
+				    <label>Age</label>
+				</div>
+			</div>
+			<div class="inline">
+				<div class="input-field size6of12">
+					<select ng-model="fashion.brand" ng-options="b.id as b.title for b in brands">
+				      <option value="" disabled selected>BRAND</option>
+				    </select>
+				    <label>Brand</label>
+				</div>
+		        <div class="input-field size6of12">
+					<select ng-model="fashion.condition" ng-options="c.id as c.title for c in [{'id':0, 'title':'New with tags'},{'id':1, 'title':'Mint Condition'},{'id':2, 'title':'Gently loved'},{'id':3, 'title':'Worn out'}]">
+				      <option value="" disabled selected>CONDITION</option>
+				    </select>
+				    <label>CONDITION</label>
+				</div>
+			</div>
+			<div class="inline">
+				<div class="input-field size6of12">
+		          <input ng-model="fashion.name" id="name" type="text" class="validate" placeholder=" ">
+		          <label for="name">Name</label>
+		        </div>
+		        <div class="input-field size6of12">
+		          <input ng-model="fashion.phone" id="phone_number" type="text" class="validate" placeholder=" ">
+		          <label for="phone_number">Phone Number</label>
+		        </div>
+			</div>
+			<div class="pictures">
+                <div class="picture add_img">
+                    <label class="myLabel">
+                    	<!-- <input type="file" id="img1" name="" hidden onchange="fileChange(this);"> -->
+                    	<span ng-click="addImg()" class="plus">+</span>
+                	</label>
+                </div>
+            </div>
+            <a ng-click="uploadPickup()" class="btn waves-effect waves-light block" ng-show="schedulePickup && !doneUpload">Schedule Pickup</a>
+            <a ng-click="schedulePickup=false" class="btn-flat waves-pink block center_align go_back">Back to selling options</a>
+        </div>
+		<div class="zap_curated_thanks" ng-show="doneUpload">
+			<p>Thank you for reaching out. We shall get back to you as soon as possible.</p>
+		</div>
+	</div>
+	<div class="zap_market center_align" ng-class="startSell ? 'size12of12': schedulePickup ? 'is_hidden' : 'size6of12'">
+		<p class="small uppercase">Sell on</p>
+		<h1 class="title italic">Zap Market</h1>
+		<div class="info" ng-hide="startSell">
+			<div class="features">
+				<ul class="feature_list list">
+					<li class="feature_item">You shoot photos &amp; upload</li>
+					<li class="feature_item">When sold, we pick it up</li>
+					<li class="feature_item">You earn</li>
+				</ul>
+			</div>
+			<div class="separator"></div>
+			<p class="small uppercase">You will make</p>
+			<h1 class="price center_align"><span class="new">[[fashionPrice * 85 / 100 | number:0]]</span></h1>
+			<p class="italic small">@ 85% of order value</p>
+			<a ng-click="startSell=true" class="btn waves-effect waves-light">Start Uploading</a>
+			<div class="receommendations" ng-if="mSimilar.length">
+				<h6 class="center_align title">You can buy these for the same price:</h6>
+				<ul class="products_list inline show2inrow center_align">
+					<li class="product_item slide medium" ng-repeat="p in mSimilar">
+						<div class="product_item_inner">
+							<div class="product_display">
+								<a ng-href="/product/[[p.id]]/[[p.title | spaceless]]" class="image_holder">
+									<img ng-src="[[p.images[0].image || p.images[0] ]]" src="/zapstatic/frontend/images/512-512.png">
+								</a>
+							</div>
+							<div class="product_details">
+								<h5>[[ p.title ]]</h5>
+								<div class="price">
+									<span class="new">[[p.listing_price | number ]]</span>
+									<span class="old" ng-if="p.original_price>p.listing_price">[[p.original_price | number ]]</span>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="how_to" ng-show="startSell">
+			<h4 class="center_align">Start selling. It's easy.</h4>
+			<div class="inline">
+				<div class="size4of12 sell_step" id="install_app">
+					<p>Install the mobile app on your phone</p>
+					<a>Get link via SMS</a>
+					<div class="tool_tip">
+						<div class="arrow_up center_align"></div>
+						<div class="content inline get_link">
+							<input type="text" name="phone_number" id="linkInput" ng-model="phone_number">
+							<a class="btn" ng-click="sendLink(phone_number)"></a>
+						</div>
+						<div class="content inline thank_you is_hidden">
+							<p>Thank you for your interest.</p>
+							<p>You will receive a link to install the App shortly.</p>
+						</div>
+						<div class="close_btn grey inside small"></div>
+					</div>
+				</div>
+				<div class="size4of12 sell_step" id="select_sell">
+					<p>Select 'Sell' from the left side menu</p>
+					<a>See where to find this</a>
+					<div class="tool_tip">
+						<div class="arrow_up center_align"></div>
+						<div class="content">
+							<p>Open the App and tap on the menu icon at the top left corner and select 'Sell'.</p>
+							<img src="/zapstatic/website/sell/sell_option.png">
+						</div>
+						<div class="close_btn grey inside small"></div>
+					</div>
+				</div>
+				<div class="size4of12 sell_step" id="take_picture">
+					<p>Take a picture of the item and upload</p>
+					<a href="#" class="is_hidden">See how to take pictures that sell</a>
+				</div>
+			</div>
+			<a ng-click="startSell=false" class="btn-flat waves-pink go_back">Back to selling options</a>
+		</div>
+	</div>
+</div>

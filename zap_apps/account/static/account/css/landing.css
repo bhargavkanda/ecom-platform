@@ -1,0 +1,68 @@
+html {
+    font-family: montserrat;
+    font-size: 14px;
+    text-align:center;
+    letter-spacing:2px;
+    color: #fff;
+    background: #b52c41; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(90deg, #ab2c51, #b91b26); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(90deg, #ab2c51, #b91b26); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(90deg, #ab2c51, #b91b26); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(90deg, #ab2c51, #b91b26); /* Standard syntax (must be last) */
+}
+.top_section {
+    background-image: url(/zapstatic/website/landing/world-tour.png);
+    background-repeat: no-repeat;
+    max-width: 768px;
+    margin: 0 auto;
+    background-position: 0 0;
+}
+.top_section img:first-child {
+    padding-left: 300px;
+    padding-bottom: 75px;
+}
+@media screen and (max-width: 650px) {
+    .top_section {
+        background-position: center 0;
+    }
+    .top_section img:first-child {
+        padding-top: 230px;
+        padding-bottom: 40px;
+        padding-left: 0;
+    }
+}
+a.button {
+    background: #fff;
+    color: #000;
+    text-decoration: none;
+    padding: 10px 30px;
+    display: inline-block;
+    margin: 30px 0 10px;
+}
+.separator {
+    height: 1px;
+    background: #fff;
+    display: inline-block;
+    width: 40px;
+    margin: 15px 0;
+}
+h1 {
+    line-height: 3rem;
+}
+.now_live {
+    text-transform: uppercase;
+    font-size: 16px;
+    border: 1px solid;
+    padding: 12px 15px;
+}
+.now_live::before {
+    background: url(/zapstatic/website/landing/dot-blink.gif);
+    display: inline-block;
+    content: ' ';
+    background-size: contain;
+    height: 14px;
+    width: 20px;
+    background-repeat: no-repeat;
+    padding-right: 8px;
+}
+

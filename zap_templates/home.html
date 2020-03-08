@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<!-- Update your html tag to include the itemscope and itemtype attributes. -->
+<html itemscope itemtype="http://schema.org/Organization" class="no-js" ng-controller="titleCtrl" ng-app="zapyle">
+
+<!-- Place this data between the <head> tags of your website -->
+<head>
+    <title>Zapyle | Discover, Sell and Buy Fashion</title>
+    <meta data-zap="index" name="description" content="Zapyle is a fun, easy and social way to shop like a pro. The most chic closets in India to buy from and your own to sell." />
+
+    <!-- Schema.org markup for Google+ -->
+    <meta data-zap="index" itemprop="name" content="Zapyle | Discover, Sell and Buy Fashion">
+    <meta data-zap="index" itemprop="description" content="Zapyle is a fun, easy and social way to shop like a pro. The most chic closets in India to buy from and your own to sell.">
+    <meta data-zap="index" itemprop="image" content="Zapyle logo">
+
+    <!-- Twitter Card data -->
+    <meta data-zap="index" name="twitter:card" content="summary">
+    <meta data-zap="index" name="twitter:site" content="@ZapyleSocial">
+    <meta data-zap="index" name="twitter:title" content="Zapyle | Discover, Sell and Buy Fashion">
+    <meta data-zap="index" name="twitter:description" content="Zapyle is a fun, easy and social way to shop like a pro. The most chic closets in India to buy from and your own to sell.">
+    <meta data-zap="index" name="twitter:image" content="[[base_url]]">
+
+
+    <!-- Open Graph data -->
+    <meta data-zap="index" property="og:title" content="Zapyle | Discover, Sell and Buy Fashion" />
+    <meta data-zap="index" property="og:type" content="website" />
+    <meta data-zap="index" property="og:url" content="[[base_url]]" />
+    <meta data-zap="index" property="og:image" content="Zapyle logo" />
+    <meta data-zap="index" property="og:description" content="Zapyle is a fun, easy and social way to shop like a pro. The most chic closets in India to buy from and your own to sell." />
+    <script type="text/javascript">
+        var INSTAGRAM_CLIENT_ID = "{{INSTAGRAM_CLIENT_ID}}"
+        var FB_CLIENT_ID = "{{FB_CLIENT_ID}}"
+        var ZAP_ENV_VERSION = "{{ZAP_ENV_VERSION}}"
+    </script>
+    <meta data-zap="index" property="og:site_name" content="Zapyle" />
+    <meta charset="utf-8">
+    <meta name="msvalidate.01" content="425B9FDD170C638E83121CF363EBC150" />
+
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" type="text/css" href="/zapstatic/frontend/bower_components/sweetalert/dist/sweetalert.css">
+    <link rel="shortcut icon" type="image/png" href="/zapstatic/frontend/favicon.ico" />
+    <link rel="stylesheet" href="/zapstatic/frontend/styles/style.css?v={{ZAP_ENV_VERSION}}">
+    <link rel="stylesheet" href="/zapstatic/frontend/styles/fonts.css?v={{ZAP_ENV_VERSION}}">
+    <!--  -->
+    <!-- endbuild -->
+    <!-- Facebook Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','//connect.facebook.net/en_US/fbevents.js');
+
+    fbq('init', '2022781211279677');
+    fbq('track', "PageView");</script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=2022781211279677&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Facebook Pixel Code -->
+
+    <script type="text/javascript">
+        // fbq('track', "InitiateCheckout");
+    </script>
+    
+
+</head>
+
+<body>
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <!-- Add your site or application content here -->
+    <header data-ng-include="'/zapstatic/frontend/views/header.html'"> </header>
+    <div data-ng-include="'/zapstatic/frontend/views/login-popup.html'"></div>
+    <div ng-view=""></div>
+    <footer id="zap_footer" data-ng-include="'/zapstatic/frontend/views/footer.html'">
+
+    </footer>
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-75163998-1', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+    <!-- Begin Inspectlet Embed Code -->
+    <script type="text/javascript" id="inspectletjs">
+    window.__insp = window.__insp || [];
+    __insp.push(['wid', 851850231]);
+    (function() {
+    function ldinsp(){if(typeof window.__inspld != "undefined") return; window.__inspld = 1; var insp = document.createElement('script'); insp.type = 'text/javascript'; insp.async = true; insp.id = "inspsync"; insp.src = ('https:' == document.location.protocol ? 'https' : 'http') + '://cdn.inspectlet.com/inspectlet.js'; var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(insp, x); };
+    setTimeout(ldinsp, 500); document.readyState != "complete" ? (window.attachEvent ? window.attachEvent('onload', ldinsp) : window.addEventListener('load', ldinsp, false)) : ldinsp();
+    })();
+    </script>
+    <!-- End Inspectlet Embed Code -->
+      <!-- build:js(.) scripts/vendor.js -->
+    {% if ZAP_ENV == 'PRODUCTION' %}
+    <script src="/zapstatic/frontend/scripts/controllers/zapjsthirdparty.min.js?v={{ZAP_ENV_VERSION}}"></script>
+    {% else %}
+    <script src="/zapstatic/frontend/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="/zapstatic/frontend/bower_components/angular/angular.min.js"></script>
+    <script src='/zapstatic/frontend/bower_components/angular-route/angular-route.min.js'></script>
+    <script src="/zapstatic/frontend/bower_components/angular-resource/angular-resource.min.js"></script>
+    <script src="/zapstatic/frontend/bower_components/angular-animate/angular-animate.min.js"></script>
+    <script src="/zapstatic/frontend/bower_components/a0-angular-storage/dist/angular-storage.min.js"></script>
+    <script src="/zapstatic/frontend/bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="/zapstatic/frontend/bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="/zapstatic/frontend/bower_components/angular-touch/angular-touch.min.js"></script>
+    <script src="/zapstatic/frontend/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="/zapstatic/frontend/bower_components/ngstorage/ngStorage.min.js"></script>
+    <script src="/zapstatic/frontend/bower_components/satellizer/satellizer.min.js"></script>
+    <script src="/zapstatic/frontend/bower_components/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="/zapstatic/frontend/bower_components/angular-img-cropper/dist/angular-img-cropper.min.js"></script>
+    <script src="/zapstatic/frontend/bower_components/angular-messages/angular-messages.js"></script>
+    <script src="/zapstatic/frontend/bower_components/cropper/dist/cropper.js"></script>
+    <!-- bower:js -->
+
+    </script>
+    <!--<script src="https://icp.citruspay.com/js/jquery.payment.min.js">
+    </script>-->
+    {% endif %}
+    <script src="/zapstatic/frontend/scripts/js/trackUserEvents.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    <link href="/zapstatic/frontend/scripts/js/jquery.twbsPagination.js">
+    <link  href="/zapstatic/frontend/bower_components/cropper/dist/cropper.css" rel="stylesheet">
+
+
+    <style type="text/css">
+        #zap_footer {
+            display: none;
+        }
+    </style>
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    {% if ZAP_ENV == 'PRODUCTION' %}
+    <script src="/zapstatic/frontend/scripts/controllers/zapjs.min.js?v={{ZAP_ENV_VERSION}}"></script>
+    {% else %}
+    <script src="/zapstatic/frontend/scripts/app.js?v={{ZAP_ENV_VERSION}}"></script>
+    <script src="/zapstatic/frontend/scripts/controllers/HomeController.js?v={{ZAP_ENV_VERSION}}"></script>
+    <script src="/zapstatic/frontend/scripts/controllers/HeaderController.js?v={{ZAP_ENV_VERSION}}"></script>
+    <script src="/zapstatic/frontend/scripts/controllers/CheckoutController.js?v={{ZAP_ENV_VERSION}}"></script>
+    <script src="/zapstatic/frontend/scripts/controllers/ProfileController.js?v={{ZAP_ENV_VERSION}}"></script>
+    <script src="/zapstatic/frontend/scripts/controllers/BloggerController.js?v={{ZAP_ENV_VERSION}}"></script>
+    <script src="/zapstatic/frontend/scripts/controllers/ProductController.js?v={{ZAP_ENV_VERSION}}"></script>
+    <script src="/zapstatic/frontend/scripts/directives.js?v={{ZAP_ENV_VERSION}}"></script>
+    <script src="/zapstatic/frontend/scripts/main.js?v={{ZAP_ENV_VERSION}}"></script>
+    <script src="/zapstatic/frontend/scripts/controllers/TokenController.js?v={{ZAP_ENV_VERSION}}"></script>
+    <script src="/zapstatic/frontend/scripts/services/cartService.js?v={{ZAP_ENV_VERSION}}"></script>
+    <script src="/zapstatic/frontend/scripts/controllers/HomeFeedController.js?v={{ZAP_ENV_VERSION}}"></script>
+    <script src="/zapstatic/frontend/scripts/controllers/BordingController.js?v={{ZAP_ENV_VERSION}}"></script>
+    <!--<script src="/zapstatic/frontend/scripts/controllers/SummaryController.js"></script>-->
+    <script src="/zapstatic/frontend/scripts/controllers/PopController.js?v={{ZAP_ENV_VERSION}}"></script>
+    <script src="/zapstatic/frontend/scripts/controllers/zapupload.js?v={{ZAP_ENV_VERSION}}"></script>
+    <script src="/zapstatic/frontend/scripts/controllers/editproductController.js?v={{ZAP_ENV_VERSION}}"></script>
+    <script src="/zapstatic/frontend/scripts/controllers/summaryController.js?v={{ZAP_ENV_VERSION}}"></script>
+    <!-- // <script src="scripts/js/main.js"></script> -->
+    <!-- custom scripts -->
+    <!-- endbuild -->
+
+    {% endif %}
+    <script>
+    function loadScript(sURL) {
+          var oS = document.createElement('script');
+          oS.type = 'text/javascript';
+          oS.src = sURL;
+          document.getElementsByTagName('head')[0].appendChild(oS);
+    };
+    var ctr_uls = ['https://icp.citruspay.com/js/citrus.js', 'https://icp.citruspay.com/js/jquery.payment.min.js']
+    for(var i in ctr_uls){
+        loadScript(ctr_uls[i]);
+    }
+    </script>
+</body>
+
+</html>

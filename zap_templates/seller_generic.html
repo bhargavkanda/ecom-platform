@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>A Simple Responsive HTML Email</title>
+        <style type="text/css">
+        body {margin: 0; padding: 0; min-width: 100%!important;}
+        .content {width: 100%; max-width: 600px;}
+        @media only screen and (max-width: 480px){
+            .templateColumnContainer{
+                display:block !important;
+                width:100% !important;
+            }.vertical-spacer-container {
+                height: 0 !important;
+            }.text-on-girl{
+                padding-top: 340px !important;
+            }
+            
+        }
+        
+        </style>
+    </head>
+    <body yahoo bgcolor="#f6f8f1" >
+        <table width="100%" bgcolor="#f2f2f2" border="0" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;" >
+            <tr class="logo" bgcolor="#000000">
+                <td>
+                    <table class="content" align="center" cellpadding="7" cellspacing="0" border="0">
+                        <tr>
+                            <td style="text-align:center;">
+                                <img alt="ZAPYLE" src="http://zapmob.cloudapp.net/media/email/welcome/logo.png" style="height: 46px;" style="font-size:40px; color:#fff;">
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class="green-bar">
+                <td height="10" bgcolor="#52FDB9"></td>
+            </tr>
+            <tr>
+                <td>
+                    <h4 style="text-align:left;margin:10px;">Hi {{seller_name}},</h4>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">Good news, you've scored a sale! Your item(s) {{product_titles}}has been ordered by {{buyer_name}}. We hope you're excited!</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">Here's what you need to do to go ahead with the sale of your item:</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">1. Keep your item packed and ready for delivery. Remember, selling your item is sharing some love!</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">2. Our courier representative will come for a pick up of your item in a day or two.</p>
+                </td>
+            </tr>
+
+            
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">Here are the details of your order:</p>
+                </td>
+            </tr>
+            <tr>
+
+                <td>
+                <table width=100% style="border-top:1px solid; border-bottom:1px solid; border-collapse:collapse !important;" >
+                    <tr class="border_bottom">
+                        <td colspan="2" style="text-align:right; padding-right:30px; border-bottom:1pt solid black !important; font-size: small !important;" width=50%>PRODUCT NAME</td> 
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;" width=10%>SIZE</td> 
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;" width=20%>COLOUR</td> 
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;" width=20%; >QTY.</td> 
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;" width=20%; >PRICE</td> 
+                    </tr>
+                    {% for pro in products %}
+                    <tr class="border_bottom">
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;"  width=20%><a href={{pro.productLink}} target="_blank"><img src={{pro.img}} height="150px;" style="padding-top: 10px; padding-bottom: 10px;"></a></td> 
+                        <td style="text-align:left; border-bottom:1pt solid black !important; font-size: small !important;"  width=30%>{{pro.productName}}</td> 
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;"  width=10%>{{pro.productSize}}</td> 
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;"  width=20%>{{pro.productColor}}</td>
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;"  width=20%>{{pro.productQuantity}}</td>
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;" width=20%>Rs. {{pro.productPrice}}</td> 
+                    </tr>
+                    {% endfor %}
+                </table>
+                </td>
+            </tr>
+            {% if userTypeDecider == 1 %}
+            <tr class="user_type" >
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;" ><b>IMPORTANT:</b>Please attach your official invoice along with the packed item to the buyer. </p>
+                </td>
+            </tr>
+            {% endif %}
+           
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">It's just that simple! Just pack your item and off it goes.</p>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">Once your item has been received by the buyer and your account is credited with your earnings, it's time for you to shop! Browse through our latest collection here: <a href="http://www.zapyle.com/#/feeds">www.zapyle.com</a> It's a steal!</p>
+                </td>
+            </tr>
+            
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">Happy Shopping!</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">Love,<br>The Zapyle Team</p>
+                </td>
+            </tr>
+
+        </table>
+    </body>

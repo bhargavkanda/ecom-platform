@@ -1,0 +1,168 @@
+<div>
+    <form ng-submit="search_order(search_id)"><span><input type="text" ng-model="search_id" required placeholder="Enter Order Id"></span><span><input type="submit" value="search" ></span></form>
+</div>
+<div class="CSSTableGenerator" style="width:123%">
+    <table>
+        <tr>
+            <th>index</th>
+            <th>OrderID</th>
+            <th>Product</th>
+            <th>FinalPrice</th>
+            <th>Seller</th>
+            <th>Buyer</th>
+            <th>PymentMode</th>
+            <th>Procurement</th>
+            <th>Verification</th>
+            <th>Shipping/Return</th>
+            <th>ReturnByBuyer</th>
+            <th>PaymentMode</th>
+            <th>Payout</th>
+        </tr>
+        <tr ng-class="{'cancelled':order.cancelled == true}" ng-repeat="order in orders">
+            <td>[[$index+1]]</td>
+            <td>
+                <a ng-click="showAcDetails(order.order_number)">[[order.order_number]]</a><hr>
+                [[order.placed_at | date:'MM/dd/yyyy @ h:mma' ]]
+            </td>
+            <td>
+                <a ng-href="/product/[[order.ordered_product.id]]/[[order.ordered_product.title]]" target="blank">
+                    <img class="product-image" height="125px" width="125px" ng-src="[[order.ordered_product.image]]">
+                    <div>[[order.ordered_product.title]]</div>
+                </a>
+            </td>
+            <td>Rs.[[order.final_price]]</td>
+            <td><!--  ng-if="order.confirmed_with_seller==false"> -->
+                <b>[[order.seller]]</b><br>
+                [[order.seller_address]]<br>
+                <input ng-hide="order.confirmed_with_seller || order.order_status=='cancelled'" type="button" value="Confirm" ng-click="confirm_order(order,'seller')" id="btn_seller[[order.id]]"/>
+                <b ng-show="order.confirmed_with_seller">Confirmed</b>
+                <button ng-click="order.change_seller='true'" ng-show="order.order_status=='being_confirmed'">Edit</button>
+                <select ng-show="order.change_seller" name="sub-category" ng-model="pickup_seller" ng-change="change_buyer_seller(pickup_seller,'seller',order)"
+  ng-options="i as (i.name+' '+i.phone) for i in all_addresses" required><option value="">Select Pickup Address</option>
+                </select>
+            </td>
+            <td>
+                <b>[[order.buyer]]</b><br>
+                [[order.buyer_address]]<br>
+                <input ng-hide="order.confirmed_with_buyer || order.order_status=='cancelled'" type="button" value="Confirm" ng-click="confirm_order(order,'buyer')" id="btn_buyer[[order.id]]"/>
+                <b ng-show="order.confirmed_with_buyer">Confirmed</b>
+                <button ng-click="order.change_buyer='true'" ng-show="order.order_status=='being_confirmed'">Edit</button>
+                <select ng-show="order.change_buyer" name="sub-category" ng-model="pickup_buyer" ng-change="change_buyer_seller(pickup_buyer,'buyer',order)"
+  ng-options="i as (i.name+' '+i.phone) for i in all_addresses" required><option value="">Select Pickup Address</option></select>
+            </td>
+            <td>[[order.payment_mode]] / [[order.platform]]</td>
+            <td>
+                <button ng-show="order.order_status=='confirmed'" ng-click="triggerLogistics(order,'logistics')" id="btn_logistics[[order.id]]">Trigger Logistics</button>
+                
+                <button ng-show="order.order_status=='pickup_in_process' && order.pickup_orders_logistics==0 && order.pickup_partner!='ZP'"" ng-click="triggerLogistics(order,'pickup')" id="btn_pickup[[order.id]]">[[order.pickup_partner]] Pickup</button>
+                <button id="btn_amzad_pick[[order.id]]" ng-show="order.order_status=='pickup_in_process' && order.pickup_partner=='ZP'" ng-click="amzadPicked(order,'picked')">Amzad Picked</button>
+
+                <select ng-init="order.new_pickup_seller=order.pickup_partner" ng-show="order.order_status=='pickup_in_process' && order.pickup_orders_logistics==0" name="sub-category" ng-model="order.new_pickup_seller" ng-change="change_partner(order, 'pickup', order.new_pickup_seller)" ng-options="i as i for i in ['DL','AR','ZP','PR','SR']" required>
+                </select>
+
+                <button id="btn_amzad_reach[[order.id]]" ng-show="order.order_status=='picked_up' && order.pickup_partner=='ZP'" ng-click="amzadPicked(order,'reched')">Amzad Reached</button>
+                <br><br><span class="[[order.order_status]] label">[[order.order_status]]</span>
+                <br><span ng-if="order.pickup_partner || order.pickup_partner">( [[order.pickup_partner]] / [[order.delivery_partner]] )</span>
+            </td>
+            <td>
+                <button ng-show="order.order_status=='verification' && !order.product_verification" ng-click="verifyPickedUp(order,'product_approved')" id="btn_approve[[order.id]]">Approve</button>
+                <button ng-show="order.order_status=='verification' && !order.product_verification" ng-click="verifyPickedUp(order,'product_rejected')" id="btn_reject[[order.id]]">Reject</button>
+                <span ng-show="order.product_verification">[[order.product_verification]]</span>
+            </td>
+            <td>
+                <button ng-if="order.product_verification=='approved' && order.delivery_order_logistics==0" ng-click="triggerLogistics(order,'delivery', 'normalDelivery')" class="btn_delivery[[order.id]]">
+                    <span ng-hide="order.delivery_partner=='ZP'">Trigger [[order.delivery_partner]] Delivery</span>
+                    <span ng-show="order.delivery_partner=='ZP'">Amzad Delivery</span>
+                </button>
+                <button ng-if="order.delivery_partner=='ZP' && order.order_status=='on_the_way_to_you'" ng-click="amzadDelivery(order)" id="btn_amzad[[order.id]]">Amzad Delivered</button>
+                <button ng-if="order.order_status=='product_rejected'" id="btn_return_trig[[order.id]]" ng-click="triggerReturn(order)">Trigger Return</button>
+                <button class="btn_delivery[[order.id]]" ng-if="order.order_status=='return_requested' && order.delivery_order_logistics==0"" ng-click="triggerLogistics(order, 'delivery', 'returnDelivery')">Trigger [[order.return_delivery_partner]] Return</button>
+
+                <select ng-init="order.new_delivery_partner=order.delivery_partner" ng-show="order.product_verification=='approved' && order.delivery_order_logistics==0" name="sub-category" ng-model="order.new_delivery_partner" ng-change="change_partner(order, 'delivery', order.new_delivery_partner)" ng-options="i as i for i in ['DL','AR','ZP','PR','SR']" required>
+                </select>
+            </td>
+            <td>
+                <button ng-show="order.delivery_order_logistics || order.delivery_order_logistics" ng-click="TrackOrder(order)" id="btn_track[[order.id]]">Track Order</button>
+                <button ng-show="order.order_status=='being_confirmed'" ng-click="triggerLogistics(order,'cancel')" id="btn_cancel[[order.id]]">Cancel Order</button>
+            </td>
+            <td>4</td>
+            <td>5</td>
+        </tr>
+    </table>
+</div>
+
+<div class="static-footer" ng-show="1">
+    <div align="center" id="orderpagination" >
+        <ul id="orderpagination-demo" class="pagination-sm pagination"></ul>
+    </div>
+</div>
+
+<div id="acc_details" class="pri-overlay">
+    <div class="glass"></div>
+    <div class="content">
+        <div class="header">Account Details</div>
+        <div class="body">
+            <b><u>Seller</u></b>
+            <div><span>Account Number :</span>
+                <span>[[ac.seller.number]]</span>
+            </div>
+            <div><span>IFSC :</span>
+                <span>[[ac.seller.ifsc]]</span>
+            </div>
+            <div><span>Email :</span>
+                <span>[[ac.seller.email]]</span>
+            </div>
+            <div><span>Phone :</span>
+                <span>[[ac.seller.phone]]</span>
+            </div><br>
+           <b><u>Buyer</u></b>
+            <div><span>Account Number :</span>
+                <span>[[ac.buyer.number]]</span>
+            </div>
+            <div><span>IFSC :</span>
+                <span>[[ac.buyer.ifsc]]</span>
+            </div>
+            <div><span>Email :</span>
+                <span>[[ac.buyer.email]]</span>
+            </div>
+            <div><span>Phone :</span>
+                <span>[[ac.buyer.phone]]</span>
+            </div>
+        </div>
+        <div class="footer">
+            <span class="button cancel" new-address>
+                <a ng-click="showAcDetails('','close')">Close</a></span>
+        </div>
+    </div>
+</div>
+
+<style>
+.delivered {
+    background-color: #2980b9;
+}
+.being_confirmed {
+    background-color: #b824c8;
+}
+.pickup_in_process {
+    background-color: #dcbde0;   
+}
+.product_approved {
+    background-color: #34E769;
+}
+.on_the_way_to_you {
+    background-color: #29809B;
+}
+.return_requested {
+    background-color: #ff0000;
+}
+.label {
+    display: inline;
+    line-height: 1;
+    color: #000;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 4.25em;
+    padding: 1px 4px;
+}
+</style>

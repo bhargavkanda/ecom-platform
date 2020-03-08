@@ -1,0 +1,22 @@
+<div class="screen_header">Sign In</div>
+<div class="screen_content no_footer">
+	<form ng-submit="signin()">
+		<div class="input-field text" ng-class="{'error':loginError.email}">
+			<span class="text_input">
+				<label for="email">Email<span class="input_error">[[loginError.email]]</span></label>
+				<input type="text" name="email" id="email" ng-model="email">
+			</span>
+		</div>
+		<div class="input-field text" ng-class="{'error':loginError.password}">
+			<span class="text_input">
+				<label for="password">Password<span class="input_error">[[loginError.password]]</span></label>
+				<input type="password" name="password" id="password" ng-model="pwd">
+				<span class="show_hide">Show</span>
+			</span>
+		</div>
+		<div class="input-field submit">
+			<button class="btn waves-effect waves-light full_width" type="submit" name="action">Sign In</button>
+		</div>
+	</form>
+</div>
+<a href="#" data-activates="#otp" class="block center forgot_password">Forgot Password?</a>

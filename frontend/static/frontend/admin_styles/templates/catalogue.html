@@ -1,0 +1,128 @@
+<div ng-controller="ListingCtrl">
+    <div style="text-align: right;margin-top: -50px;">
+        <input ng-model="search_words" style="width: 250px;height: 25px;" id="listing_search" placeholder="Search Listings">
+    </div>
+    <div ng-repeat="product in productsToApprove track by $index">
+        <div class="size4of12">
+            <span class="closet-size">[[product.upload_time | date:"MM/dd/yyyy 'at' h:mma"]]</span>
+            <div class="seller-info">
+                <a href="/#/profile/[[product.user.id]]" target="blank">
+                    <img ng-src="[[product.user.profile_pic]]">
+                    <span class="name verified">[[product.user.zap_username]]</span>
+                    <span class="closet-size">[[product.user.num_of_products]] Products</span>
+                </a><!-- <button ng-click="load_users(product.user.id,product.pickup_address,product.id,$index)">change</button> -->
+            </div>
+            <div class="product-images">
+                <div class="large">
+                    <a href="/product/[[product.id]]" target="blank" ng-if="page=='approved'"><img ng-src="[[product.image1]]"></a>
+                    <img ng-src="[[product.image1]]" ng-if="page!='approved'">
+                </div>
+                <ul class="thumbnails">
+                    <li id="img[[thumbs.id]]" ng-class="{'is_current':$index==0}" ng-click="get_big_size(thumbs.id,thumbs.url,product)" class="size2of12" ng-repeat="thumbs in product.thumbnails"><img ng-src="[[thumbs.url]]">
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="product-details size7of12">
+            <b ng-if="product.sale==2" class="backcolor">SALE</b>
+            <b ng-if="product.sale==1" class="backcolor">SOCIAL</b>(Completed:[[product.completed]])<b ng-hide="product.parcel || product.sale==1">(Parcel Not Available)</b>
+            <button ng-click="goto_edit_page(product.id,$index)">Edit</button>
+            <h6 class="product-title attribute">[[product.title]]</h6>
+            <div class="product-description attribute">[[product.description]]</div>
+            <div>
+                <span class="size6of12 attribute">
+                    <span>Brand: </span>
+                    <span id="product-brand">[[product.brand.brand]]</span>
+                </span>
+                <span class="size5of12 attribute">
+                    <span >Style: </span>
+                    <span id="product-style">[[product.style.style_type]]</span>
+                </span>
+            </div>
+
+            <div>
+                <span class="size6of12 attribute">
+                  <span>Occasion: </span>
+                                <span>[[product.occasion.name]]</span>
+                               </span>
+                                <span class="size5of12 attribute">
+                  <span>Color: </span>
+                                <span>[[product.color.name]]</span>
+                                
+                </span>
+            </div>
+
+            <div ng-if="product.sale == '2'">
+                <span class="size6of12 attribute">
+                    <span>Condition: </span>
+                    <span>
+                        [[product.condition=='0' ? conditions[0].name : (product.condition=='1' ? conditions[1].name : (product.condition=='2' ? conditions[2].name : conditions[3].name))]]
+                    </span>
+                </span>
+                <span class="size5of12 attribute">
+                    <span>Age: </span>
+                    <span>
+                        [[product.age=='0' ? age[0].name : (product.age=='1' ? age[1].name : (product.age=='2' ? age[2].name : age[3].name))]]
+                    </span>
+                </span>
+            </div>
+            <div>
+                <span class="size6of12 attribute">
+                    <span>Product Category: </span>
+                    <span>[[product.product_category.name]]</span>
+                </span>
+                <span class="size5of12 attribute">
+                    <span>Pickup: </span>
+                    <span ng-show="product.pickup_address">[[product.pickup_address.name]],[[product.pickup_address.address]]</span><span ng-hide="product.pickup_address">Not selected</span>
+                </span>
+            </div>
+            <div class="size attribute">
+                <span>Sizes: </span>
+                <div class="normal-sizes">
+                    <div ng-repeat="s in product.no_of_products"><span class="size">[[s.size]]</span>
+                        <span class="quantity">
+                            Qty: <span id="quantity">[[s.qty]]</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-if="product.sale == '2'">
+                <span class="size6of12 price"><!--  class="price attribute size7of12"> -->
+                    <span class="new icon-rupee">[[product.listing_price]]</span>
+                    <span class="old icon-rupee" ng-if="product.original_price!=null">[[product.original_price]]</span>
+                    <span class="discount" ng-if="product.original_price!=null">[[100-(product.listing_price/product.original_price)*100 | limitTo : limit : begin | number:0]]</span>
+                </span>
+                <!-- <span class="quantity attribute size5of12"></span> -->
+                
+            </div>
+            <div class="approve-ctas">
+                <span class="size6of12">
+                    <span class="button" ng-if="(page == 'disapproved' || page=='catalogue') && product.completed == true">
+                        <a ng-click="approve(product)" id="approve_button_[[product.id]]">APPROVE</a>
+                    </span>
+                    <span class="button" ng-if="page=='disapproved' || page=='approved'"> 
+                        <a ng-click="delete_product(product.id)">Delete</a>
+                    </span>
+                </span>
+                <span class="size6of12">
+                    <select ng-model="product.reason" required ng-options="i.id as i.reason for i in reject_reasons" ng-show="page=='catalogue' || page=='approved'">
+                        <option value="">Select a reason for disapprove</option>
+                    </select>   
+                    <span ng-show="product.reason">
+                        <input type="checkbox" ng-checked="1" ng-model="product.send_pushnot"/>Send Push Notification
+                    </span>
+                    <span class="button" ng-if="page=='catalogue' || page=='approved'"> 
+                        <a ng-click="reject_product(product.id,product.reason,product.send_pushnot,$index)" id="disaprv_button_[[product.id]]">DISAPPROVE</a>
+                    </span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="static-footer" ng-show="total_pages>1">
+        <div align="center" id="paginationholder" >
+            <ul id="pagination-demo" class="pagination-sm pagination"></ul>
+        </div>
+    </div>
+</div>

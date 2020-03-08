@@ -1,0 +1,119 @@
+{% extends "account/base.html" %}
+{% block extra_head %}
+	<script>
+		zapyle.controller('OrderController', function($scope, $http, $rootScope){
+			$scope.showPaymentOptions = function(){
+				$scope.cart()
+		        setTimeout(function(){
+					$scope.getZapCash()
+			        $('.right_panel_inner > div').removeClass('is_visible');
+			        $($('.right_panel_inner').attr('data-activates') == '#checkout').addClass('is_visible');
+			        $('#checkout').addClass('is_visible');
+			        $('.right_panel').addClass('is_visible');
+		        	var address = $('.try_payment_again').data('address')
+			        $scope.my_addresses(address);
+		        	// console.log($(".address_item").length)
+		        	// $(".address_item [data-id = "+address+"]").addClass('selected')
+		        	$('#order_review').removeClass('open')
+		        	$('#payment_options').removeClass('open')
+		        	
+		        	if($('.try_payment_again').data('zapwalletused')!=0.0){
+				        $scope.setZapCash($('.try_payment_again').data('zapwalletused'))
+		        	}
+			        $('#checkout').attr('class', 'is_visible step_2');
+					// closeAccordion($('.step.open h6.title'));
+					$('#order_review .price').addClass('is_visible')
+					$('#delivery_address .address').addClass('is_visible')
+					// openAccordion($('#delivery_address h6.title'));
+		        })
+		        // $scope.getSavedCards();
+		        // $scope.get_accesskey_vanity();
+		        // $scope.juspayOrder(false);
+		   	}
+
+		   	$scope.viewOrder = function(){
+		   		$scope.my_orders()
+		   		$('.right_panel_inner > div').removeClass('is_visible');
+				$('#my_orders').addClass('is_visible');
+		        $('.right_panel').addClass('is_visible');
+		   	}
+		})
+	</script>
+{% endblock %}
+{% block body %} 
+{% if status == 'success' %}
+
+<!-- Google Code for Conversion Pixel Conversion Page -->
+<script type="text/javascript">
+/* <![CDATA[ */
+	var google_conversion_id = 929496837;
+	var google_conversion_language = "en";
+	var google_conversion_format = "3";
+	var google_conversion_color = "ffffff";
+	var google_conversion_label = "PA66COnp02QQhf6buwM";
+	var google_remarketing_only = false;
+/* ]]> */
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+</script>
+<noscript>
+	<div style="display:inline;">
+	<img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/929496837/?label=PA66COnp02QQhf6buwM&amp;guid=ON&amp;script=0"/>
+	</div>
+</noscript>
+<!-- End Google Code for Conversion Pixel Conversion Page -->
+
+<!-- Facebook Pixel Code -->
+<script>
+	!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+	n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+	t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+	document,'script','https://connect.facebook.net/en_US/fbevents.js');
+
+	fbq('init', '2022781211279677');
+	fbq('track', "Purchase");
+</script>
+<noscript>
+	<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2022781211279677&ev=PageView&noscript=1"/>
+</noscript>
+<!-- End Facebook Pixel Code -->
+<main ng-controller="OrderController">
+	<div class="page_content">
+		<div class="center_size6of12 center_align">
+			<div class="order_confrimation">
+				<h2 class="icon_top icon-tick">Awesome!</h2>
+				<p class="intro">Your order has been placed successfully.</p>
+				<a ng-click="viewOrder()" class="all_caps inline_btn">View order details</a>
+			</div>
+			
+			<!-- <div class="invite_friends">
+				<h3>Get a discount of 200</h3>
+				<p class="intro">Invite a friend and get her to buy or upload an item on Zapyle to get a discount of ₹200 on this order.</p>
+				<p class="intro">Hurry! Offer valid only for the next 48 hours.</p>
+				<a href="#" class="btn waves-effect waves-light">Invite Friends</a>
+				<a href="/buy" class="all_caps inline_btn block">Continue Shopping</a>
+			</div> -->
+		</div>
+	</div>
+</main>
+{% else %}
+<main ng-controller="OrderController">
+	<div class="page_content">
+		<div class="center_size6of12 center_align">
+			<div class="order_confrimation">
+				<h2 class="icon_top icon-cross">Oops!</h2>
+				<p class="intro">{{detail}}</p>
+			</div>
+			{% if retry %}
+			<div class="try_payment_again" data-address={{address}} data-zapwalletused={{zapwallet_used}}>
+				<p class="intro">Please try paying through a different payment mode.</p>
+				<a ng-click="showPaymentOptions()" class="btn-flat waves-effect waves-pink pink block">Try Again</a>
+				<a ng-click="showPaymentOptions()" class="btn">Payment Options</a>
+			</div>
+			{% endif %}
+		</div>
+	</div>
+</main>
+{% endif %}
+{% endblock %}

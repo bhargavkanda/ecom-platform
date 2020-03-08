@@ -1,0 +1,37 @@
+---
+- hosts: develop_server
+  remote_user: zapyle
+  vars:
+    folder: /home/zapyle/zapyle_new
+    git_repo: git@github.com:Zapyle/zapyle_new.git
+    branch: develop
+    zapenv: /home/zapyle/zapyle_new/env
+  tasks:
+  - name: Pulling 'develop' branch from 'zapyle_new' Repository.
+    git: 
+      repo: "{{git_repo}}" 
+      dest: "{{folder}}" 
+      version: "{{branch}}"
+      force: yes
+  - name: Minification of js Files 
+    shell: "{{zapenv}}/bin/python manage.py minifyjs"
+    args:
+      chdir: "{{folder}}"
+  - name: Collecting static files
+    shell: "{{zapenv}}/bin/python manage.py collectstatic --noinput"
+    args:
+      chdir: "{{folder}}"
+  - name: Database makemigrations
+    shell: "{{zapenv}}/bin/python manage.py makemigrations"
+    args:
+      chdir: "{{folder}}"
+  - name: Database migrate
+    shell: "{{zapenv}}/bin/python manage.py migrate"
+    args:
+      chdir: "{{folder}}"
+  - name: Develop server is restarting zapyle_server_dev
+    shell: sudo supervisorctl restart zapyle_server_dev
+    sudo: yes 
+  - name: Staging server is restarting nginx
+    service: name=nginx state=restarted
+    sudo: yes      

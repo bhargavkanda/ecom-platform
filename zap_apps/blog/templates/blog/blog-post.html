@@ -1,0 +1,125 @@
+{% extends "account/base.html" %}
+{% block extra_head %}
+<title>{{title}} | Zapyle</title>
+<link rel="stylesheet" href="/zapstatic/blog/css/blog-style.css">
+<meta property="og:title" content="{{title}}" />
+<meta property="og:image" content="https://www.zapyle.com{{cover}}" />
+<meta property="og:url" content="https://www.zapyle.com/blog/post/{{id}}/{{slug}}" />
+{% endblock %}
+{% block body %}
+{% load humanize %}
+    <main ng-controller="BlogPostController" class="content" ng-cloak>
+        <div class="blog_post" ng-repeat="post in posts">
+            <div class="blog_content">
+                <span class="post_time">[[post.time]]</span>
+                <h1 class="post_title">
+                    <a href="/blog/post/[[post.id]]/[[post.slug]]" class="black">[[post.title]]</a>
+                    <a class="edit_btn" ng-if="post.editable && post.category.slug!='look-book'" href="/blog/post/[[post.id]]/edit">Edit</a>
+                    <a class="edit_btn" ng-if="post.editable && post.category.slug=='look-book'" href="/look/post/[[post.id]]/edit">Edit</a>
+                </h1>
+                <div class="post_category">[[post.category.name]]</div>
+                <div ng-if="post.category.slug!='look-book'">
+                    <div class="post_body" ng-bind-html="post.body | unsafe"></div>
+                    <div class="products" ng-if="post.products.length>0">
+                        <h6>Shop Products</h6>
+                        <div class="related_products">
+                            <div class="product_item small" ng-repeat="p in post.products" data-id="[[p.id]]" ng-class="{'sold_out':!p.available, 'designer_product':p.user_type == 'designer'}">
+                                <div class="product_item_inner">
+                                    <div class="product_display">
+                                        <a ng-href="/product/[[p.id]]/[[p.title]]">
+                                            <div class="image_holder">
+                                                <img ng-src="[[p.image]]" alt="[[ p.title ]]">
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="product_details">
+                                        <h3 class="title">[[ p.title ]]</h3></a>
+                                        <div class="price">
+                                            <span class="new">[[p.listing_price | number]]</span>
+                                            <span class="old" ng-show="p.original_price>p.listing_price">[[p.original_price | number]]</span>
+                                            <span class="discount" ng-class="{'show_percent':!p.discount.indexOf('off')}" ng-show="p.original_price>p.listing_price || !p.available">[[p.discount]]</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="post_body" ng-if="post.category.slug=='look-book'">
+                    <p>[[post.body]]</p>
+                    <div class="inline look_layout">
+                        <div class="size7of12 look">
+                            <div class="cover_pic">
+                                <img src="[[post.cover_pic]]" alt="[[post.title]]">
+                            </div>
+                            <div class="look_data">
+                                <div class="left">
+                                    <span class="stylist">[[post.author_name]]</span>
+                                </div>
+                                <div class="right">
+                                    <a ng-click="love_or_unlove_blog(post, $event)" ng-class="{'loved':post.loved_by_user}" class="love_btn"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="products size5of12 left_align">
+                            <div class="products_inner">
+                                <div class="product_item" ng-repeat="p in post.products"
+                                     ng-class="{'sold_out':!p.available, 'selected':p.available}" data-id="[[p.id]]">
+                                    <div class="inline">
+                                        <div class="size4of12 mobile_also">
+                                            <a ng-href="/product/[[p.id]]/[[p.title | spaceless]]">
+                                                <img ng-src="[[p.image.replace('100x100','500x500')]]">
+                                            </a>
+                                        </div>
+                                        <div class="size8of12 mobile_also" style="padding-left: 15px;">
+                                        <h6 class="title" style="margin:0;">
+                                            <a class="black brand">[[p.brand_name]]</a>
+                                        </h6>
+                                        <a class="black" ng-href="/product/[[p.id]]/[[p.title | spaceless]]"
+                                           style="font-size: 14px;margin: 2px 0 6px;display: block;">[[p.title]]</a>
+                                        <div class="sizes" ng-if="p.available">
+                                            <div class="input-field" id="post-category" style="margin: 0 !important;">
+                                                <select>
+                                                  <option value="" disabled selected>Select Size</option>
+                                                  <option value="[[size.id]]" ng-repeat="size in p.sizes" on-finish-render="materializeSelect">[[size.category_type == 'FW' ? 'EU ' + size.eu_size : size.size]]</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="price price_wrapper" style="margin-top: -10px;">
+                                            <span class="new">[[p.listing_price | number]]</span>
+                                            <span class="old" ng-if="p.original_price>p.listing_price">[[p.original_price | number]]</span>
+                                            <span class="discount" ng-if="p.original_price>p.listing_price">[[p.discount]]% OFF</span>
+                                        </div>
+                                        <a ng-click="love(p, $event)" ng-class="{'loved':p.liked_by_user}" class="love_btn"></a>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="buy_cta">
+                                <a class="cart_btn btn waves-effect waves-light full_width " ng-click="addToCart_bulk(post, $event)">Add to tote</a>
+                                <!--<a class="confirm_btn btn waves-effect waves-light full_width is_hidden" ng-click="confirmCart()">Confirm</a>-->
+                                <a data-activates="#cart" class="goto_btn btn waves-effect waves-light full_width is_hidden" ng-click="gotoToCart()">Go to tote</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="engagement_bar">
+                <div class="engagement_bar_inner">
+                    <div class="zap_links left">
+                        <a ng-click="love_or_unlove_blog(post, $event)" ng-class="post.loved_by_user ? 'loved' : ''" class="icon-heart_empty love_btn no_text"></a>
+                        <a ng-if="post.editable && post.category.slug!='look-book'" href="/blog/post/[[post.id]]/edit">Edit</a>
+                        <a ng-if="post.editable && post.category.slug=='look-book'" href="/look/post/[[post.id]]/edit">Edit</a>
+                    </div>
+                    <div class="social_links right">
+                        <a target="_blank" class="icon-twitter" href="http://twitter.com/share?text=[[post.title]]&url=https%3A%2F%2Fwww.zapyle.com%2Fblog%2Fpost%2F[[post.id]]%2F[[post.slug]]"></a>
+                        <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=www.zapyle.com/blog/post/[[post.id]]/[[post.slug]]" class="icon-facebook"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="comments"></div>
+        </div>
+    </main>
+    <script src="/zapstatic/blog/js/thirdparty/jquery.cycle2.min.js"></script>
+    <script src="/zapstatic/blog/js/blogPostController.js"></script>
+{% endblock %}

@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title></title>
+        
+        <style type="text/css">
+        body {
+            
+            border: 1px solid;
+            margin: 0;
+            /*padding: 0;*/
+            width: 800px;
+             
+        }
+        .content {
+            max-width: 600px;
+            width: 100%;
+        }
+        .size6of12 {
+            display: inline-block;
+            text-align: center;
+            width: 398px;
+        }
+        .title {
+            border-right: 1px solid;
+            width: 465px;
+        }
+        .product-details div span {
+            display: inline-block;
+            font-size: 14px;
+            padding: 5px;
+        }
+        .product-details {
+            font-size: 0;
+        }
+        .quantity {
+            border-right: 1px solid;
+            text-align: right;
+            width: 152px;
+        }
+        .price {
+            text-align: right;
+            width: 100px;
+        }
+        .product-details > div {
+            border-bottom: 1px solid;
+        }
+        .logos {
+            border-bottom: 1px solid;
+            font-size: 0;
+        }
+        .size6of12:first-child {
+            border-right: 1px solid;
+            width: 399px;
+        }
+        .header {
+            border-top: 1px solid;
+            font-weight: bold;
+        }.addresses {
+            font-size: 0;
+            border-top: 1px solid;
+        }.addresses > span {
+            display: inline-block;
+            font-size: 14px;
+            padding-left: 10px;
+            padding-bottom: 10px;
+            /*width: calc(50% - 11px);*/
+            vertical-align: top;
+        }.addresses > span:first-child {
+            border-right: 1px solid;
+
+        }.name::after, .city::after, .state::after {
+            content: ", ";
+        }.pincode::after {
+            content: ".";
+        }.name {
+            font-weight: bold;
+        }.name, .pincode {
+            display: block;
+        }.phone::before {
+            content: "Ph No.: ";
+        }.addresses p {
+            font-weight: bold;
+            margin: 10px 0 5px;
+        }.return-address {
+            display: inline-block;
+            font-size: 12px;
+            width: 60%;
+            padding-bottom: 10px;
+        }.return-address p {
+            margin: 5px 0;
+        }.code-image {
+            /*width: 40%;*/
+            display: inline-block;
+        }.bar-code {
+            font-size: 0;
+        }.bar-code * {
+            font-size: 14px;
+        }
+        .packing-slip{
+            border: 1px dashed;
+        }
+        img{
+            padding: 5px;
+        }.declaration{
+            border: 1px dashed;
+            padding: 10px;
+            /*padding-bottom: 5px;*/
+        }.seller-address{
+            width: 388px;
+        }.buyer-address{
+            width: 388px;
+        }
+
+        </style>
+
+    </head>
+    <body yahoo bgcolor="#f6f8f1" style="font-family:'Lato', Trebuchet MS, Lucida Sans, Tahoma, Helvetica, Arial;">
+       <div class="logos">
+            <span class="size6of12"><img src="https://www.zapyle.com/zapstatic/website/images/logo_black.png" style="height:70px;"></span>
+            <span class="size6of12"><img src={{delhivery_logo}} style="height:70px; width:250px; "></span>
+       </div>
+       <div class="bar-code">
+           <span class="code-image"><img src={{waybill_barcode}}></span>
+           <span class="order-id-wrapper" style="float: right;">Order Reference: <b class="order-id" style="padding: 10px;">{{order_number}}</b></span>
+           <span class="coc-code" style="display: block;font-weight: bold;padding: 10px;text-align: right; font-size:30px;">{{coc_code}}</span>
+       </div>
+        <div class="addresses">
+            <span class="seller-address"> <p>From:</p> <span class="name">{{from_name}}</span> <span>{{from_add}}</span> <br><span class="city">{{from_city}}</span><span class="state">{{from_state}}</span><span class="pincode">{{from_pincode}}</span><span class="phone">{{from_phone}}</span></span>
+            <span class="buyer-address"><p>To:</p> <span class="name">{{to_name}}</span> <span>"{{to_add}}</span> <span class="city">{{to_city}}</span><span class="state">{{to_state}}</span><span class="pincode">{{to_pincode}}</span><span class="phone">{{to_phone}}</span></span>
+        </div>
+        <div class="product-details">
+            <div class="header">
+                <span class="title">Product</span>
+                <span class="quantity">Quantity</span>
+                <span class="price">Price</span>
+            </div>
+            <div class="product">
+                <span class="title">{{package_product}}</span>
+                <span class="quantity">1</span>
+                <span class="price">Rs. {{package_price}}</span>
+            </div>
+            <div class="total">
+                <span class="title" style="width:628px;">Total</span>
+                <span class="price">Rs. {{package_price}}</span>
+            </div>
+            {% if cod_decider == 1 %}
+            <div class="cod">
+                <span class="title" style="width:628px;">COD amount:</span>
+                <span class="price">Rs. {{cod_amt}}</span>
+            </div>
+            {% endif %}
+        </div>
+        <div class="bar-code">
+            <span class="code-image"><img src={{order_barcode}}></span>
+            <span class="return-address">
+                <span class="name"><p>Return Address:</p>Zapyle</span> <span>RMZ Millenia, Tower B, Level 4, <br>Ulsoor,</span> <span class="city">Bangalore</span><span class="state">Karnataka</span><span class="pincode">560008</span><span class="phone">07337880282</span>
+        </div><br>
+        {% if userTypeDecider == 1 %}
+        <tr class="user_type" >
+            <td>
+                <p style="padding-left:10px; padding-right:10px;" ><h6><b>IMPORTANT:</b>The product does not attract any taxes since it is a second hand merchandise.</h6> </p>
+            </td>
+        </tr>
+        {% endif %}
+        
+    </body>
+</html>

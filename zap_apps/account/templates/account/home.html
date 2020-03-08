@@ -1,0 +1,176 @@
+{% extends "account/base.html" %}
+{% block extra_head %}
+    <script src="/zapstatic/account/home.js?v=eee{{ZAP_ENV_VERSION}}"></script>
+	<title>Buy and Sell Designer Luxury Bags, Shoes, Clothes Online India</title>
+    <meta name="description" content="Buying and Selling is easy and fun at Zapyle. Shop the luxury closets of women across India at great discounts and turn your closets in to money by selling yours.">
+{% endblock %}
+{% block body %} 
+<main ng-controller="HomeController">
+	<div class="top_banner home inline">
+{#		<div>#}
+{#			<div class="banner_background">#}
+{#				<video preload="auto" loop="loop" class="full_width web_only" autoplay>#}
+{#				  	<source src="/zapstatic/website/video/mp4/home_bg.mp4" type="video/mp4"></source>#}
+{#				  	<source src="/zapstatic/website/video/webm/home_bg.webm" type="video/webm"></source>#}
+{#				</video>#}
+{#				<div class="glass absolute"></div>#}
+{#			</div>#}
+{#			<div class="caption center-align">#}
+{#	            <h3>LIVE LUXURY</h3>#}
+{#				<h5 class="light grey-text text-lighten-3">Shop 100% authentic fashion at its best prices.</h5>#}
+{#				<div class="icon-play modal-trigger" data-target="home_video_modal" onclick='document.getElementById("home_video").play();''>&nbsp;&nbsp;Watch Video</div>#}
+{#	        </div>#}
+{#		</div>#}
+		{% if not page %}
+		<div class="web_only inline no_margin">
+			<div class="size6of12_nomargin">
+				<a href="/shop/brand-new"><img src="/zapstatic/website/home/brand_new.svg"></a>
+			</div>
+			<div class="size6of12_nomargin">
+				<a href="/shop/pre-loved"><img src="/zapstatic/website/home/pre_loved.svg"></a>
+			</div>
+		</div>
+		{% endif %}
+		<div class="mobile_only inline no_margin" ng-if="isMobile">
+			<div class="size6of12_nomargin mobile_also">
+				<a href="/shop/brand"><img src="/zapstatic/website/home/international.jpg" class="block"></a>
+			</div>
+			<div class="size6of12_nomargin mobile_also">
+				<a href="/shop/designer"><img src="/zapstatic/website/home/indian.jpg" class="block"></a>
+			</div>
+			<div class="size6of12_nomargin mobile_also">
+				<a href="/shop/pre-loved"><img src="/zapstatic/website/home/pre-owned.jpg" class="block"></a>
+			</div>
+			<div class="size6of12_nomargin mobile_also">
+				<a href="/events"><img src="/zapstatic/website/home/sale.gif" class="block"></a>
+			</div>
+		</div>
+	</div>
+	<div class="modal" id="home_video_modal">
+		<div class="modal-content">
+			<div class="video_container">
+				<video preload="none" id="home_video">
+					<source src="/zapstatic/website/video/mp4/home.mp4" type="video/mp4"></source>
+				</video>
+				<div class="icon-play">&nbsp;&nbsp;Watch Video</div>
+			</div>
+			<div class="close_btn modal-close over"></div>
+			<div class="glass modal-close video_pause mobile_only"></div>
+		</div>
+	</div>
+	
+	<div ng-cloak class="page_content home_page">
+		<div ng-repeat="data in discover_data" ng-switch="data.content_data.discover_type">
+			<div class="featured_closet discover_layout" ng-switch-when="closet">
+				<h3 class="title center_align">[[data.content_data.discover_data.title]]</h3>
+				<div class="seller_block">
+					<a ng-href="/profile/[[data.content_data.discover_data.user.id]]/[[data.content_data.discover_data.user.zap_username]]">
+						<img ng-src="[[data.content_data.discover_data.image]]">
+						<h6 class="user_name">[[data.content_data.discover_data.user.full_name]]</h6>
+						<p class="user_handle">[[data.content_data.discover_data.user.zap_username]]</p>
+					</a>
+					<a ng-click="admire(data.content_data.discover_data.user)" class="admire_btn" ng-class="{'admired':data.content_data.discover_data.user.admired}"></a>
+				</div>
+				<div class="products wrapper">
+					<ul class="products_list inline">
+						<li class="product_item" ng-repeat="prod in data.content_data.discover_data.product">
+							<div class="card">
+								<div class="card-image">
+									<a ng-href="/product/[[prod.id]]/[[prod.title | spaceless]]">
+										<img ng-src="[[prod.image]]" src="/zapstatic/frontend/images/512-512.png">
+									</a>
+								</div>
+								<div class="card-content">
+									<h1 class="title uppercase brand">[[ prod.brand ]]</h1>
+									<h5>[[prod.title]]</h5>
+									<div class="price">
+										<span class="new">[[prod.listing_price]]</span>
+										<span class="old" ng-if="prod.original_price>prod.listing_price">[[prod.original_price]]</span>
+									</div>
+								</div>
+							</div>
+						</li>
+						<li class="view_closet">
+							<a class="btn_link" ng-href="/profile/[[data.content_data.discover_data.user.id]]/[[data.content_data.discover_data.user.zap_username]]">Browse entire closet</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="product_group discover_layout viewport" ng-switch-when="product_collection">
+				<h3 ng-if="data.content_data.discover_data.header_image" class="title center_align"><img ng-src="[[data.content_data.discover_data.header_image]]"></h3>
+				<h3 ng-if="!data.content_data.discover_data.header_image" class="title center_align">[[data.content_data.discover_data.title]]</h3>
+				<p ng-if="data.content_data.discover_data.description" class="title center_align">[[data.content_data.discover_data.description]]</p>
+				<div class="products">
+					<ul class="products_list inline">
+						<li class="product_item slide" ng-class="isMobile ? 'medium' : 'small'" ng-repeat="prod in data.content_data.discover_data.product" on-last-repeat>
+							<div class="product_item_inner" ng-class="isMobile ? 'no_margin' : ''">
+								<a ng-href="/product/[[prod.id]]/[[prod.title | spaceless ]]" class="black product_display">
+									<div class="image_holder">
+										<img src="/zapstatic/frontend/images/512-512.png" ng-src="[[prod.image]]">
+									</div>
+								</a>
+								<div class="product_details">
+									<h1 class="title uppercase brand one_line" ng-if="prod.brand!='Designer'">[[ prod.brand ]]</h1>
+									<h3 class="title two_lines">[[prod.title]]</h3>
+									<div class="price">
+										<span class="new">[[prod.listing_price|number]]</span>
+										<span class="old" ng-if="prod.original_price>prod.listing_price">[[prod.original_price|number]]</span>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="center_align">
+					<a ng-href="/buy?i_product_collection=[[data.content_data.discover_data.id]]" class="btn hollow black">[[data.content_data.discover_data.cta_text]]</a>
+				</div>
+			</div>
+			<div class="user_group discover_layout viewport" ng-switch-when="user_collection">
+				<h3 class="title center_align">Closets to Admire</h3>
+				<div class="previous"></div>
+				<div class="next"></div>
+				<div class="users wrapper">
+					<ul class="user_list inline scroller">
+						<li class="user_item inline slide" ng-repeat="u in data.content_data.discover_data.user">
+							<div class="picture">
+								<img ng-src="[[u.profile_image]]" src="/zapstatic/frontend/images/512-512.png">
+							</div>
+							<div class="user_details">
+								<a ng-href="/profile/[[u.id]]/[[u.zap_username]]" class="black">
+									<h3 class="name">[[u.full_name]]</h3>
+									<p class="closet_handle">[[u.zap_username]]</p>
+								</a>
+								<div class="inline counts">
+									<div class="size6of12">
+										<h6 class="products_count" ng-class="{'singular':u.outfits==1}">[[u.outfits]]</h6>
+									</div>
+									<div class="size6of12">
+										<h6 class="admirers_count" ng-class="{'singular':u.admirers==1}">[[u.admirers]]</h6>
+									</div>
+								</div>
+								<a ng-click="admire(u)" class="admire_btn" ng-class="{'admired':u.admired}"></a>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="collections discover_layout" ng-switch-when="custom_collection">
+				<h3 class="title center_align" ng-if="data.content_data.discover_data.title!==''">[[data.content_data.discover_data.title]]</h3>
+				<p class="center_align" ng-if="data.content_data.discover_data.description!==''">[[data.content_data.discover_data.description]]</p>
+				<ul class="collections_list inline">
+					<li class="collection_item" ng-class="data.content_data.discover_data.number_in_row=='2' ? 'size6of12_nomargin' : data.content_data.discover_data.number_in_row=='3' ? 'size4of12' : 'size2of12'" ng-repeat="c in data.content_data.discover_data.collection">
+						<a ng-href="[[c.action.website_target]]">
+							<img ng-src="[[c.image]]" src="/zapstatic/frontend/images/512-512.png" alt="[[data.content_data.discover_data.description]]">
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="banner discover_layout" ng-switch-when="banner">
+			  <a ng-href="[[data.content_data.discover_data.action.website_target]]">
+				  <img ng-src="[[data.content_data.discover_data.image]]" alt="[[data.content_data.discover_data.description]]">
+			  </a>
+			</div>
+		</div>
+	</div>
+</main>
+{% endblock %}

@@ -1,0 +1,575 @@
+<script type="text/javascript">
+    function onReady(callback) {
+        var intervalID = window.setInterval(checkReady, 1000);
+
+        function checkReady() {
+            if (document.getElementsByTagName('body')[0] !== undefined) {
+                window.clearInterval(intervalID);
+                callback.call(this);
+            }
+        }
+    }
+
+    function show_loader(id, value) {
+        document.getElementById(id).style.display = value ? 'block' : 'none';
+    }
+
+    // onReady(function () {
+    // });
+</script>
+<div id="loading"></div>
+<div class="main-content buy" id="page">
+    <div class="content" ng-show="txid && summarydetail.status=='failed'">
+        <div class="order-summary">
+            <h6>Order Summary<!-- <a href="#/checkout">Edit Order</a> --></h6>
+            <div>
+                <div class="seller-msg size8of12">
+<!--                     <div class=" seller-info">
+                        <img src="[[summarydetail[0].seller.profile_pic]]">
+                        <div class="name">[[summarydetail[0].seller.name]]</div>
+                    </div> -->
+                    <div class="message">
+                        <p>Hi [[zap_username]]</p>
+                        <p>Something went wrong and we could not process the payment. Please try again.</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="product-info size8of12">
+                    <div class="products">
+                        <div class="header">
+                            <span class="image"></span>
+                            <span class="item">Item</span>
+                            <span class="quantity">Quantity</span>
+                            <span class="price">Price</span>
+                        </div>
+                        <div class="product" ng-repeat="i in summarydetail.ordered_products">
+                            <span class="image"><img class="product-image" src="[[i.image]]"></span>
+                            <span class="item">
+                                <span class="title">[[i.title]]</span>
+                            <span class="brand">[[i.brand]]</span>
+                            <span class="size">[[i.size]]</span>
+                            </span>
+                            <span class="quantity"><span data-max-quantity="6" id="quantity">[[i.quantity]]</span></span>
+                            <span class="price">
+                                <span class="icon-rupee new">[[i.listing_price | number:0]]</span>
+                            <span class="icon-rupee old">[[i.original_price | number:0]]</span>
+                            <span class="discount">[[i.discount*100| limitTo : limit : begin | number:0]]</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="price-info size4of12">
+                    <div class="summary">
+                        <p>ORDER SUMMARY</p>
+                        <div><span>Total: </span><span class="icon-rupee">
+                            [[summarydetail.original_price | number:0]]</span></div>
+                        <div><span>Seller Discount: </span><span class="icon-rupee">
+                            [[(summarydetail.original_price - summarydetail.listing_price) | number:0]]</span></div>
+                        <div><span>Shipping Charges: </span><span class="icon-rupee">
+                            [[summarydetail.shipping_charge | number:0]]</span></div>
+                        <div><span>Zapcash Used: </span><span class="icon-rupee">
+                            [[summarydetail.zapwallet_used | number:0]]</span></div>
+                        <div><span>Sub total: </span><span class="icon-rupee">
+                            [[(summarydetail.shipping_charge+summarydetail.listing_price-summarydetail.zapwallet_used) | number:0]]</span></div>
+                        <div class="total"><span>Total Amount: </span><span class="icon-rupee">
+                            [[final_price]]
+                        </span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-show="txid && summarydetail.status=='failed' && final_price>0" id="payment" class="step open">
+                <script src="/zapstatic/frontend/scripts/controllers/mycitrus.js">
+                </script>
+                <script src="https://icp.citruspay.com/js/jquery.payment.min.js">
+                </script>
+                <div class="header">
+                    <span class="tick icon-ok"><span class="fold"></span></span>
+                    <h6>Payment Mode</h6>
+                </div>
+                <div class="content">
+                    <!-- <div ng-show="final_price>0"> -->
+                    <div class="options">
+                        <ul>
+                            <li class="li_saved">
+                                <a ng-class="{'is_selected': flag == 4}" href="" ng-click="change_flag(4);">Saved Cards<span class="right-arrow"></span></a>
+                            </li>
+                            <li>
+                                <a ng-class="{'is_selected': flag == 1}" href="" ng-click="change_flag(1);card=''">Debit Card<span class="right-arrow"></span></a>
+                            </li>
+                            <li>
+                                <a ng-class="{'is_selected': flag == 2}" href="" ng-click="change_flag(2);card=''">Credit Card<span class="right-arrow"></span></a>
+                            </li>
+                            <li>
+                                <a ng-class="{'is_selected': flag == 3}" href="" ng-click="change_flag(3)">Net Banking<span class="right-arrow"></span></a>
+                            </li>
+                            <li>
+                            <a ng-class="{'is_selected': flag == 5}" href="" ng-click="change_flag(5)">COD<span class="right-arrow"></span></a>
+                        </li>
+                        </ul>
+                    </div>
+                    <div class="modes">
+                        <div class="mode debit">
+                            <div class="saved" ng-show="flag==4">
+                                <div ng-click="click_to_save($index)" class="card mysavedcards" ng-repeat="i in saved_cards" saved-radio>
+
+                                    <input class="card_radio" id="saved_radio_[[$index]]" type="radio" value="[[$index]]&[[i.token]]" name="CitrusWalletPaymentOption" ng-class="i.type=='netbanking' ? 'savedAccountsRadio NetBankingPayments' : 'savedAccountsRadio cardPayments'" />
+                                    <span class="card-logos">
+                                        <img ng-if="i.scheme=='VISA'" class="visa" src="/zapstatic/frontend/images/cardimages/visa.png">
+                                        <img ng-if="i.scheme=='MCRD'" class="master" src="/zapstatic/frontend/images/cardimages/master.png">
+                                    </span>
+                                    <span class="num" for="citrusPaymentOptionToken">[[i.number]]</span>
+                                    <span ng-if="i.type!='netbanking'" class="cvv">
+                                        <input type="password" maxlength="3" placeholder="CVV" id="CitrusMembercvv[[$index]]" required="required">
+                                    </span>
+                                    <span class="type">[[i.type=='debit' ? 'DEBIT CARD' : (i.type=='credit' ? 'CREDIT CARD' : 'NETBANKING')]]</span>
+                                </div>
+
+
+                                <div>
+                                    <script type="text/javascript">
+                                        // jQuery("#citrusWalletCardPayButton").on("click", function(){makePayment("card", true)});
+                                        // jQuery("#citrusWalletNetbankingButton").on("click", function(){makePayment("netbanking", true)});
+
+                                        function FetchWallet() {
+                                            $.ajax({
+                                                type: "GET",
+                                                url: "/user/mysavedcards/",
+                                                contentType: "application/json; charset=utf-8",
+                                                dataType: "json",
+                                                success: function(json) {
+                                                    alert(json)
+                                                    var jsonObj = json.data;
+                                                    var paymentOptions = jsonObj.paymentOptions;
+                                                    var citrusWalletresponse = paymentOptions;
+                                                    var wallet = "";
+                                                    var len = citrusWalletresponse.length;
+                                                    if (len > 0) {
+                                                        for (var i = 0, len = citrusWalletresponse.length; i < len; i++) {
+                                                            //code to render the citrus wallet
+                                                            if (citrusWalletresponse[i] !== undefined && citrusWalletresponse[i] !== null) {
+                                                                if (citrusWalletresponse[i].type == "credit" || citrusWalletresponse[i].type == "debit") {
+                                                                    if (citrusWalletresponse[i].scheme === "amex") {
+                                                                        var cvvLength = 4;
+                                                                    } else {
+                                                                        var cvvLength = 3;
+                                                                    }
+                                                                    wallet +=
+                                                                        '<li>' +
+                                                                        '   <input type="radio" value="' + i + '&' + citrusWalletresponse[i].token + '" name="CitrusWalletPaymentOption" class="savedAccountsRadio cardPayments" onclick="selectPaymentOption(this)">' +
+                                                                        '   <span for="citrusPaymentOptionToken">' + citrusWalletresponse[i].number + '</span>' +
+                                                                        '   <input type="password" maxlength="' + cvvLength + '" placeholder="CVV" id="CitrusMembercvv' + i + '" required="required">' +
+                                                                        '<span>' + citrusWalletresponse[i].type + '</span>' +
+                                                                        '</li>';
+                                                                } else {
+                                                                    wallet +=
+                                                                        '<li>' +
+                                                                        '   <input type="radio" value="' + citrusWalletresponse[i].token + '" name="CitrusWalletPaymentOption" class="savedAccountsRadio NetBankingPayments" onclick="selectPaymentOption(this)">' +
+                                                                        '   <span class="savedAccountsCard" for="citrusPaymentOptionToken" >' + citrusWalletresponse[i].name.split(" - ")[1] + '</span>' +
+                                                                        '<span>' + citrusWalletresponse[i].type + '</span>' +
+                                                                        '</li>';
+                                                                }
+                                                            }
+                                                            $("#walletData").html(wallet);
+                                                        }
+                                                    } else {
+                                                        $("#walletData").html("You have no saved cards yet.");
+                                                    }
+
+                                                },
+                                                error: function(json) {
+                                                    alert(json.responseText);
+                                                }
+                                            });
+                                        };
+                                        //FetchWallet();
+                                    </script>
+                                    <input id="citrusEmail" type="hidden" value="[[user_detail.email]]" />
+                                    <input id="citrusPassword" type="hidden" value="[[user_detail.phone_number]]" />
+                                    <ul id="walletData"></ul> <br/>
+
+                                    <input type="hidden" class="PayFromWallet" value="" />
+                                </div>
+
+
+
+
+                            </div>
+
+
+
+
+
+                            <div class="mode debit" ng-show="flag==1">
+                        <div class="new">
+                            <div class="card">
+                                <input hidden id="citrusCardType">
+                                <form>
+                                    <span class="data">
+                                            <span class="card-num">
+                                                <input                                                    id="citrusNumber" ng-change="check_cardNumber()" ng-model="card.cardNumber" required type="text" placeholder="Debit card number">
+                                                <span class="card-logos" id="cardlogo">
+                                                    <img class="visa" id="cardvisa" src="/zapstatic/frontend/images/cardimages/visa.png">
+                                                    <img class="master" id="cardmaster" src="/zapstatic/frontend/images/cardimages/master.png">
+                                                </span>
+                                            </span>
+                                    <span class="exp-cvv">
+                                                <span class="expiry">
+                                                    <label>Valid till:</label>
+                                                    <input type="text" placeholder="MM" ng-model="card.month" maxlength="2" ng-change="set_focus('month');expiry=card.month+'/'+card.year" required>
+                                                    <label>/</label>
+                                                    <input type="text" placeholder="YY" ng-model="card.year" id="year_box" ng-change="set_focus('year');expiry=card.month+'/'+card.year"
+                                            maxlength="2" required>
+                                                </span>
+                                    <span class="cvv">
+                                                    <label>CVV:</label>
+                                                    <input type="password" id="citrusCvv"
+                                                        ng-change="set_focus('cvv')"
+                                                        required ng-model="card.cvv" maxlength="3">
+                                                </span>
+                                    </span>
+                                    <span>
+                                                <input id="citrusCardHolder" type="text" placeholder="Name on Card" required ng-model="card.name">
+                                            </span>
+
+                                    </span>
+                                    
+                                    
+                                    <input type="text" id="citrusScheme" value="VISA" hidden>
+                                    <input type="text" id="citrusExpiry" value="[[expiry]]" placeholder="EXPIRY" / ng-model="expiry" hidden>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mode credit" ng-show="flag==2">
+                        <div class="new">
+                            <div class="card">
+                                <input hidden id="citrusCardType">
+                                <form>
+                                    <span class="data">
+                                            <span class="card-num">
+                                                <input                                                    id="citrusNumber" ng-change="check_cardNumber()" ng-model="card.cardNumber" required type="text" placeholder="Credit card number">
+                                                <span class="card-logos" id="cardlogo">
+                                                    <img class="visa" id="cardvisa" src="/zapstatic/frontend/images/cardimages/visa.png">
+                                                    <img class="master" id="cardmaster" src="/zapstatic/frontend/images/cardimages/master.png">
+                                                </span>
+                                            </span>
+                                    <span class="exp-cvv">
+                                                <span class="expiry">
+                                                    <label>Valid till:</label>
+                                                    <input type="text" placeholder="MM" ng-model="card.month" maxlength="2" ng-change="set_focus('month');expiry=card.month+'/'+card.year" required>
+                                                    <label>/</label>
+                                                    <input type="text" placeholder="YY" ng-model="card.year" id="year_box" ng-change="set_focus('year');expiry=card.month+'/'+card.year"
+                                            maxlength="2" required>
+                                                </span>
+                                    <span class="cvv">
+                                                    <label>CVV:</label>
+                                                    <input type="password" id="citrusCvv"
+                                                        ng-change="set_focus('cvv')"
+                                                        required ng-model="card.cvv" maxlength="3">
+                                                </span>
+                                    </span>
+                                    <span>
+                                                <input id="citrusCardHolder" type="text" placeholder="Name on Card" required ng-model="card.name">
+                                            </span>
+
+                                    </span>
+                                    <input type="text" id="citrusScheme" value="VISA" hidden>
+                                    <input type="text" id="citrusExpiry" value="[[expiry]]" placeholder="EXPIRY" / ng-model="expiry" hidden>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mode internet" ng-show="flag==3">
+                        <div class="saved"></div>
+                        <div class="new"><select id="citrusAvailableOptions"> </select>
+                            <input type="button" value="Pay by netbanking" id="citrusNetbankingButton" hidden/></div>
+                    </div>
+                    <div class="mode internet" ng-show="flag==5">
+                        <div class="saved">
+                            
+                        </div>
+                        <div class="new">
+                            Total payable amount at the time of delivery: Rs. [[final_price | number:0]]
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+<!-- 
+
+
+                            <div class="new" ng-show="flag==1 || flag==2">
+                                <div class="card">
+                                    <input hidden id="citrusCardType">
+                                    <form>
+                                        <span class="data">
+                                            <span>
+                                                <input                                                    id="citrusNumber" ng-change="check_cardNumber()" ng-model="card.cardNumber" required type="text" placeholder="Card Number">
+                                            </span>
+                                        <span class="exp-cvv">
+                                                <span class="expiry">
+                                                    <label>Valid till:</label>
+                                                    <input type="text" placeholder="MM" ng-model="card.month" maxlength="2" ng-change="set_focus('month');expiry=card.month+'/'+card.year" required>
+                                                    <label>/</label>
+                                                    <input type="text" placeholder="YY" ng-model="card.year" id="year_box" ng-change="set_focus('year');expiry=card.month+'/'+card.year"
+                                            maxlength="2" required>
+                                                </span>
+                                        <span class="cvv">
+                                                    <label>CVV:</label>
+                                                    <input type="password" id="citrusCvv"
+                                                        ng-change="set_focus('cvv')"
+                                                        required ng-model="card.cvv" maxlength="3">
+                                                </span>
+                                        </span>
+                                        <span>
+                                                <input id="citrusCardHolder" type="text" placeholder="Name on Card" required ng-model="card.name">
+                                            </span>
+
+                                        </span>
+                                        <span class="images">
+                                            <img src="/zapstatic/frontend/images/cardimages/logo.png">
+                                            <img src="/zapstatic/frontend/images/cardimages/chip.png">
+                                        </span>
+                                        <span class="card-logos" id="cardlogo">
+                                            <img class="visa" id="cardvisa" src="/zapstatic/frontend/images/cardimages/visa.png">
+                                            <img class="master" id="cardmaster" src="/zapstatic/frontend/images/cardimages/master.png">
+                                        </span>
+                                        <input type="text" id="citrusScheme" value="VISA" hidden>
+                                        <input type="text" id="citrusExpiry" value="[[expiry]]" placeholder="EXPIRY" / ng-model="expiry" hidden>
+                                    </form>
+                                </div>
+                            </div> -->
+                            <!-- <div class="new" ng-show="flag==3">
+                                <select id="citrusAvailableOptions"> </select>
+                                <input type="button" value="Pay by netbanking" id="citrusNetbankingButton" hidden/>
+
+                            </div>
+                            <div class="mode internet" ng-show="flag==5">
+                        <div class="saved">
+                            
+                        </div>
+                        <div class="new">
+                            Total payable amount at the time of delivery: Rs. [[final_price | number:0]]
+                        </div>
+                    </div> -->
+                        </div>
+                        <div class="mode credit">
+                            <div class="saved"></div>
+                            <div class="new"></div>
+                        </div>
+                        <div class="mode internet">
+                            <div class="saved"></div>
+                            <div class="new"></div>
+                        </div>
+                    </div>
+                    <!-- </div> -->
+                    <!--  <div style="text-align:center;margin:20px 0;"><button id="paynow_button" ng-click="confirmOrder()" class="pri-button">RETRY NOW</button></div> -->
+                </div>
+            </div>
+            <div style="text-align:center;margin:20px 0;"><button id="paynow_button" ng-click="confirmOrder()" class="pri-button">RETRY PAYMENT</button></div>
+        </div>
+
+    </div>
+    <div class="content" ng-show="txid && summarydetail.status=='success'">
+        <div class="order-summary">
+            <h6>Order Summary</h6>
+            <div>
+                <div class="seller-msg size8of12">
+<!--                     <div class=" seller-info">
+                        <img src="[[summarydetail[0].seller.profile_pic]]">
+                        <div class="name">[[summarydetail[0].seller.name]]</div>
+                    </div> -->
+                    <div class="message">
+                        <p>Hi [[zap_username]]</p>
+                        <p ng-hide="summarydetail[0].seller.user_type == 'zap_exclusive'">Thanks for shopping from my closet. I'm sure you will love and enjoy the product as much as I did.</p>
+                        <p ng-show="summarydetail[0].seller.user_type == 'zap_exclusive'">Thanks for shopping from us. We are sure you will love and enjoy the product as much as our seller did.</p>
+                    </div>
+                </div>
+                <div class="size4of12 closet-link">
+                    <p>Check out <a href="#profile/[[summarydetail[0].seller.id]]">my entire collection.</a></p>
+                </div>
+            </div>
+            <div>
+                <div class="product-info size8of12">
+                    <div class="products">
+                        <div class="header">
+                            <span class="image"></span>
+                            <span class="item">Item</span>
+                            <span class="quantity">Quantity</span>
+                            <span class="price">Price</span>
+                        </div>
+                        <div class="product" ng-repeat="i in summarydetail.ordered_products">
+                            <span class="image"><img class="product-image" src="[[i.image]]"></span>
+                            <span class="item">
+                                <span class="title">[[i.title]]</span>
+                            <span class="brand">[[i.brand]]</span>
+                            <span class="size">[[i.size]]</span>
+                            </span>
+                            <span class="quantity"><span data-max-quantity="6" id="quantity">[[i.quantity]]</span></span>
+                            <span class="price">
+                                <span class="icon-rupee new">[[i.listing_price | number:0]]</span>
+                            <span class="icon-rupee old">[[i.original_price | number:0]]</span>
+                            <span class="discount">[[i.discount*100| limitTo : limit : begin | number:0]]</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="price-info size4of12">
+                    <div class="summary">
+                        <p>ORDER SUMMARY</p>
+                        <div><span>Total: </span><span class="icon-rupee">
+                            [[summarydetail.original_price | number:0]]</span></div>
+                        <div><span>Seller Discount: </span><span class="icon-rupee">
+                            [[(summarydetail.original_price - summarydetail.listing_price) | number:0]]</span></div>
+                        <div><span>Shipping Charges: </span><span class="icon-rupee">
+                            [[summarydetail.shipping_charge | number:0]]</span></div>
+                        <div><span>Zapcash Used: </span><span class="icon-rupee">
+                            [[summarydetail.zapwallet_used | number:0]]</span></div>
+                        <div><span>Sub total: </span><span class="icon-rupee">
+                            [[(summarydetail.shipping_charge+summarydetail.listing_price-summarydetail.zapwallet_used) | number:0]]</span></div>
+                        <div class="total"><span>Total Amount: </span><span class="icon-rupee">
+                            [[final_price]]
+                        </span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="zap-msg">
+                <p>Thank you for shopping from Zapyle! We shall notify you when the shipment is made.</p>
+                <button class="pri-button" ng-click="goto_feeds()">CONTINUE SHOPPING</button>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="content" ng-if="!txid">
+        <div class="product-info size8of12">
+            <div class="products">
+                <div class="header">
+                    <span class="image"></span>
+                    <span class="item">Item</span>
+                    <span class="quantity">Quantity</span>
+                    <span class="price">Price</span>
+                </div>
+                <div class="product" ng-repeat="cart in summarydetail.ordered_products">
+                    <span class="image"><img class="product-image" src="[[cart.products[0].image1]]"></span>
+                    <span class="item">
+                    <span class="title">[[cart.title]]</span>
+                    <span class="brand">[[cart.brand]]</span>
+                    <span class="size">Uk 6</span>
+                    </span>
+                    <span class="quantity"><span data-max-quantity="6" id="quantity">[[cart.quantity]]</span></span>
+                    <span class="price">
+                    <span class="icon-rupee new">[[cart.original_price | number:0]]</span>
+                    <span class="icon-rupee old">[[cart.listing_price | number:0]]</span>
+                    <span class="discount">[[cart.discount*100 | limitTo : limit : begin | number:0]]</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <!-- <div class="content ng-scope">
+        <div class="seller-msg" ng-if="txid">
+            <div class="size4of12 seller-info">
+                <img src="[[summarydetail[0].seller.profile_pic]]">
+                <div class="name ng-binding">[[summarydetail[0].seller.name]]</div>
+            </div>
+            <div class="size8of12 message">
+                <p class="ng-binding">Hi [[zap_username]]</p>
+                <p ng-show="summarydetail[0].success==true">Thanks for shopping from my closet. I hope you enjoy the product as much as I did.</p>
+                <p ng-show="summarydetail[0].success==false">Something went wrong. we will contact shortly.</p> -->
+    <!-- <p>Check out my entire collection <a href="">here</a>.</p> -->
+    <!-- </div>
+        </div>
+        <h6>Order Summary</h6>
+        <div ng-repeat="t in summarydetail">
+            <div ng-repeat="product in t.products">
+                <div class="product-info size6of12">
+                    <img class="product-image" src="[[product.image1]]">
+                    <div class="product-details">
+                        <h6 class="title ng-binding">[[product.title]]</h6>
+                        <div><span class="style ng-binding">[[product.style]]</span><span class="brand ng-binding">[[product.brand]]</span></div>
+                        <div><span class="size ng-binding">UK 10</span><span class="quantity"><span>Quantity: </span><span data-max-quantity="6" id="quantity" class="ng-binding">[[t.quantity]]</span>
+                            <a class="transaction-status-success" ng-if="t.success==true">SUCCESS</a>
+                            <a class="transaction-status-fail" ng-if="t.success==false">FAILED</a> -->
+    <!-- <a class="transaction-return" ng-if="t.can_return==true" ng-click="return(i.order_id)">RETURN</a> -->
+    <!-- </span></div>
+                    </div>
+                </div>
+                <div class="price-info size6of12">
+                    <div><span>Price: </span><span class="icon-rupee ng-binding"> [[t.listing_price_sum]]</span></div>
+                    <div><span>Shipping: </span><span class="icon-rupee ng-binding">[[t.shipping_charge]]</span></div> -->
+    <!-- ngIf: DiscountStatus -->
+    <!-- <div class="applied-coupon  ng-scope" ng-if="DiscountStatus"><span>Coupon (CODE): </span><span class="icon-rupee ng-binding"> -0</span></div> -->
+    <!-- end ngIf: DiscountStatus -->
+    <!--        <div class="total"><span>Total: </span><span class="icon-rupee ng-binding"> [[t.listing_price_sum+t.shipping_charge]]</span></div>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+    <div class="zap-msg" countinue-shopping="">
+        <p ng-show="summarydetail[0].success==true">Thank you for shopping from Zapyle! We shall notify you when the shipment is made.</p>
+            <span class="button"><a href="#/feeds" class="button">Continue Shopping</a><span class="disable"></span></span>
+    </div> -->
+    <form>
+        <input type="hidden" id="citrusFirstName" value="[[user_detail.zap_username ? user_detail.zap_username : 'myfirstname']]" />
+        <input type="hidden" id="citrusLastName" value="[[user_detail.last_name ? user_detail.last_name : 'mylastname']]" />
+        <input type="hidden" id="citrusEmail" value="[[user_detail.email]]" />
+        <input type="hidden" id="citrusStreet1" value="" />
+        <input type="hidden" id="citrusStreet2" value="" />
+        <input type="hidden" id="citrusCity" value="" />
+        <input type="hidden" id="citrusState" value="" />
+        <input type="hidden" id="citrusCountry" value="" />
+        <input type="hidden" id="citrusZip" value="" />
+        <input type="hidden" id="citrusMobile" value="[[user_detail.phone_number]]" />
+    </form>
+    </br>
+    <form>
+        <input type="hidden" readonly id="citrusAmount" value="[[citrus_var.amount.value]]" />
+        <input type="hidden" readonly id="citrusMerchantTxnId" value="[[citrus_var.merchantTxnId]]" />
+        <input type="hidden" readonly id="citrusSignature" value="[[citrus_var.requestSignature]]" />
+        <input type="hidden" readonly id="citrusReturnUrl" value="[[citrus_var.returnUrl]]" />
+        <input type="hidden" readonly id="citrusNotifyUrl" value="[[citrus_var.notifyUrl]]" />
+    </form>
+</div>
+
+
+
+<script type="text/javascript">
+    function handleCitrusPaymentOptions(citrusPaymentOptions) {
+        if (citrusPaymentOptions.netBanking != null)
+            for (i = 0; i < citrusPaymentOptions.netBanking.length; i++) {
+                var obj = document.getElementById("citrusAvailableOptions");
+                var option = document.createElement("option");
+                option.text = citrusPaymentOptions.netBanking[i].bankName;
+                option.value = citrusPaymentOptions.netBanking[i].issuerCode;
+                obj.add(option);
+            }
+    }
+</script>
+<script type="text/javascript">
+    function citrusServerErrorMsg(errorResponse) {
+        $("#paynow_button").text('Pay Now')
+        $("#paynow_button").prop('disabled', false)
+    }
+
+    function citrusClientErrMsg(errorResponse) {
+        $("#paynow_button").text('Pay Now')
+        $("#paynow_button").prop('disabled', false)
+        alert(errorResponse)
+        console.log(errorResponse);
+    }
+</script>

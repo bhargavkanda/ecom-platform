@@ -1,0 +1,48 @@
+<div class="screen_header">
+	<a href="#rp_checkout" class="screen_back" data-activates="#checkout">Back</a>
+	<div class="screen_title">Card Details</div>
+</div>
+<div class="screen_content">
+	<div class="input-field text">
+		<span class="text_input">
+			<label for="name">Name<span class="input_error">Error</span></label>
+			<input type="text" name="name" id="citrusCardHolder" ng-model="card.name">
+		</span>
+	</div>
+	<div class="input-field text">
+		<span class="text_input">
+			<label for="card_number">Card Number<span class="input_error">Error</span></label>
+			<input type="text" name="card_number" ng-model="card.cardNumber" id="citrusNumber">
+		</span>
+	</div>
+	<div class="inline input-field">
+		<div class="size6of12 inline mobile_also no_padding">
+			<div class="input-field text size6of12 mobile_also no_padding">
+				<span class="text_input">
+					<label for="month">Month<span class="input_error">Error</span></label>
+					<input type="text" name="month" id="month" ng-model="card.month" maxlength="2" ng-change="set_focus('month');expiry=card.month+'/'+card.year">
+				</span>
+			</div>
+			<div class="input-field text size6of12 mobile_also no_padding">
+				<span class="text_input">
+					<label for="year">Year<span class="input_error">Error</span></label>
+					<input type="text" name="year" id="year" ng-model="card.year" ng-change="set_focus('year');expiry=card.month+'/'+card.year"
+                                            maxlength="2">
+				</span>
+			</div>
+		</div>
+		<div class="input-field text size6of12 mobile_also no_padding">
+			<span class="text_input">
+				<label for="cvv">CVV<span class="input_error">Error</span></label>
+				<input type="text" name="cvv" id="citrusCvv" ng-model="card.cvv" >
+			</span>
+		</div>
+	</div>
+	<div class="input-field checkbox"><span class="check_box is_selected"><span></span></span><label>Save this card securely for a faster checkout next time</label></div>
+</div>
+<div class="screen_footer">
+	<a ng-click="confirmOrder()" id="payment_options" class="waves-effect waves-pink btn full_width center_align">Proceed to Payment</a>
+</div>
+<input hidden id="citrusCardType">
+<input type="text" id="citrusScheme" value="VISA" hidden>
+<input type="text" id="citrusExpiry" value="[[expiry]]" placeholder="EXPIRY" ng-model="expiry" hidden>

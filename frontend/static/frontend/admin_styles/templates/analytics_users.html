@@ -1,0 +1,69 @@
+    Total Number of Users : [[ud.total]]<br>
+    Total Number of Sessions : [[ud.sessions]]<br>
+    Total Users Logged from Yesterday : [[ud.yesterday]]<br>
+    Total Users Joined from Yesterday : [[ud.joined]]<button ng-show="ud.joined" ng-click="new_user_flag=true">Show</button><br>
+    Total Users who verified email id : [[ud.verified_email]] ([[(ud.verified_email/ud.total)*100 | number:2]]%)<br>
+    Total Users who Verified Phone number : [[ud.verified_phone]] ([[(ud.verified_phone/ud.total)*100 | number:2]]%)<br>
+    Total Users having description : [[ud.description]] ([[(ud.description/ud.total)*100| number:2]]%)<br>
+    Total Email Users with profile picture: [[ud.profile_pic]] ([[ud.profile_pic/ud.email_users*100 | number:2]]%)<br>
+    <b><u>Segmentation</u></b><br>
+    <select ng-model="p_type" ng-init="p_type='onboarding'" ng-change="change_table_flag()">
+        <option value="onboarding">Onboarding Steps Completed</option>
+        <option value="sex">Sex</option>
+        <option value="size">Size</option>
+        <option value="brandtags">Brand Tags</option>
+        <option value="channel">Loggin Channel</option>
+        <option value="device">Device</option>
+    </select>
+    <button ng-click="load_filtered_users(p_type,'segmentation')">Load</button><br>
+    <table ng-show="table_flag==true">
+        <tr ng-repeat="uc in userCount">
+            <td>[[uc.name]]</td>
+            <td>[[uc.value]]</td>
+            <td ng-show="p_type=='all' || p_type=='approved'">[[pc.approved]]</td>
+            <td ng-show="p_type=='all' || p_type=='tobeapproved'">[[pc.tobeapproved]]</td>
+            <td ng-show="p_type=='all' || p_type=='disapproved'">[[pc.disapproved]]</td>
+        </tr>
+    </table>
+    <b><u>Interaction</u></b><br>
+    <select ng-model="i_type" ng-init="i_type='upload'" ng-change="change_table_flag()">
+        <option value="upload">Products Uploaded</option>
+        <option value="admirer">Admirers</option>
+        <option value="admiring">Admiring</option>
+        <option value="love">Loves</option>
+        <option value="comment">Comments</option>
+        <option value="view">Products View</option>
+    </select>
+    <button ng-click="load_filtered_users(i_type,'interaction')">Load</button><br>
+    <table>
+        <tr ng-repeat="mx in interaction.max">
+            <td><span ng-if="$index==0">Maximum</span></td>
+            <td>[[mx]]</td>
+        </tr>
+        <tr>
+            <td>Average</td>
+            <td>[[interaction.avg]]</td>
+        </tr>
+        <tr>
+            <td>No.Of Users With Zero</td>
+            <td>[[interaction.with0]]</td>
+        </tr>
+    </table>
+    <div class="pri-overlay size-guide is_visible" ng-show="new_user_flag">
+        <div class="glass"></div>
+        <div class="content">
+            <div class="header">New Users<span class="close" ng-click="new_user_flag=false">x</span></div>
+            <div class="body">
+                <table align="center">
+                    <tr><th>Zap_username</th><th>Email</th><th>LoggedBy</th><th>Device</th><th>Time</th></tr>
+                    <tr ng-repeat="user in ud.new_users">
+                        <td align="left">[[user.username]]</td>
+                        <td align="left">[[user.email]]</td>
+                        <td align="left">[[user.logged_from]]</td>
+                        <td align="left">[[user.device]]</td>
+                        <td align="left">[[user.time]]</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>

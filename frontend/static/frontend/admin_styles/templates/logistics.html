@@ -1,0 +1,73 @@
+<div>
+        <form ng-submit="search_order(search_id)"><span><input type="text" ng-model="search_id" required placeholder="Enter Order Id"></span><span><input type="submit" value="search"></span></form>
+    </div>
+    <div class="CSSTableGenerator" style="width:100%">
+    <table>
+        <tr>
+            <th>Index</th>
+            <th>Orders</th>
+            <th>Returns</th>
+            <th>Product</th>
+            <th>Consignee Address</th>
+            <th>Consignor Address</th>
+            <th>Packaging Material Delivered Status</th>
+            <th>Triggered Packaging Material Status</th>
+            <th>Status</th>
+            <th>Delivery Time</th>
+            <th>Seller to Zapyle Partner</th>
+            <th>Zapyle to Buyer Partner</th>
+            <th>Change</th>
+        </tr>
+        <tr ng-repeat="logistic in logistics">
+            <td>[[$index]]</td>
+            <td>
+                <ul>
+                    <li ng-repeat="order in logistic.orders">[[order]]</li>
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    <li ng-repeat="return_id in logistic.returns">[[return_id]]</li>
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    <li ng-repeat="product in logistic.products"><img class="product-image" src="[[product.image]]">
+                        <div>[[product.title]]</div>
+                    </li>
+                </ul>
+            </td>
+            <td ng-hide="logistic.edit_flag">[[logistic.consignee.full_address]]</td>
+            <td ng-show="logistic.edit_flag" ng-init="logistic.consignee.id=logistic.consignee.userid">
+                <select ng-model="logistic.consignee.id" ng-options="i.id as i.address for i in logistic.consignee.address">
+                </select>----- OR --------<br>
+                <input type="button" value="Add New Address" ng-click="open_popup(logistic.consignee.userid,logistic.consignee)">
+
+            </td>
+            <td ng-hide="logistic.edit_flag">[[logistic.consignor.full_address]]</td>
+            <td ng-show="logistic.edit_flag" ng-init="logistic.consignor.id=logistic.consignor.userid">
+                <select ng-model="logistic.consignor.id" ng-options="i.id as i.address for i in logistic.consignor.address">>
+                </select>----- OR --------<br>
+                <input type="button" value="Add New Address" ng-click="open_popup(logistic.consignor.userid,logistic.consignor)">
+            </td>
+            <td><input ng-readonly="!logistic.edit_flag" ng-disabled="!logistic.edit_flag" type="checkbox" checked="logistic.packaging_material_delivered" /></td>
+            <td><input ng-readonly="!logistic.edit_flag" ng-disabled="!logistic.edit_flag" type="checkbox" checked="logistic.triggered_packaging_material" /></td>
+            <td>[[logistic.status]]</td>
+            <td>[[logictic.delivery_time | date:'MM/dd/yyyy @ h:mma' ]]</td>
+            <td ng-hide="logistic.edit_flag">[[logistic.packaging_material_partner]]</td>
+            <td ng-show="logistic.edit_flag">
+                <select ng-model="logistic.pm_partner" ng-options="i.id as i.address for i in logistic.consignee.address">
+                </select>
+            </td ng-hide="logistic.edit_flag">
+            <td ng-hide="logistic.edit_flag">[[logistic.product_delivery_partner]]</td>
+            <td ng-show="logistic.edit_flag">
+                <select>
+                    <option>DL</option>
+                    <option>XX</option>
+                </select>
+            </td>
+            <td ng-hide="logistic.edit_flag"><input type="button" value="edit" ng-click="logistic.edit_flag=true"></td>
+            <td ng-show="logistic.edit_flag"><input type="button" value="update" ng-click="somefunction();logistic.edit_flag=false"></td>
+        </tr>
+    </table>
+    </div>

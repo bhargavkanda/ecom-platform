@@ -1,0 +1,75 @@
+<style type="text/css">
+    #page {
+        display: none;
+    }
+    
+    #loading {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 100;
+        width: 100vw;
+        height: 100vh;
+        background-image: url("/zapstatic/frontend/images/loading.gif");
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+</style>
+<script type="text/javascript">
+    function onReady(callback) {
+        var intervalID = window.setInterval(checkReady, 1000);
+
+        function checkReady() {
+            if (document.getElementsByTagName('body')[0] !== undefined) {
+                window.clearInterval(intervalID);
+                callback.call(this);
+            }
+        }
+    }
+
+    function show(id, value) {
+        document.getElementById(id).style.display = value ? 'block' : 'none';
+    }
+
+    onReady(function() {
+        show('page', true);
+        show('loading', false);
+    });
+</script>
+<div id="loading"></div>
+<div class="content" id="page">
+    <div class="seller-msg">
+        <div class="size4of12 seller-info">
+            <img src="{{SellerData.profile_pic}}">
+            <div class="name">{{SellerData.zap_username}}</div>
+        </div>
+        <div class="size8of12 message">
+            <p>Hidd {{username}}--{{SellerData}}</p>
+            <p ng-if="">Thanks for shopping from my closet. I hope you enjoy the product as much as I did.</p>
+            <p ng-if="">Thanks for shopping from us. We hope you enjoy the product as much as our seller did.</p>
+            <!-- <p>Check out my entire collection <a href="">here</a>.</p> -->
+        </div>
+    </div>
+    <div>
+        <h6>Order Summary</h6>
+        <div class="product-info size6of12">
+            <img src="http://zapmob.cloudapp.net/media/{{productInfo.image}}" class="product-image">
+            <div class="product-details">
+                <h6 class="title">{{productInfo.album_title}}</h6>
+                <div><span class="style">{{productInfo.fashion_type}}</span><span class="brand">{{productInfo.brand}}</span></div>
+                <div><span class="size">{{productInfo.size}}</span><span class="quantity"><span>Quantity: </span><span data-max-quantity="6" id="quantity">{{SellerData.quantity}}</span></div>
+            </div>
+        </div>
+        <div class="price-info size6of12">
+            <div><span>Price: </span><span class="icon-rupee"> {{ListingPrice}}</span></div>
+            <div><span>Shipping: </span><span class="icon-rupee"> {{ShippingCharge}}</span></div>
+            <div class="applied-coupon " ng-if="DiscountStatus"><span>Coupon (CODE): </span><span class="icon-rupee"> -{{DiscountPrice}}</span></div>
+            <div class="total"><span>Total: </span><span class="icon-rupee"> {{FinalPrice}}</span></div>
+        </div>
+    </div>
+    <div class="zap-msg" countinue-shopping>
+        <p>Thank you for shopping from Zapyle! We shall notify you when the shipment is made.</p>
+        <span class="button"><a class="button">Continue Shopping</a><span class="disable"></span></span>
+    </div>
+</div>

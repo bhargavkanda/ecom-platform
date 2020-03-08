@@ -1,0 +1,511 @@
+{% extends "account/base.html" %}
+{% block extra_head %}
+<title>Buy {{title}} - {{brand}} for Women Online India</title>
+<meta name="description" content="Save {{discount}} on {{title}}. {{description}}">
+<script src="/zapstatic/account/js/rangy-core.js"></script>
+<script src="/zapstatic/catalogue/product.js?v=6jan2017"></script>
+<script src="/zapstatic/catalogue/zoom/jquery.zoom.min.js"></script>
+<script src="/zapstatic/catalogue/zoom/pinchzoom.min.js"></script>
+<link rel="stylesheet" href="/zapstatic/blog/css/blog-style.css">
+<meta property="og:title" content="{{brand}} {{title}}" />
+<meta property="og:image" content="{{image}}" />
+<meta property="og:description" content="{{description}}" />
+<meta property="og:price:amount" content="{{listing_price}}" />
+<meta property="og:price:currency" content="INR" />
+{% endblock %}
+{% block body %} 
+{% load humanize %}
+
+
+
+
+<main ng-controller="ProductController" class="content product_page">
+    <div class="page_content product_id inline" data-id="{{id}}" ng-cloak>
+        <div class="mobile_only full_width" ng-if="product.user">
+            <div class="seller_block_min inline">
+                <div class="seller_intro inline">
+                    <a ng-href="/profile/[[product.user.id]]/[[product.user.zap_username]]" class="inline">
+                        <img check-image imgsrc="[[product.user.profile_pic]]" ng-src="[[product.user.profile_pic]]">
+                        <h6 class="name black">[[product.user.zap_username]]</h6>
+                    </a>
+                </div>
+                <a ng-click="admire(product.user.id,product)" class="admire_btn" ng-class="{'admired':product.admire_or_not}"></a>
+            </div>
+        </div>
+        <div class="product_images size7of12">
+            <ul class="thumbnails web_only">
+                {% for i in thumbnails%}
+                <li class="thumbnail"><img src="{{i.url}}" alt="{{title}} - {{i.id}}"></li>
+                {% endfor %}
+            </ul>
+            <div class="image_container" id="zoom">
+                   <div id="current_image" class="current_image">
+                       <img src="{{image}}" alt="{{title}}" class="is_transparent" imageonload>
+                   </div>
+                   <div class="modal-trigger mobile_zoom mobile_only" data-target="mobile_zoom"></div>
+                   <div id="loading" class="is_visible full_width absolute zoomimage white"></div>
+            </div>
+            <ul class="thumbnails mobile_only">
+                {% for i in thumbnails%}
+                <li class="thumbnail"><img src="{{i.url}}" alt="{{title}} - {{i.id}}"></li>
+                {% endfor %}
+            </ul>
+            <div class="engagement_wrapper">
+                <div class="engagement web_only">
+                    <div class="actions inline">
+                        <div class="size4of12">
+                            <a class="btn-flat love waves-effect waves-pink" ng-click="like(product.likes.me)" ng-class="{'loved':product.likes.me.length}"></a>
+                        </div>
+                        <div class="size4of12">
+                            <a class="btn-flat comment waves-effect waves-pink"></a>
+                        </div>
+                        <div class="size4of12">
+                            <a class="btn-flat share waves-effect waves-pink modal-trigger" href="#share_options"></a>
+                        </div>
+                    </div>
+                    <div class="counts inline">
+                        <div class="loves icon-heart_empty" ng-show="product.likes.liker1.length || product.likes.me.length || product.likes.others.length">
+                            <ul class="inline_block" ng-class="{'names':(product.likes.liker1.length || product.likes.others.length) && product.likes.me.length}">
+                                <li ng-if="product.likes.me.length">You</li>
+                                <li ng-repeat="u in product.likes.liker1">[[u.zap_username]]</li>
+                            </ul>
+                            <span class="others" ng-if="product.likes.others.length">
+                                <span class="num">[[product.likes.others.length]]</span>
+                            </span>
+                        </div>
+
+                        <div class="comments icon-comment" ng-show="product.commentCount">[[product.commentCount]] </div>
+                    </div>
+                </div>
+                <div class="engagement_block show_comments expand left_align">
+                    <div class="relative">
+                        <div class="comments_block">
+                            <div class="mobile_only screen_header">
+                                <div class="screen_title">Comments</div>
+                                <a class="close_btn"></a>
+                            </div>
+                            <ul class="comments_list">
+                                <li class="comment_item inline" ng-repeat="c in comments">
+                                    <div class="display_picture circle_image">
+                                        <img ng-src="[[c.commented_by.profile_pic]]">
+                                    </div>
+                                    <div class="comment_details">
+                                        <a ng-href="/profile/[[c.commented_by.id]]/[[c.commented_by.zap_username]]" class="black">
+                                            <h6 class="user_name">[[c.commented_by.full_name]]<span class="closet_handle">[[c.commented_by.zap_username]]</span></h6>
+                                        </a>
+                                        <p class="comment_text" ng-bind-html="c.comment"></p>
+                                        <!-- <p class="comment_text">[[c.comment]]</p> -->
+                                    </div>
+                                </li>
+                            </ul>
+                            {%if request.user.is_authenticated %}
+                            <div id="compose_comment" class="compose_comment">
+                                <div class="display_picture circle_image">
+                                    <img ng-src="{{request.user.profile.profile_pic}}">
+                                </div>
+                                <div class="post_comment">
+                                    <div class="comment_text new_comment" contenteditable="true">Write your comment here</div>
+                                    <a ng-click="postComment()" class="post"><span class="up"></span><span class="down"></span></a>
+                                </div>
+                                <div id="mention_suggestions" class="mention_suggestions">
+                                    <ul class="suggestions_list">
+                                        <li class="suggestion_item inline" ng-repeat="u in users">
+                                            <img ng-src="[[u.profile_pic]]">
+                                            <h6 class="name">[[u.zap_username]]</h6>
+                                            <span class="closet_handle">[[u.zap_username]]</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div>
+                                <a ng-click="loginToComment()">Login to Comment</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="loves_block">
+                            <div class="mobile_only screen_header">
+                               <div class="screen_title">Loves</div>
+                               <a class="close_btn"></a>
+                            </div>
+                            <ul class="loves_list">
+                               <li class="love_item" ng-repeat="l in loves">
+                                    <div class="user_block_min inline">
+                                        <a ng-href="/profile/[[l.loved_by.id]]/[[l.loved_by.zap_username]]" class="user_details">
+                                            <div class="inline">
+                                               <img ng-src="[[l.loved_by.profile_pic]]">
+                                               <h6 class="name">[[l.loved_by.full_name]]</h6>
+                                               <span class="closet_handle">[[l.loved_by.zap_username]]</span>
+                                           </div>
+                                           </a>
+                                       <a ng-click="admire(l.loved_by.id,l.loved_by)" class="admire_btn" ng-class="{'admired':l.loved_by.admire_or_not}" ng-if="loggedUser!=l.loved_by.id"></a>
+                                   </div>
+                               </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="seller_details web_only" ng-if="product.user">
+                    <h5 class="uppercase grey normal_font">Seller</h5>
+                    <div class="user_item inline">
+                            <!-- <a ng-href="/profile/[[product.user.id]]/[[product.user.zap_username]]"> -->
+                        <div class="picture">
+                            <img check-image imgsrc="[[product.user.profile_pic]]" ng-src="[[product.user.profile_pic]]">
+                        </div>
+                           <!--  </a> -->
+                        <div class="user_details">
+                            <a ng-href="/profile/[[product.user.id]]/[[product.user.zap_username]]">
+                                <h3 class="name">[[product.user.fullname]]</h3>
+                                <span class="closet_handle block">[[product.user.zap_username]]</span>
+                            </a>
+                        </div>
+                        <a ng-click="admire(product.user.id,product)" class="admire_btn" ng-class="{'admired':product.admire_or_not}"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="product_details size5of12 product_page">
+            <ul class="crumbs_list inline">
+                <li class="crumb_item inline"><a href="/shop/[[product.user.seller_type.slug]]" class="inline_btn underline pink small capitalize">[[product.user.seller_type.name]]</a></li>
+                <li class="crumb_item inline"><a ng-href="/shop/[[product.user.seller_type.slug]]/product_category/[[product.product_category.id]]" class="inline_btn underline pink small">[[product.product_category.name]]</a></li>
+                <li class="crumb_item inline"><a ng-href="/shop/[[product.user.seller_type.slug]]/brand/[[product.brand.id]]" class="inline_btn underline pink small">[[product.brand.name]]</a></li>
+                <li class="crumb_item inline"><a ng-href="/shop/[[product.user.seller_type.slug]]?occasion=[[product.occasion.id]]" class="inline_btn underline pink small">[[product.occasion.name]]</a></li>
+            </ul>
+            <h1 class="product_title_brand">{{brand}}</h1>
+            <h1 class="product_title">{{title}}</h1>
+            <div class="age_condition relative" ng-if="product.user.seller_type.slug!='designer' && product.user.seller_type.slug!='brand'">
+                {% if age and condition %}
+                <a class="inline_btn grey small underline hover_trigger hide_on_leave" data-activates="#condition_guide">{{age}} Old - {{condition}}</a>
+                {% endif %}
+                <div id="condition_guide" class="tool_tip white small bottom [[product.condition | spacetounderscore]]">
+                    <ul class="new list">
+                        <li>This is an authentic, pre-owned piece that is <span class="age">{{age}}</span> old.</li>
+                        <li>This is a new item that has not been used and shows no signs of wear</li>
+                        <li>Original tags or labels are attached to the items</li>
+                        <li>There may be natural imperfections from the manufacturer</li>
+                    </ul>
+                    <ul class="mint list">
+                        <li>This is an authentic, pre-owned piece that is <span class="age">{{age}}</span> old.</li>
+                        <li>There must be imperfections as it is a pre-owned item.</li>
+                        <li>This item is in a good condition but shows some signs of gentle-to-normal wear.</li>
+                    </ul>
+                    <ul class="gently_loved list"> 
+                        <li>This is an authentic, pre-owned piece that is <span class="age">{{age}}</span> old.</li>
+                        <li>There must be imperfections as it is a pre-owned item</li>
+                        <li>This item is in a "loved" condition and may have obvious signs of wear</li>
+                        <li>We see these flaws and blemishes as unique characteristics that are exclusive to vintage or previously owned items</li>
+                    </ul>
+                    <ul class="worn_out list">
+                        <li>This is an authentic, pre-owned piece that is <span class="age">{{age}}</span> old.</li>
+                        <li>There must be imperfections as it is pre-owned item</li>
+                        <li>This item is in “worn out” condition and may have obvious signs of wear</li>
+                        <li>This item might be worn between 5-10 times but it brings in a story and a memory along with it.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="flash_sale_flag is_hidden">
+                <span class="small_font">THIS ITEM IS ON SALE <span class="pink small_font">(<span class="show_percent" ng-class="{'show_extra':product.flash_sale_data.original_discount>0}">[[product.flash_sale_data.extra_discount]]</span>)</span></span>
+                {% if available %}
+                <span class="flash_sale_timer is_hidden">
+                    <span class="block label small_font">HURRY! SALE ENDS IN</span>
+                    <span id="countdown" class="timer pink"></span>
+                </span>
+                {% endif %}
+            </div>
+            <div class="description">{{ description|linebreaks }}</div>
+            <div class="price inline">
+                <span class="new z_new big" ng-class="appliedOffer ? 'offer_price' : ''">{{listing_price|floatformat:"0"|intcomma}}</span>
+                {% if original_price > listing_price %}
+                    <span class="old z_old">{{original_price|floatformat:"0"|intcomma}}</span>
+                {% endif %}
+                {% if original_price > listing_price %}
+                    <span class="discount very_small">@ {{discount}}</span>
+                {% endif %}
+            </div>
+            {% if cashback > 0 %}
+                <div class="cashback">Get a cash back of <span class="icon-rupee">{{cashback}}</span> when you shop for <span class="icon-rupee">2,500</span> or more.</span>.</div>
+            {% endif %}
+            <div class="offers" ng-if="offers" ng-class="offers.length>1 ? 'show_one' : ''">
+                <div class="offer" ng-repeat="offer in offers" data-offer-id="[[offer.id]]">
+                    <input class="with-gap black" name="offers" type="radio" id="[[offer.id]]" ng-click="applyOffer(offer.id)" ng-class="appliedOffer==offer.id ? 'applied' : ''"/>
+                    <label for="[[offer.id]]" class="full_width">
+                        <div>
+                            <div class="code" ng-if="offer.code">[[offer.code]]</div>
+                            <div class="message">
+                                <span class="success">APPLIED</span>
+                                <span class="error"></span>
+                            </div>
+                            <div class="name" ng-if="offer.name">[[offer.name]]</div>
+                            <div class="validity" ng-if="offer.valid_till">Expires in [[offer.valid_till]]</div>
+                            <div class="benefit" ng-if="offer.benefit">[[offer.benefit]]</div>
+                        </div>
+                    </label>
+                </div>
+                <a class="show_offers small_font underline" ng-if="offers.length>1">offers</a>
+            </div>
+            <div class="engagement mobile_only">
+                <div class="counts">                           
+                    <div class="loves icon-heart_empty" ng-show="product.likes.liker1.length || product.likes.me.length || product.likes.others.length">
+                        <ul class="inline_block" ng-class="{'names':(product.likes.liker1.length || product.likes.others.length) && product.likes.me.length}">
+                            <li ng-if="product.likes.me.length">You</li>
+                            <li ng-repeat="u in product.likes.liker1">[[u.zap_username]]</li>
+                        </ul>
+                        <span class="others" ng-if="product.likes.others.length" ng-class="{'singular':product.likes.others.length==1}">
+                            <span class="num">[[product.likes.others.length]]</span>
+                        </span>
+                    </div>
+                    <div class="comments icon-comment" ng-class="{'singular':product.commentCount==1}" ng-show="product.commentCount">[[product.commentCount]] </div>
+               </div>
+            </div>
+
+            {% if not discount == 'Inspiration' %}
+                <div class="inline size_quantity" ng-hide="'{{ size.0.size}}'==''">
+                    <div class="sizes size8of12">
+                        <label class="uppercase small">Size&nbsp;&nbsp;</label><span class="modal-trigger" data-position="left" data-delay="50" data-target="size_guide"><a href="" class="inline_btn grey small underline" ng-hide="'{{ size.0.size}}'=='FREESIZE'">See Size Guide</a></span>
+                        <ul class="sizes_list">
+                            {%for s in size%}
+                            <li class="size_item {% if not s.qty > 0 %}soldout{% endif %}" ng-class="{'tooltipped':'{{s.size}}'!='FREESIZE'}" data-id="{{s.id}}" data-qty="{{s.qty}}"  data-tooltip="{{s.tooltip}}" data-delay="50" data-position="top">{{s.size}}</li>
+                            {%endfor%}
+                        </ul>
+                        <p class="size_info small grey"></p>
+
+                    </div>
+                    <!-- {% if available %} -->
+                    <div class="size4of12">
+                        <div class="get_quantity is_hidden">
+                            <label class="small uppercase">Quantity</label>
+                            <div class="change_quantity">
+                                <span class="change minus">-</span>
+                                <span class="quantity">[[qty]]</span>
+                                <span class="change plus">+</span>
+                            </div>
+                            <p class="small grey max_quantity is_hidden">[[availble_qty]]</p>
+                        </div>
+                    </div>
+                    <!-- {% endif %} -->
+                </div>
+                
+                {% if not user == request.user.id and available %}
+                    <div class="buy_cta web_only">
+                        <a class="cart_btn btn waves-effect waves-light full_width " ng-click="addToCart(product)">Add to tote</a>
+                        <!--<a class="confirm_btn btn waves-effect waves-light full_width is_hidden" ng-click="confirmCart()">Confirm</a>-->
+                        <a data-activates="#cart" class="goto_btn btn waves-effect waves-light full_width is_hidden" ng-click="gotoToCart()">Go to tote</a>
+                    </div>
+                    <!-- <div id="best_price_challenge" class="small web_only is_visible" ng-if="product.best_price">
+                        <h6 class="uppercase small">Best price guaranteed</h6>
+                        <p class="small_font">Think you can buy this item for cheaper elsewhere? We'll give you an extra 10% off if you can!</p>
+                    </div> -->
+                    <div class="small_font" style="margin-top:10px;">Have any questions? Call us at <b class="small_font">07337880282</b></div>
+                {% endif %}
+            {% endif %}
+            {% if not available %}
+                <div class="product_sold_out">This item is Sold out</div>
+            {% endif %}
+            {% if user == request.user.id and available %}
+                <div class="share_cta web_only">
+                    <a class="waves-effect waves-light btn center_align full_width share modal-trigger" href="#share_options">Share your item</a>
+                </div>
+            {% endif %}
+            <div class="engage mobile_only fixed bottom full_width left inline">
+                <div class="actions inline {% if not user == request.user.id %}size6of12{% else %}size12of12{% endif %}">
+                    <div class="size4of12">
+                        <a ng-click="like(product.likes.me)" ng-class="{'loved':product.likes.me.length}" class="btn-flat love"></a>
+                    </div>
+                    <div class="size4of12">
+                        <a href="#" class="btn-flat comment"></a>
+                    </div>
+                    <div class="size4of12">
+                        <a href="#share_options" class="btn-flat share modal-trigger"></a>
+                    </div>
+                </div>
+                {% if not user == request.user.id%}
+                    {% if available %}
+                        <div class="buy_cta size6of12">
+                            {% if not user == request.user.id and not discount == 'Inspiration' %}
+                            <a class="cart_btn btn waves-effect waves-light full_width" ng-click="addToCart()">Add to tote</a>
+                            <a class="confirm_btn btn waves-effect waves-light full_width is_hidden" ng-click="confirmCart()">Confirm</a>
+                            <a data-activates="#cart" class="goto_btn btn waves-effect waves-light full_width is_hidden" ng-click="gotoToCart()">Go to tote</a>
+                            {% endif %}
+                        </div>
+                        <!--<div id="best_price_challenge" class="small center_align is_visible" ng-if="product.best_price">-->
+                            <!--<h6 class="uppercase">Best price guaranteed</h6>-->
+                            <!--<p>Think you can buy this item for cheaper elsewhere? We'll give you an extra 10% off if you can!</p>-->
+                            <!--<div class="close_btn small"></div>-->
+                        <!--</div>-->
+                    {% endif %}
+                {% endif %}
+                {% if not available %}
+                    <div class="product_sold_out size6of12">Sold out</div>
+                {% endif %}
+            </div>
+
+            <div class="shipping_mod" ng-if="product.time_to_make">
+                <span class="icon-shipping small">This product will be shipped to you after [[product.time_to_make]] from the date of order placed. All custom made orders are not returnable.</span>
+            </div>
+            <div class="more_details">
+                <ul class="custom_tabs">
+                    <li data-tabID="zap_promise" class="custom_tab selected">Info</li>
+                    <li data-tabID="product_details" class="custom_tab">Product</li>
+                    <li data-tabID="brand_story" class="custom_tab is_hidden">Brand</li>
+                </ul>
+                <ul class="tab_contents">
+                    <li class="tab_content is_visible" id="zap_promise">
+                        <div ng-if="product.best_price">
+                            <h6 class="small bold">Best Price Guarantee</h6>
+                            <p class="small">Think you can buy this item for cheaper elsewhere? We'll give you an extra 10% off if you can!
+                            </p>
+                        </div>
+                        <h6 class="small bold">Authentic Products Only</h6>
+                        <p class="small">We only sell pure branded products. Each item goes through a rigorous authentication process.</p>
+                        <h6 class="small bold">24-Hour Returns</h6>
+                        <p class="small">If you are not satisfied with the product, please feel free to return within 24 hours. We will have it picked up and pay you back.</p>
+                        <h6 class="small bold">Payment Options</h6>
+                        <p class="small">We accept payments through Netbanking, Credit, Debit cards and Cash on Delivery for items below 10,000.</p>
+                    </li>
+                    <li class="tab_content" id="product_details">
+                        <h6 class="small">Product Details</h6>
+                        <div class="inline">
+                            <div class="size6of12 mobile_also">
+                                <label class="small">Brand:</label>
+                                <div class="small attribute_value z_brand">{{brand}}</div>
+                            </div>
+                            <div class="size6of12 mobile_also" ng-if="product.style">
+                                <label class="small">Style:</label>
+                                <div class="small attribute_value">[[product.style]]</div>
+                            </div>
+                            <div class="size6of12 mobile_also" ng-if="product.occasion">
+                                <label class="small">Occasion:</label>
+                                <div class="small attribute_value">[[product.occasion.name]]</div>
+                            </div>
+
+                            <div class="size6of12 mobile_also" ng-if="product.product_category">
+                                <label class="small">Category:</label>
+                                <div class="small attribute_value">[[product.product_category.name]]</div>
+                            </div>
+                            <div class="size6of12 mobile_also" ng-if="product.color">
+                                <label class="small">Color:</label>
+                                <div class="small attribute_value">[[product.color]]</div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="tab_content is_hidden" id="brand_story">
+                        <h6>Brand Story</h6>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="looks block center_align" ng-if="look_thumbs.length>0">
+            <p class="bold">View in a look:</p>
+            <div class="inline">
+                 <div class="look_item big size6of12 overlay_trigger" ng-repeat="look in look_thumbs" class="overlay_trigger" data-overlay="#product_looks" ng-click="get_looks(product, look)">
+                     <div class="cover_pic">
+                        <img src="[[look.cover_pic]]">
+                     </div>
+                     <div class="look_data">
+                        <div class="center_align">
+                            <span class="look_title">[[look.title]]</span>
+                            <span class="stylist">[[look.author.name]]</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="related_products block" ng-if="relatedProducts.length>2">
+            <p class="bold center_align" style="margin: 30px 0 15px;">You may also like:</p>
+            <div class="viewport one_row">
+                <ul class="products_list inline scroller">
+                    <li class="product_item medium" ng-repeat="p in relatedProducts">
+                        <div class="product_item_inner">
+                            <a ng-href="/product/[[p.id]]/[[p.title|spaceless]]" class="product_display block no_margin">
+                                <div class="image_holder">
+                                    <img ng-src="[[p.images[0].image]]" class="full_width">
+                                </div>
+                            </a>
+                            <div class="product_details">
+                                <h5 class="normal_font">[[p.title]]</h5>
+                                <div class="price">
+                                    <span class="new">[[p.listing_price]]</span>
+                                    <span class="old" ng-if="p.original_price>p.listing_price">[[p.original_price]]</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="blogs block center_align" ng-if="blogs.length>0">
+            <p class="bold">Related Reading:</p>
+            <div class="center_align">
+                <div class="post-card big inline_block left_align" ng-repeat="blog in blogs">
+                    <div class="post-card__inner">
+                        <a id="post-picture" href="/blog/post/[[blog.id]]/[[blog.slug]]">
+                            <img class="post-cover" ng-src="[[blog.cover_pic]]">
+                        </a>
+                        <div class="post-details">
+                            <a class="post-category" href="/blog/category/[[blog.category.slug]]">[[blog.category.name]]</a>
+                            <a class="post-title" href="/blog/post/[[blog.id]]/[[blog.slug]]">[[blog.title]]</a>
+                            <div class="post-time">[[blog.time]]</div>
+                            <a class="love_btn no_text" ng-class="blog.loved_by_user ? 'loved' : ''"
+                               ng-click="love_or_unlove_blog(blog, $event)"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay" id="product_looks" style="z-index:6;">
+        <div class="glass"></div>
+        <div class="content" style="left: 50%;overflow: scroll;transform: translate(-50%, -50%);position: fixed;max-height: calc(100% - 80px);margin: 0;">
+            {% include "catalogue/product_looks.html" %}
+        </div>
+    </div>
+    <div id="size_guide" class="modal">
+        <div class="modal-content">
+            <h4>Size Guide:</h4>
+            <div class="body">
+                <img ng-src="[[product.product_category.name == 'Foot Wear' ? '/zapstatic/frontend/images/size_guide_shoe.jpg' : '/zapstatic/frontend/images/size_guide.jpg']]">
+            </div>
+        </div>
+    </div>
+    <div id="share_options" class="modal">
+        <div class="modal-content center-align">
+            <h5>Share through</h5>
+            <div class="body">
+                <a target="_blank" href="mailto:?subject=Look at this website&body=Hi,I found this website and thought you might like it www.zapyle.com. Also check this product of mine - www.zapyle.com/product/{{id}}/[[product_title|spaceless]]. Will be a great fit for you!" class="icon-email"></a>
+                <a target="_blank" href="whatsapp://send?text=www.zapyle.com/product/{{id}}/[[product_title|spaceless]]" class="mobile_only icon-whatsapp"></a>
+                <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=www.zapyle.com/product/{{id}}/[[product_title|spaceless]]" class="icon-facebook"></a>
+            </div>
+       </div>
+    </div>
+    <div class="modal full_height" id="mobile_zoom">
+        <div class="close_btn right modal-close"></div>
+        <div class="modal-content">
+            <div class="pinch-zoom current_image">
+                 <img src="{{image}}" alt="{{title}}" class="is_transparent" imageonload>
+            </div>
+            <ul class="thumbnails mobile_only">
+
+                {% for i in thumbnails%}
+                <li class="thumbnail"><img src="{{i.url}}" alt="{{title}} - {{i.id}}"></li>
+                {% endfor %}
+            </ul>
+            <div id="loading" class="is_visible absolute full_width zoomimage"></div>
+        </div>
+    </div>
+</main>
+<style>
+    .soldout {
+        text-decoration: line-through;
+    }
+</style>
+<!-- Google Code for Remarketing Tag -->
+<script type="text/javascript">
+var google_tag_params = {
+ecomm_prodid: '{{id}}',
+ecomm_pagetype: 'product',
+ecomm_totalvalue: parseInt('{{listing_price}}'),
+};
+</script>
+
+{% endblock %}

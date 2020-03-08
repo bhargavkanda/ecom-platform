@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Zapyle Blog Editor</title>
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="/zapstatic/frontend/blog/dist/css/medium-editor.css">
+    <link rel="stylesheet" href="/zapstatic/frontend/blog/dist/css/themes/flat.css">
+    <link rel="stylesheet" href="/zapstatic/frontend/blog/css/blog-style.css">
+    <script type="text/javascript" src="/zapstatic/frontend/blog/js/jquery/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="/zapstatic/frontend/blog/js/jquery/jquery-migrate-1.2.1.min.js"></script>
+    <script type="text/javascript" src="/zapstatic/frontend/blog/js/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://rawgithub.com/fengyuanchen/cropper/master/dist/cropper.min.css">
+    <script type="text/javascript" src="https://rawgithub.com/fengyuanchen/cropper/master/dist/cropper.js"></script>
+</head>
+<body>
+    <div class="insert-overlays">
+
+        <div class="pri-overlay zap_embed">
+            <div class="glass"></div>
+            <div class="content">
+                <div class="header">Embed Zapyle Post</div>
+                <div class="body">
+                    <div class="url-input">
+                        <input class="url" type="text" name="url">
+                        <input type="checkbox" name="user-preview"><label>Show User preview</label>
+                        <input type="checkbox" name="use-cta"><label>Show Buy CTA</label>
+                        <input class="show-preview" type="submit" value="Show Preview">
+                    </div>
+                    <div class="preview">
+                        
+                    </div>
+                </div>
+                <div class="footer">
+                    <a class="done" href="#">Done</a>
+                    <a class="cancel" href="#">Cancel</a>
+                </div>
+            </div>
+        </div>
+        <div class="pri-overlay social_embed">
+            <div class="glass"></div>
+            <div class="content">
+                <div class="header">Embed Social Post</div>
+                <div class="body">
+                    <!-- <div class="networks">
+                        <ul>
+                            <li class="facebook">Facebook</li>
+                            <li class="youtube">YouTube</li>
+                            <li class="instagram">Instagram</li>
+                            <li class="pinterest">Pinterest</li>
+                            <li class="twitter">Twitter</li>
+                        </ul>
+                    </div> -->
+                    <div class="url-input">
+                        <textarea class="embed-code"></textarea>
+                        <input class="show-preview" type="submit" value="Show Preview">
+                    </div>
+                    <div class="preview">
+                        
+                    </div>
+                </div>
+                <div class="footer">
+                    <a class="done" href="#">Done</a>
+                    <a class="cancel" href="#">Cancel</a>
+                </div>
+            </div>
+        </div>
+        <div class="pri-overlay image">
+            <div class="glass"></div>
+            <div class="content">
+                <div class="header">Embed Image</div>
+                <div class="body">
+                    <div class="input">
+                        <input type="file" class="sr-only" id="inputImage" name="file" accept="image/*">
+                        <input class="show-preview" type="submit" value="Show Preview">
+                        <input class="back" type="submit" value="Back">
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-9">
+                            <!-- <h3 class="page-header">Demo:</h3> -->
+                                <div class="img-container">
+                                    <img id="crop-image" src="" alt="Picture">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <!-- <h3 class="page-header">Preview:</h3> -->
+                                <div class="docs-preview clearfix">
+                                  <div class="img-preview preview-lg"></div>
+                                  <div class="img-preview preview-md"></div>
+                                  <div class="img-preview preview-sm"></div>
+                                  <div class="img-preview preview-xs"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-9 docs-buttons">
+                            <!-- <h3 class="page-header">Toolbar:</h3> -->
+                                <div class="btn-group">
+                                  <button type="button" class="btn btn-primary" data-method="setDragMode" data-option="crop" title="Crop">
+                                    <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;setDragMode&quot;, &quot;crop&quot;)">
+                                      <span class="fa fa-crop"></span>
+                                    </span>
+                                    Crop
+                                  </button>
+                                </div>
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-primary" data-method="rotate" data-option="-45" title="Rotate Left">
+                            <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;rotate&quot;, -45)">
+                              <span class="fa fa-rotate-left"></span>
+                            </span>
+                            rotate -
+                          </button>
+                          <button type="button" class="btn btn-primary" data-method="rotate" data-option="45" title="Rotate Right">
+                            <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;rotate&quot;, 45)">
+                              <span class="fa fa-rotate-right"></span>
+                            </span>
+                            rotate +
+                          </button>
+                        </div>
+                      </div><!-- /.docs-buttons -->
+                    </div>  
+                </div>
+                <div class="preview">
+                        
+                </div>
+                </div>
+                <div class="footer">
+                    <a class="done" href="#">Done</a>
+                    <a class="cancel" href="#">Cancel</a>
+                </div>
+            </div>
+        </div>
+        <div class="pri-overlay zap_cta">
+            <div class="glass"></div>
+            <div class="content">
+                <div class="header">Embed Zapyle CTA</div>
+                <div class="body">
+                    <div class="input">
+                        <input class="cta_text" type="text" name="button-text">
+                        <input class="url" type="text" name="url">
+                        <input class="new_tab" type="checkbox" name="new-tab">
+                        <label>Open in new tab</label>
+                        <input class="show-preview" type="submit" value="Show Preview">
+                    </div>
+                    <div class="preview">
+                        
+                    </div>
+                </div>
+                <div class="footer">
+                    <a class="done" href="#">Done</a>
+                    <a class="cancel" href="#">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main-content">
+        <h1>Blog Editor</h1>
+        <div class="post-title">
+            <span id="post-title" class="input-field">
+                <label>Title</label>
+                <input type="text" name="title">
+            </span>
+        </div>
+        <div id="container">
+            <div class="row">
+                <div class="row-helper">
+                    <div class="new-block">
+                        <ul>
+                            <li id="text" class="text">Text</li>
+                            <li id="image" class="image">Image</li>
+                            <li id="social_embed" class="social_embed">Social Embed</li>
+                            <li id="zap_embed" class="zap_embed">Zapyle Product Embed</li>
+                            <li id="zap_cta" class="zap_cta">Button</li>
+                        </ul>
+                    </div>
+                    <div class="add-bottom" data-location='after'></div>
+                </div>
+                
+                <div class="column size12of12" data-width="12">
+                    <div class="col-helper">
+                        <div class="new-block">
+                            <ul>
+                                <li id="text" class="text">Text</li>
+                                <li id="image" class="image">Image</li>
+                                <li id="social_embed" class="social_embed">Social Embed</li>
+                                <li id="zap_embed" class="zap_embed">Zapyle Product Embed</li>
+                                <li id="zap_cta" class="zap_cta">Button</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="block text" data-type="text">
+                        <div class="dropper"><div class="above" data-location="above"><div class="left" data-location="left"></div><div class="right" data-location="right"></div></div><div class="below" data-location="below"><div class="left" data-location="left"></div><div class="right" data-location="right"></div></div></div>
+                        <div class="editable">
+                            <p>Type here..</p>
+                        </div>
+                        <div class="new-block">
+                            <ul>
+                                <li id="text" class="text">Text</li>
+                                <li id="image" class="image">Image</li>
+                                <li id="social_embed" class="social_embed">Social Embed</li>
+                                <li id="zap_embed" class="zap_embed">Zapyle Product Embed</li>
+                                <li id="zap_cta" class="zap_cta">Button</li>
+                            </ul>
+                        </div>
+                        <div class="edit-block"><ul><li class="move">Move</li><li class="delete">Delete</li></ul></div>
+                    </div>
+                    <div class='add-left' data-location='before'></div><div class='add-right' data-location='after'><div class='resizer'><div class='resize-line'></div></div></div>
+                </div>
+
+            </div>
+            
+        </div>
+        <div class="actions">
+            <button class="discard">Discard</button>
+            <button class="next">Next</button>
+        </div>
+    </div>
+    
+
+    <div class="post-data">
+        <span id="post-category" class="input-field">
+            <label>Category</label>
+            <select>
+                <option data-id="1">Category 1</option>
+                <option data-id="1">Category 1</option>
+                <option data-id="1">Category 1</option>
+                <option data-id="1">Category 1</option>
+            </select>
+        </span>
+        <span id="post-author" class="input-field">
+            <label>Author</label>
+            <select>
+                <option data-id="1">Author 1</option>
+                <option data-id="1">Author 1</option>
+                <option data-id="1">Author 1</option>
+                <option data-id="1">Author 1</option>
+            </select>
+        </span>
+        <div class="post-preview">
+            <span id="post-picture" class="input-field">
+                <label>
+                    <input type="file" name="cover-picture">
+                    <span class="edit"></span>
+                </label>
+                <img class="cover-preview" src="">
+            </span>
+            <span id="preview-text" class="input-field">
+                <span></span>
+            </span>
+        </div>
+        <div class="actions">
+            <button class="back">Back</button>
+            <button class="save">Save</button>
+            <button class="publish">Publish</button>
+        </div>
+    </div>
+    
+
+    <script src="/zapstatic/frontend/blog/dist/js/medium-editor.js"></script>
+    <script type="text/javascript" src="/zapstatic/frontend/blog/js/insert.js"></script>
+    
+    <script type="text/javascript" src="/zapstatic/frontend/blog/js/main.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script type="text/javascript" src="/zapstatic/frontend/blog/js/editorController.js"></script>
+    <script type="text/javascript" src="/zapstatic/frontend/blog/js/embed.js"></script>
+    <script>
+    
+        initiateEditor();
+    </script>
+</body>
+</html>

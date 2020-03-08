@@ -1,0 +1,47 @@
+<html>
+<head>
+    <title>Awesome! Thank you for signing up. We'll keep you notified.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/zapstatic/account/fonts/font.css">
+    <link rel="stylesheet" type="text/css" href="/zapstatic/marketing/landing.css">
+    <script type="text/javascript" src="/zapstatic/frontend/landing/js/jquery/jquery-1.11.3.min.js"></script>
+    <script src="/zapstatic/marketing/campaign.js?v=ghgh"></script>
+    <script src="//load.sumome.com/" data-sumo-site-id="7cf2def28ee6d23ddf8b409407eb86fe5fb53e81aa09bf0ff85670692c7932bd" async="async"></script>
+    <!-- GA Code -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-75163998-1', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+    <!-- End GA Code -->
+</head>
+<body>
+<header>
+    <div class="logo"><a href="/"><img src="https://www.zapyle.com/zapstatic/website/images/logo_black.png"></a></div>
+    <div class="right"><a href="/" class="cta secondary">Continue Shopping</a></div>
+</header>
+<main>
+    <div class="content center_align">
+        <p class="revisit_message absolute web_only">{{msg}}</p>
+        <p class="revisit_message mobile_only">{{msg}}</p>
+        <!-- <p>You're the first to know! Now be the first to give your friends the big news.</p> -->
+		</br>
+        <p class="intro" style="max-width: 725px;margin: 0 auto;font-size:26px;">Share the secret and earn a Rs.1000 voucher to shop the big surprise.</p>
+        </br>
+		<p>Just get 5 friends to sign up using your url:</p>
+	   <div class="url"><span>{{ref_url}}</span></div>
+        <!-- <label>or better just:</label> -->
+        <div class="inline">
+            <a target="_blank" class="fb_link icon-facebook share_link" href="https://www.facebook.com/sharer/sharer.php?u={{ref_url | safe}}" data-name="Facebook">Share on</a>
+            <a target="_blank" class="tw_link icon-twitter share_link web_only" href="https://twitter.com/intent/tweet?text=An%20international%20treat%20is%20coming%20to%20India.%20&#64;zapylesocial%20{{ref_url | safe}}" data-name="Twitter">Share on</a>
+            <a target="_blank" class="wt_link icon-whatsapp share_link mobile_only" href="whatsapp://send?text=Guess what?%20Your%20favourite%20luxury%20brands%20are%20coming%20to%20India!%20{{ref_url | safe}}" data-name="Whatsapp">Share on</a>
+        </div>
+    </div>
+</main>
+</body>
+</html>

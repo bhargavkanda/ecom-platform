@@ -1,0 +1,5 @@
+PRODUCT_APPROVED = "Your product {} has been approved by Zapyle." 
+PRODUCT_DISAPPROVED = "You product {} has been disapproved by Zapyle({})"
+ADMIRED_YOU = "{ or Someone} just admired you."
+LOVED_YOUR_PRODUCT = "{} loved your Product - {}"
+COMMENTED_ON_YOUR_PRODUCT = "{} commented on your product - {}"

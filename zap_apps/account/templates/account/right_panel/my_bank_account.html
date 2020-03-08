@@ -1,0 +1,34 @@
+<div class="screen_header">
+	<div class="screen_title">My Bank Account</div>
+	<a class="screen_back" data-activates="#my_account" href="#rp_my_account">Back</a>
+</div>
+<div class="screen_content no_footer">
+	<div class="empty_state" ng-class="{'is_visible' : !bankAC.user_acc}">
+		<div class="message center_align">You haven't added a bank account to Zapyle yet</div>
+		<div class="info center_align">You will receive money into this account when you sell an item.</div>
+		<a href="#rp_add_bank_account" class="btn waves-effect waves-light" data-activates="#add_bank_account">ADD An ACCOUNT</a>
+	</div>
+
+	<div class="account" ng-show="bankAC.user_acc">
+		<div class="account_data">
+			<div>
+				<label>Name</label>
+				<div>[[bankAC.account_holder]]</div>
+			</div>
+			<div>
+				<label>Account Number</label>
+				<div>[[bankAC.user_acc]]</div>
+			</div>
+			<div>
+				<label>IFSC Code</label>
+				<div>[[bankAC.ifsc_code]]</div>
+			</div>
+			<a href="#rp_add_bank_account" data-activates="#add_bank_account" class="edit_link" ng-click="bk=bankAC">EDIT</a>
+		</div>
+		<div class="info">You will receive money into this account when you sell an item.</div>
+	</div>
+
+
+
+</div>
+<div class="screen_footer"></div>

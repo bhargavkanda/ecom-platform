@@ -1,0 +1,20 @@
+<div class="screen_header">
+	<a class="screen_back" data-activates="#my_profile" href="#rp_my_profile" ng-click="my_profile()">Back</a>
+	<div class="screen_title">My Admirers</div>
+</div>
+<div class="screen_content no_footer">
+	<div class="admirers">
+		<ul class="admirers_list">
+			<li class="admirer_item" ng-repeat="u in admirers">
+				<div class="user_block_min inline">
+					<div class="user_details inline">
+						<img ng-src="[[u.profile_pic]]">
+						<h6 class="name">[[u.full_name]]</h6>
+						<span class="closet_handle">[[u.zap_username]]</span>
+					</div>
+					<a class="admire_btn" ng-class="{'admired':u.admired}" ng-click="admire(u)"></a>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>

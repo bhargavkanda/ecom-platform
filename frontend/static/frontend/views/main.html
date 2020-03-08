@@ -1,0 +1,107 @@
+<style type="text/css">
+    #page {
+        display: none;
+    }
+    /*#loading {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100vw;
+    height: 100vh;
+    background-image: url("/zapstatic/frontend/images/loading.gif");
+    background-repeat: no-repeat;
+    background-position: center;
+}*/
+</style>
+<script type="text/javascript">
+    function onReady(callback) {
+        var intervalID = window.setInterval(checkReady, 1000);
+        function checkReady() {
+            if (document.getElementsByTagName('body')[0] !== undefined) {
+                window.clearInterval(intervalID);
+                callback.call(this);
+            }
+        }
+    }
+    function show(id, value) {
+        document.getElementById(id).style.display = value ? 'block' : 'none';
+    }
+    onReady(function() {
+        show('page', true);
+        // show('loading', false);
+    });
+</script>
+<!-- <div id="loading"></div> -->
+<script src="/zapstatic/frontend/scripts/js/home.js"></script>
+<style>
+    header {
+        background: transparent none repeat scroll 0 0;
+    }
+    
+    footer .content {
+        display: none;
+    }
+    
+    .hide {
+        opacity: 0;
+    }
+    
+    .first-fold header {
+        display: block;
+    }
+</style>
+<div class="home">
+    <div class="home-bg"></div>
+    <div class="container group">
+
+      <section class = "hero">
+        <h1>Shop  the most luxurious closets of women across India and sell yours too!</h1>
+        <div class="cta">
+          <a class="primary" href="/#/feeds">Shop Now</a>
+          <a class="secondary">Get App</a>
+        </div>
+      </section>
+
+      <div class="pri-overlay get-app">
+        <div class="glass"></div>
+        <div class="content">
+          <div class="body">
+            <section class = "message">
+              <p>Download the app now and</p>
+              <h2>GET ₹200 OFF</h2>
+              <p>on your first purchase at the checkout</p>
+            </section>
+
+            <section class="applinks">
+              <a href="https://play.google.com/store/apps/details?id=com.zapyle.zapyle" class="ctas">Android</a>
+              <a href="https://geo.itunes.apple.com/us/app/zapyle/id1032735636?mt=8" class="ctas">iPhone</a>
+            </section>
+
+            <section class = "smsrequest">
+              <h6>Get a link to download the app via SMS</h6>
+              <div class = "inputwrapper" >
+              <!-- <form  action="" method="POST"> -->
+                <input class = "textbox" id="txtphone_number" name="phone_number" placeholder="Enter Mobile Number">
+                <a class = "button" id="btn_send" href="javascript:anchorScr()">Send</a>
+                <!-- <input type="submit" class = "button" value="Send"> -->
+              <!-- </form> -->
+              </div>
+              <p class="error-msg"></p>
+              <p class="success-msg sucess_msg"></p>
+            </section>
+          </div>
+          <div class="close"></div>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+<script>
+  
+  $('.secondary').click(function(){
+    $('.get-app').addClass('is_visible');
+  })
+</script>

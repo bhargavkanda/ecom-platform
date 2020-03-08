@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="min-width=device-width, initial-scale=1.0">
+    <title>Closet Cleanup | Zapyle</title>
+    <script src="//load.sumome.com/" data-sumo-site-id="c88f539dddafc739a702d9a628804d43d18bb72755fe1eaed25140c985d8bbf4" async="async"></script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-75163998-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+     <script type="text/javascript">
+  window.sendinblue=window.sendinblue||[];window.sendinblue.methods=["identify","init","group","track","page","trackLink"];window.sendinblue.factory=function(e){return function(){var t=Array.prototype.slice.call(arguments);t.unshift(e);window.sendinblue.push(t);return window.sendinblue}};for(var i=0;i<window.sendinblue.methods.length;i++){var key=window.sendinblue.methods[i];window.sendinblue[key]=window.sendinblue.factory(key)}window.sendinblue.load=function(){if(document.getElementById("sendinblue-js"))return;var e=document.createElement("script");e.type="text/javascript";e.id="sendinblue-js";e.async=true;e.src=("https:"===document.location.protocol?"https://":"http://")+"s.sib.im/automation.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)};window.sendinblue.SNIPPET_VERSION="1.0";window.sendinblue.load();window.sendinblue.client_key="pg7em09peza5i3pcyor2m";window.sendinblue.page();
+function sendInBlue(){
+  var email = document.getElementById('email').value 
+  var nam = document.getElementById('name').value
+  var num = document.getElementById('phone_number').value
+
+        sendinblue.identify(email, {
+        'name': nam,
+        'mobile' : num
+      })   
+    
+
+}
+</script>
+<link rel="shortcut icon" type="image/png" href="/zapstatic/frontend/favicon.ico" />
+</head>
+<body>
+    <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&amp;version=v2.2";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+    <script>
+   sendinblue.identify('latheef@zapyle.com');
+sendinblue.page('test');
+    </script>
+    <header><img src="/zapstatic/frontend/landing/images/white-logo.png"></header>
+    <div class="content">
+        {% if 'success' in request.GET %}
+        <h1>Thank You!</h1>
+        <p>We will get back to you shortly. Mean while check out our website.</p>
+        {% else %}
+        <h1 style="font-weight: bold;margin-top: 50px;font-size: 25px;">Do you have a lot of stuff in your closet that you
+don't wear anymore ?</h1>
+        <p style="margin-top: 40px; font-size: 18px">Well, you're in luck! You can sell pre-owned luxury fashion on Zapyle.
+            Fill in your details below and our stylists will get in touch with you.</p>
+</p>
+       <!--  <p> Our stylists sort out your closet, style your products for sale & all you have to do is, sit back & earn.</p> -->
+        {% endif %}
+        
+        <!-- <p><i>So sign up for a day of Fashion, Fun, Wine and Dine!</i></p> -->
+        {% if 'success' in request.GET %}
+        <a href="/">GO TO WEBSITE</a>
+        {% else %}
+        <form action="" method="post">
+            <span><input id="name" type="text" placeholder="Name" name="name" value="{% if data %}{% if 'name' in data %}{{data.name}}{% endif %}{% endif %}"><span>{% if errors %}{% if 'name' in errors %}{{errors.name.0}}{% endif %}{% endif %}</span></span>
+            <span><input type="text" id="phone_number" placeholder="Phone No." name="phone_number" value="{% if data %}{% if 'phone_number' in data %}{{data.phone_number}}{% endif %}{% endif %}"><span>{% if errors %}{% if 'phone_number' in errors %}{{errors.phone_number.0}}{% endif %}{% endif %}</span></span>
+            <span><input type="text" id="email" placeholder="Email" name="email" value="{% if data %}{% if 'email' in data %}{{data.email}}{% endif %}{% endif %}"><span>{% if errors %}{% if 'email' in errors %}{{errors.email.0}}{% endif %}{% endif %}</span></span>
+<!--             <span><input type="text" placeholder="City" name="city"></span>
+ -->            <input type="submit" onclick="sendInBlue()" value="I WANT TO KNOW MORE">
+        </form>
+        <p style="font-size: 16px;">*On an average a Zapyler makes Rs.45,000 by selling on Zapyle.</p>
+        {% endif %}
+
+        <div class="fb-post" data-href="https://www.facebook.com/brightside/videos/876668102461934/"></div>
+
+    </div>
+</body>
+<style type="text/css">
+@font-face {
+    font-family: 'opensans';
+    src: url('/zapstatic/frontend/fonts/opensans/opensans-regular-webfont.eot');
+    src: url('/zapstatic/frontend/fonts/opensans/opensans-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/zapstatic/frontend/fonts/opensans/opensans-regular-webfont.woff2') format('woff2'),
+         url('/zapstatic/frontend/fonts/opensans/opensans-regular-webfont.woff') format('woff'),
+         url('/zapstatic/frontend/fonts/opensans/opensans-regular-webfont.ttf') format('truetype'),
+         url('/zapstatic/frontend/fonts/opensans/opensans-regular-webfont.svg#open_sansregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'opensans';
+    src: url('/zapstatic/frontend/fonts/opensans/opensans-bold-webfont.eot');
+    src: url('/zapstatic/frontend/fonts/opensans/opensans-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/zapstatic/frontend/fonts/opensans/opensans-bold-webfont.woff2') format('woff2'),
+         url('/zapstatic/frontend/fonts/opensans/opensans-bold-webfont.woff') format('woff'),
+         url('/zapstatic/frontend/fonts/opensans/opensans-bold-webfont.ttf') format('truetype'),
+         url('/zapstatic/frontend/fonts/opensans/opensans-bold-webfont.svg#open_sansbold') format('svg');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'opensans';
+    src: url('/zapstatic/frontend/fonts/opensans/opensans-italic-webfont.eot');
+    src: url('/zapstatic/frontend/fonts/opensans/opensans-italic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/zapstatic/frontend/fonts/opensans/opensans-italic-webfont.woff2') format('woff2'),
+         url('/zapstatic/frontend/fonts/opensans/opensans-italic-webfont.woff') format('woff'),
+         url('/zapstatic/frontend/fonts/opensans/opensans-italic-webfont.ttf') format('truetype'),
+         url('/zapstatic/frontend/fonts/opensans/opensans-italic-webfont.svg#open_sansitalic') format('svg');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'opensans';
+    src: url('/zapstatic/frontend/fonts/opensans/opensans-light-webfont.eot');
+    src: url('/zapstatic/frontend/fonts/opensans/opensans-light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/zapstatic/frontend/fonts/opensans/opensans-light-webfont.woff2') format('woff2'),
+         url('/zapstatic/frontend/fonts/opensans/opensans-light-webfont.woff') format('woff'),
+         url('/zapstatic/frontend/fonts/opensans/opensans-light-webfont.ttf') format('truetype'),
+         url('/zapstatic/frontend/fonts/opensans/opensans-light-webfont.svg#open_sanslight') format('svg');
+    font-weight: 200;
+    font-style: normal;
+}
+body {
+    background: rgba(0, 0, 0, 0) url("/zapstatic/frontend/images/bg1.jpg") no-repeat scroll center top / cover ;
+    font-family: opensans;
+    margin: 0;
+
+}
+@media only screen and (max-width: 47em) {
+body {
+    background: rgba(0, 0, 0, 0) url("/zapstatic/frontend/images/bg1.jpg") no-repeat scroll center top / auto 100%;
+}
+}
+header {
+    padding: 50px 50px;
+    text-align: center;
+}
+header img {
+    max-width: 150px;
+    opacity: 1.6;
+}
+.content {
+    color: #fff;
+    font-size: 18px;
+    margin: 0 auto;
+    max-width: 900px;
+    padding: 0 10px;
+    text-align: center;
+}
+.content h1 {
+   font-family: opensans;
+   font-weight: normal;
+   text-transform: uppercase;
+}
+.content h4 {
+    font-weight: normal;
+    margin: 0;
+    opacity: 0.6;
+    padding-top: 100px;
+    text-transform: uppercase;
+}
+.content p {
+   font-size: 16px;
+   margin: 0 auto;
+   /*max-width: 650px;*/
+   font-size: 25px;
+}
+form {
+    font-size: 0;
+    margin: 50px auto 0;
+    max-width: 850px;
+}
+form span {
+    display: inline-block;
+    margin: 0;
+    position: relative;
+    vertical-align: top;
+    width: 25%;
+}
+@media only screen and (max-width: 47em) {
+form {
+    height: auto;
+    margin: 0 auto;
+}
+form span {
+    display: block;
+    margin: 5px 20px;
+    width: calc(100% - 42px);
+}
+}
+form span > span {
+    color: #ff7694;
+    font-size: 10px;
+    left: 0;
+    margin-top: 3px;
+    text-align: left;
+    width: calc(100% - 5px);
+}form > span input {
+    /*border-radius: 6px;*/
+    height: 9px;
+    font-weight: bold;
+}
+input {
+    border-color: #999;
+    border-style: solid;
+    border-width: 0 0 0 1px;
+    font-family: opensans;
+    padding: 15px 10px;
+    width: calc(100% - 20px);
+}
+input[type="submit"] {
+    background: #ff7694 none repeat scroll 0 0;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    height: 39px;
+    /*line-height: 16px;*/
+    vertical-align: top;
+    width: calc(25% - 4px);
+    /*border-radius: 6px;*/
+    margin-left: 2px;
+    font-weight: bold;
+    padding-top: 9px;
+}
+@media only screen and (max-width: 47em) {
+input[type="submit"] {
+    margin: 5px 20px;
+    width: calc(100% - 42px);
+}
+.content p {
+    margin-bottom: 30px;
+}
+}
+a {
+    background: #ff7694 none repeat scroll 0 0;
+    color: #fff;
+    display: inline-block;
+    margin: 20px 0;
+    padding: 10px 20px;
+    text-decoration: none;
+}
+</style>
+</html>
+

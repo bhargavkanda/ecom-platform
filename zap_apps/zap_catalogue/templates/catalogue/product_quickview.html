@@ -1,0 +1,110 @@
+<div class="close_btn black white_bg"></div>
+<script src="/zapstatic/catalogue/zoom/jquery.zoom.min.js"></script>
+<script src="/zapstatic/catalogue/zoom/pinchzoom.min.js"></script>
+<script type="text/javascript">
+    $('body').on('click', '.mobile_zoom', function() {
+        $('div.pinch-zoom').each(function () {
+            new RTP.PinchZoom($(this), {});
+        });
+    });
+</script>
+<div class="inline quick_product" style="background: #fff;color: #000;">
+    <div class="product_images size7of12">
+        <ul class="thumbnails web_only" ng-if="!isMobile">
+            <li class="thumbnail" ng-repeat="image in product.images" ng-click="set_current_image(image, $event)" data-image_url="[[image]]"><img src="[[image.replace('1000x1000', '100x100')]]" alt="[[product.title]] - [[product.id]]"></li>
+        </ul>
+        <div class="image_container" id="zoom">
+           <div id="current_image" class="current_image">
+               <img src="[[current_image]]" alt="[[product.title]]" class="is_transparent" imageonload>
+           </div>
+           <div class="modal-trigger mobile_zoom mobile_only" data-target="mobile_zoom"></div>
+           <div id="loading" class="is_visible full_width absolute zoomimage white"></div>
+        </div>
+        <ul class="thumbnails mobile_only" ng-if="isMobile">
+            <li class="thumbnail" ng-repeat="image in product.images" ng-click="set_current_image(image, $event)" data-image_url="[[image]]"><img src="[[image.replace('1000x1000', '100x100')]]" alt="[[product.title]] - [[product.id]]"></li>
+        </ul>
+    </div>
+    <div class="product_details size5of12 product_page left_align">
+        <h1 class="product_title_brand">[[product.brand]]</h1>
+        <h1 class="product_title">[[product.title]]</h1>
+        <div class="flash_sale_flag is_hidden">
+            <span class="small_font">THIS ITEM IS ON SALE <span class="pink small_font">(<span class="show_percent" ng-class="{'show_extra':product.flash_sale_data.original_discount>0}">[[product.flash_sale_data.extra_discount]]</span>)</span></span>
+            <span class="flash_sale_timer is_hidden" ng-if="product.available">
+                <span class="block label small_font">HURRY! SALE ENDS IN</span>
+                <span id="countdown" class="timer pink"></span>
+            </span>
+        </div>
+        <div class="description">[[product.description]]</div>
+        <div class="price inline">
+            <span class="new z_new big" ng-class="appliedOffer ? 'offer_price' : ''">[[product.listing_price | number]]</span>
+            <span class="old z_old" ng-if="product.original_price > product.listing_price">[[product.original_price | number]]</span>
+            <span class="discount very_small" ng-if="product.original_price > product.listing_price">@ [[product.discount]]% OFF</span>
+        </div>
+        <div class="cashback" ng-if="product.cashback > 0">Get a cash back of <span class="icon-rupee">[[product.cashback]]</span> when you shop for <span class="icon-rupee">2,500</span> or more.</span>.</div>
+        <div class="offers" ng-if="offers" ng-class="offers.length>1 ? 'show_one' : ''">
+            <div class="offer" ng-repeat="offer in offers" data-offer-id="[[offer.id]]">
+                <input class="with-gap black" name="offers" type="radio" id="[[offer.id]]" ng-click="applyOffer(offer.id)" ng-class="appliedOffer==offer.id ? 'applied' : ''"/>
+                <label for="[[offer.id]]" class="full_width">
+                    <div>
+                        <div class="code" ng-if="offer.code">[[offer.code]]</div>
+                        <div class="message">
+                            <span class="success">APPLIED</span>
+                            <span class="error"></span>
+                        </div>
+                        <div class="name" ng-if="offer.name">[[offer.name]]</div>
+                        <div class="validity" ng-if="offer.valid_till">Expires in [[offer.valid_till]]</div>
+                        <div class="benefit" ng-if="offer.benefit">[[offer.benefit]]</div>
+                    </div>
+                </label>
+            </div>
+            <a class="show_offers small_font underline" ng-if="offers.length>1">offers</a>
+        </div>
+
+        <div class="inline size_quantity" ng-if="product.discount != 'Inspiration'">
+            <div class="sizes size8of12">
+                <label class="uppercase small">Size</label>
+                <!--<span class="modal-trigger" data-position="left" data-delay="50" data-target="size_guide"><a href="" class="inline_btn grey small underline" ng-hide="product.size_type=='FREESIZE'">See Size Guide</a></span>-->
+                <ul class="sizes_list">
+                    <li class="size_item" ng-class="{'tooltipped':'[[s.size]]'!='FREESIZE', 'soldout':s.quantity <= 0}"
+                        data-id="[[s.id]]" data-qty="[[s.quantity]]"  data-tooltip="[[s.tooltip]]" data-delay="50"
+                        data-position="top" ng-repeat="s in product.size" ng-click="set_quantities(s, $event)">[[s.category_type == 'FW'
+                        ? s.eu_size : s.category_type == 'C' ? s.size : 'FREESIZE']]</li>
+                </ul>
+                <p class="size_info small grey"></p>
+            </div>
+            <!-- {% if available %} -->
+            <div class="size4of12">
+                <div class="get_quantity is_hidden">
+                    <label class="small uppercase">Quantity</label>
+                    <div class="change_quantity">
+                        <span class="change minus">-</span>
+                        <span class="quantity">[[qty]]</span>
+                        <span class="change plus">+</span>
+                    </div>
+                    <p class="small grey max_quantity is_hidden">[[availble_qty]]</p>
+                </div>
+            </div>
+            <!-- {% endif %} -->
+        </div>
+
+        <div class="buy_cta center_align" ng-if="product.available">
+            <a class="cart_btn btn waves-effect waves-light full_width " ng-click="addToCart()">Add to tote</a>
+            <a data-activates="#cart" class="goto_btn btn waves-effect waves-light full_width is_hidden" ng-click="gotoToCart()">Go to tote</a>
+            <a ng-click="love(product)" ng-class="{'loved':product.liked_by_user}" class="love_btn" style="padding:10px 0; display:block;"></a>
+        </div>
+        <div class="product_sold_out" ng-if="!product.available">This item is Sold out</div>
+        <div class="small_font" style="margin-top:10px;">Have any questions? Call us at <b class="small_font">07337880282</b></div>
+    </div>
+    <div class="modal full_height" id="mobile_zoom">
+        <div class="right modal-close icon-cross white_fg absolute"></div>
+        <div class="modal-content">
+            <div class="pinch-zoom current_image">
+                 <img src="{{image}}" alt="[[product.title]]" class="is_transparent" imageonload>
+            </div>
+            <ul class="thumbnails mobile_only">
+                <li class="thumbnail" ng-repeat="image in product.images" ng-click="set_current_image(image, $event)" data-image_url="[[image]]"><img src="[[image.replace('1000x1000', '100x100')]]" alt="[[product.title]] - [[product.id]]"></li>
+            </ul>
+            <div id="loading" class="is_visible absolute full_width zoomimage"></div>
+        </div>
+    </div>
+</div>

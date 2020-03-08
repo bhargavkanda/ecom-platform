@@ -1,0 +1,58 @@
+<div class="screen_header">
+	<div class="screen_title">[[add_adrss_btn_text]]</div>
+	<a href="#rp_my_addresses" ng-click="my_addresses()" class="screen_back" data-activates="#my_addresses">Back</a>
+</div>
+<div class="screen_content no_footer">
+	<div class="screen_content_inner">
+		<form ng-submit="save_address()">
+		<div class="input-field text" ng-class="{'error':errors.name}">
+			<span class="text_input">
+				<label for="name" ng-class="{'active':a.name}">Name<span class="input_error">[[errors.name]]</span></label>
+				<input type="text" name="name" id="name" ng-model="a.name">
+			</span>
+		</div>
+		<div class="input-field text" ng-class="{'error':errors.address}">
+			<span class="text_input">
+				<label for="address1" ng-class="{'active':a.address}">Address Line 1<span class="input_error">[[errors.address]]</span></label>
+				<input type="text" name="address1" id="address1" ng-model="a.address">
+			</span>
+		</div>
+		<div class="input-field text" ng-class="{'error':errors.address2}">
+			<span class="text_input">
+				<label for="address2" ng-class="{'active':a.address2}">Address Line 2<span class="input_error">[[errors.address2]]</span></label>
+				<input type="text" name="address2" id="address2" ng-model="a.address2">
+			</span>
+		</div>
+		<div class="input-field text" ng-class="{'error':errors.pincode}">
+			<span class="text_input">
+				<label for="pincode" ng-class="{'active':a.pincode}">Pincode<span class="input_error">[[errors.pincode]]</span></label>
+				<input type="text" name="pincode" id="pincode" ng-model="a.pincode" ng-change="pincodeTyping(a.pincode)">
+			</span>
+		</div>
+		<div class="input-field text" ng-class="{'error':errors.city}">
+			<span class="text_input">
+				<label for="city" ng-class="{'active':a.city}">City<span class="input_error">[[errors.city]]</span></label>
+				<input type="text" name="city" id="city" ng-model="a.city">
+			</span>
+		</div>
+		<div class="input-field dropdown" ng-class="{'error':errors.state}">
+			<div class="select_input">
+				<select id=state name="state" ng-model="selected_state">
+					<option value="" disabled selected>Choose your option</option>
+					<option value="[[i.id]]" ng-repeat='i in states'>[[i.name]]</option>
+				</select>
+				<label>State<span class="input_error">[[errors.state]]</span></label>
+			</div>
+		</div>
+		<div class="input-field text" ng-class="{'error':errors.phone}">
+			<span class="text_input">
+				<label for="phone" ng-class="{'active':a.phone}">Phone Number<span class="input_error">[[errors.phone]]</span></label>
+				<input type="text" name="phone" id="phone" ng-model="a.phone">
+			</span>
+		</div>
+		<div class="input-field submit">
+			<button class="btn waves-effect waves-light full_width" type="submit" name="action">[[add_adrss_btn_text]]</button>
+		</div>
+		</form>
+	</div>
+</div>

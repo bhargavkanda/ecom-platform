@@ -1,0 +1,55 @@
+<div>
+        <form ng-submit="search_order(search_id)"><span><input type="text" ng-model="search_id" required placeholder="Enter Order Id"></span><span><input type="submit" value="search"></span></form>
+    </div>
+    <div class="CSSTableGenerator" style="width:100%">
+    <table>
+        <tr>
+            <th>index</th>
+            <th>Order_number</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Date</th>
+            <th>Seller</th>
+            <th>Buyer</th>
+            <th>Status</th>
+
+        </tr>
+        <tr ng-class="{'cancelled':order.cancelled == true}" ng-repeat="order in orders">
+            <td>[[$index+1]]</td>
+            <td>[[order.order_number]]</td>
+            <td><img class="product-image" height="125px" width="125px" src="[[order.product.image1]]">
+                <div>[[order.product.title]]</div>
+            </td>
+            <td>[[order.quantity]]</td>
+            <td>[[order.placed_at | date:'MM/dd/yyyy @ h:mma' ]]</td>
+            <td ng-if="order.confirmed_with_seller==false">
+                [[order.seller]]<br>
+                <input type="button" value="Confirm" ng-click="confirm_order(order,'seller')" /><button ng-click="order.change_seller='true'">Edit</button>
+                <select ng-show="order.change_seller" name="sub-category" ng-model="pickup_seller" ng-change="change_buyer_seller(pickup_seller,'seller',order)"
+  ng-options="i as (i.name+' '+i.phone) for i in all_addresses" required><option value="">Select Pickup Address</option>
+                </select>
+            </td>
+            <td ng-if="order.confirmed_with_seller==true">
+                [[order.seller]]
+                <button ng-click="order.change_seller='true'">Edit</button>
+  
+                <span><select ng-show="order.change_seller" name="sub-category" ng-model="pickup_seller" ng-change="change_buyer_seller(pickup_seller,'seller',order)"
+  ng-options="i as (i.name+' '+i.phone) for i in all_addresses" required>
+                    <option value="">Select Pickup Address</option></select><span><b>Confirmed</b></span></span>
+            </td>
+            <td ng-if="order.confirmed_with_buyer==false">
+                [[order.buyer]]<br>
+                <input type="button" value="Confirm" ng-click="confirm_order(order,'buyer')" /><button ng-click="order.change_buyer='true'">Edit</button>
+                <select ng-show="order.change_buyer" name="sub-category" ng-model="pickup_buyer" ng-change="change_buyer_seller(pickup_buyer,'buyer',order)"
+  ng-options="i as (i.name+' '+i.phone) for i in all_addresses" required><option value="">Select Pickup Address</option></select>
+            </td>
+            <td ng-if="order.confirmed_with_buyer==true">
+                [[order.buyer]]<button ng-click="order.change_buyer='true'">Edit</button>
+                <span><select ng-show="order.change_buyer" name="sub-category" ng-model="pickup_buyer" ng-change="change_buyer_seller(pickup_buyer,'buyer',order)"
+          ng-options="i as (i.name+' '+i.phone) for i in all_addresses" required>
+                <option value="">Select Pickup Address</option></select></span><span><b>     Confirmed</b></span>
+            </td>
+            <td>[[order.status]]</td>
+        </tr>
+    </table>
+    </div>

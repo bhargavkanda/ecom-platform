@@ -1,0 +1,667 @@
+<style>
+    #imagePreview {
+        width: 100%;
+        height: 100%;
+        background-position: center center;
+        background-size: cover;
+        -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, .3);
+        display: inline-block;
+    }
+    
+    input.img::after {
+        content: "+";
+        display: block;
+        font-size: 30px;
+    }
+    
+    label.myLabel input[type="file"] {
+        position: fixed;
+        top: -1000px;
+    }
+    
+    .product-upload .row {
+        width: 100%;
+    }
+    
+    .pictures {
+        height: 180px;
+        overflow-x: auto;
+    }
+    
+    .pictures-inner {
+        min-width: 960px;
+    }
+    
+    .description textarea {
+        border: 1px solid;
+        height: 3rem;
+        max-width: 600px;
+        padding: 5px;
+        resize: none;
+        width: 100%;
+    }
+    
+    .picture {
+        border: 1px solid #d5d5d5;
+        height: 150px;
+        width: 150px;
+        position: relative;
+        display: inline-block;
+    }
+    /***** Example custom styling *****/
+    
+    .myLabel {
+        background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+        display: inline-block;
+        font-size: 40px;
+        height: 100%;
+        left: 0;
+        margin: 0 !important;
+        position: absolute;
+        text-align: center;
+        top: 0;
+        width: 100%;
+    }
+    
+    .myLabel:hover {
+        background: #CCC;
+        opacity: 0.1;
+    }
+    
+    .myLabel:active {
+        background: #CCF;
+    }
+    
+    .myLabel:invalid + span {
+        color: #A44;
+    }
+    
+    .myLabel:valid + span {
+        color: #53FDB9;
+    }
+    
+    .plus {
+        font-size: 100px;
+        color: #53FDB9;
+        position: relative;
+        top: 15px;
+    }
+    
+    .title-desc {
+        display: inline-block;
+        width: 640px;
+    }
+    
+    .title-desc input,
+    textarea {
+        max-width: 600px;
+        width: 100%;
+    }
+    
+    .row > div {
+        vertical-align: top;
+    }
+    
+    .select-size select {
+        margin: 5px 10px;
+        min-width: 100px !important;
+    }
+    
+    form.product-upload input,
+    select {
+        background: #fff;
+        border: 1px solid;
+        padding: 5px;
+        margin: 5px 0;
+    }
+    
+    form.product-upload select {
+        min-width: 200px;
+    }
+    
+    form.product-upload option {
+        padding: 3px;
+    }
+    
+    .product-upload .attribute {
+        display: inline-block;
+        margin: 5px 10px 5px 0;
+        width: 300px;
+        vertical-align: middle;
+    }
+    
+    .attribute select,
+    .attribute input {
+        float: right;
+        min-width: 200px;
+    }
+    
+    .product-upload label {
+        float: left;
+        margin: 10px 0;
+    }
+    
+    .product-upload h5 {
+        border-bottom: 1px solid;
+        font-size: 24px !important;
+        text-align: center;
+        text-transform: uppercase;
+    }
+    
+    .listing-details {
+        max-width: 630px;
+        width: 100%;
+    }
+    
+    .product-upload > div {
+        display: inline-block;
+        vertical-align: top;
+    }
+    
+    .price-account {
+        margin-left: 20px;
+        max-width: 300px;
+    }
+    
+    .product-upload > input[type="submit"] {
+        display: block;
+        font-size: 16px;
+        font-weight: bold;
+        margin: 30px auto 0;
+        max-width: 300px;
+        padding: 10px 0;
+        text-transform: uppercase;
+        width: 100%;
+    }
+    
+    .wrapper {
+        height: 130px;
+        overflow-x: hidden;
+        overflow-y: hidden;
+        width: 150px;
+        padding-left: 97px;
+    }
+    
+    .wrapper .selection {
+        width: 150px;
+        border: 1px solid #ccc
+    }
+    .address-card.is_selected {
+        background: #000;
+        color: white;
+    }
+    .container .img-container{
+        max-width: 848px;
+        max-height: 516px;
+    }
+</style>
+<script type="text/javascript">
+    var i = 1;
+
+    function add_visible_crop() {
+        $('.crop-image').addClass('is_visible');
+    }
+
+    function hide_crop() {
+        $('.crop-image').removeClass('is_visible');
+    }
+</script>
+
+<script type="text/javascript">
+    function onReady(callback) {
+        var intervalID = window.setInterval(checkReady, 1000);
+
+        function checkReady() {
+            if (document.getElementsByTagName('body')[0] !== undefined) {
+                window.clearInterval(intervalID);
+                callback.call(this);
+            }
+        }
+    }
+
+    function show_loader(id, value) {
+        document.getElementById(id).style.display = value ? 'block' : 'none';
+    }
+
+    // onReady(function () {
+    //     show('page', true);
+    //     show('loading', false);
+    // });
+</script>
+<div id="loading"></div>
+<div class="main-content" id="page">
+    <div class="content">
+        <div class="pri-overlay crop-image">
+            <div class="content">
+                <div class="header">Crop Image</div>
+                <div class="body">
+
+
+
+
+  <div class="container" ng-init="show_crop=false">
+    <div class="row">
+      <div class="col-md-9">
+        <!-- <h3 class="page-header">Demo:</h3> -->
+        <div class="img-container" ng-show="show_crop">
+          <img id="image" src="/zapstatic/frontend/placeholder.png" alt="Picture">
+        </div>
+      </div>
+      <div class="col-md-3">
+        <!-- <h3 class="page-header">Preview:</h3> -->
+        <div class="docs-preview clearfix" ng-show="show_crop">
+          <div class="img-preview preview-lg"></div>
+          <div class="img-preview preview-md"></div>
+          <div class="img-preview preview-sm"></div>
+          <div class="img-preview preview-xs"></div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-9 docs-buttons">
+        <!-- <h3 class="page-header">Toolbar:</h3> -->
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary" data-method="setDragMode" data-option="move" title="Move">
+            <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;setDragMode&quot;, &quot;move&quot;)">
+              <span class="fa fa-arrows"></span>
+            </span>
+            Drag
+          </button>
+          <button type="button" class="btn btn-primary" data-method="setDragMode" data-option="crop" title="Crop">
+            <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;setDragMode&quot;, &quot;crop&quot;)">
+              <span class="fa fa-crop"></span>
+            </span>
+            Crop
+          </button>
+        </div>
+
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary" data-method="rotate" data-option="-45" title="Rotate Left">
+            <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;rotate&quot;, -45)">
+              <span class="fa fa-rotate-left"></span>
+            </span>
+            rotate -
+          </button>
+          <button type="button" class="btn btn-primary" data-method="rotate" data-option="45" title="Rotate Right">
+            <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;rotate&quot;, 45)">
+              <span class="fa fa-rotate-right"></span>
+            </span>
+            rotate +
+          </button>
+        </div>
+
+<!--         <div class="btn-group">
+          <label class="btn btn-primary" for="inputImage" title="Upload image file">
+            <input type="file" class="sr-only" id="inputImage" name="file" accept="image/*">
+            <span class="docs-tooltip" data-toggle="tooltip" title="Import image with Blob URLs">
+              <span class="fa fa-upload"></span>
+            Select File
+            </span>
+          </label>
+        </div> -->
+
+      </div><!-- /.docs-buttons -->
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </div>
+        <div class="footer docs-buttons">
+          <button type="button" class="btn btn-success" data-method="getCroppedCanvas">
+            <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;getCroppedCanvas&quot;)">
+              Upload
+            </span>
+          </button>
+<!--                     <button ng-click="hide_crop()">Upload</button>
+ --> 
+          <button type="button" class="btn btn-default" ng-click="cancel_crop()">
+            <span >
+              Cancel
+            </span>
+          </button>
+<!--                     <button ng-click="cancel_crop()">Cancel</button>
+ -->                </div>
+            </div>
+        </div>
+
+        
+        <form class="product-upload" ng-submit="submit()">
+            <div class="listing-details">
+                <h5>Listing Details</h5>
+                <div class="pictures">
+                    <div class="picture" ng-repeat="i in images_selected">
+                        <label class="myLabel"><a ng-click="remove_img([[i.id]])">remove</a>
+					</label>
+                        <div class="imagePreview"><img id="preview_img_[[i]]" ng-src="[[i.img_url]]" style="height:151px;width:150px" /></div>
+                    </div>
+                    <div class="picture" ng-repeat="i in old_images">
+                        <label class="myLabel"><a ng-click="remove_old_img([[i.id]])">remove</a>
+					</label>
+                        <div class="imagePreview"><img ng-src="[[i.image]]" style="height:151px;width:150px" /></div>
+                    </div>
+                    <div ng-show="new_img" class="picture">
+                        <label class="myLabel">
+						<input type="file" class="sr-only" id="inputImage" name="file" accept="image/*">
+						<span class="plus">+</span>
+					</label>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="title-desc">
+                        <div class="title"><input ng-model="product_title" type="text" name="title" placeholder="Enter title for the product" required></div>
+                        <div class="description"><textarea ng-model="product_description" name="description" placeholder="Product description.." required></textarea></div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <span class="category attribute">
+					<label>Category</label>
+					<select ng-model="category" ng-change="cat_change()" ng-options="i as i.name for i in cat" required>
+					<option value="">Please select one</option>
+				</select>
+
+				</span>
+                    <span class="sub-category attribute">
+					<label>Sub Category</label>
+					<select name="sub-category" ng-model="sub_cat_selected" ng-options="i.id as i.name for i in sub_cat  | filter:{parent:{id:category.id}}" required>
+					<option value="">Please select one</option>
+<!-- 					<option ng-if="category" ng-repeat="i in sub_cat | filter:{parent:{id:category}}" value="[[i.id]]">[[i.name]]</option>  -->
+				</select>
+
+				</span>
+
+                </div>
+                <div ng-init="show_brands=false;brand_id=0" class="row">
+                    <span class="brand attribute">
+					<label>Brand</label>
+					<input type="text" name="brand" ng-model="search_word.brand" ng-focus="show_brands=true" class="icon-search" placeholder="Search for a Brand" required>
+					<div ng-show="show_brands && filtered.length!=0" class="wrapper">
+						<select size="5" class="selection" ng-options="i.brand for i in filtered = ( brands | filter:{ brand : search_word.brand})" ng-model="brand_selected" ng-click="set_brand();show_brands=false"></select>
+					</div>
+				</span>
+                    <div class="select-size attribute" ng-if="user_type!='store_front'">
+                        <label style="display:block;">Size:</label>
+                        <div ng-hide="free_size">
+                            <select name="size-type1" ng-model="size_selected[0].size" ng-required="!free_size">
+							<option value="">Select</option>
+							<option value="[[i.id]]" ng-repeat="i in size_list | filter:{category_type:category.category_type}" ng-if="category &&size_type_selected">[[size_type_selected=='UK' ? i.uk_size : (size_type_selected=='US' ? i.us_size : (size_type_selected=='EU' ? i.eu_size : 'Select'))]]</option>
+						</select>
+                            <select name="size-type2" ng-model="size_type_selected">
+							<option value="">select</option>
+							<option ng-repeat="type in ['UK','US','EU']" ng-if="category">[[type]]</option>
+						</select>
+                        </div>
+                        <div ng-show="free_size" style="padding-top: 10px;padding-left: 99px;">Free Size</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <span class="style attribute">
+					<label>Style</label>	
+				<select ng-model="style_selected"
+					ng-options="i.id as i.style_type for i in styles" required>
+					<option value="">Please select style</option>
+				</select>	
+
+				</span>
+
+
+                    <span class="occasion attribute">
+					<label>Occasion</label>
+				<select ng-model="occasion_selected"
+					ng-options="i.id as i.name for i in occasions" required>
+					<option value="">Please select occasions</option>
+				</select>
+
+				</span>
+                    <span class="color attribute">
+					<label>Color</label>
+				<select ng-model="color_selected"
+					ng-options="i.id as i.name for i in colors" required>
+					<option value="">Please select colors</option>
+				</select>
+				</span>
+                    <span class="color attribute">
+					<label>Type</label>
+				<select ng-model="product_type">
+						<option value="2" selected="true">SALE</option>
+						<option value="1">SOCIAL</option>
+					</select>
+				</span>
+                </div>
+
+                <div ng-if="user_type=='store_front' && category && !free_size">
+                    <div ng-repeat="i in size_selected" class="select-size row">
+                        <span>
+					<label style="display:block;">Size[[$index+1]]: </label>
+					<select ng-model="i.size_type" ng-required="!free_size">
+						<option value="">select</option>
+						<option ng-repeat="type in ['UK','US','EU']">[[type]]</option>
+					</select>
+					<select ng-model="i.size"
+						ng-required="!free_size">
+						<option value="">Select</option>
+						<option value="[[j.id]]" ng-repeat="j in size_list">
+							[[i.size_type=='UK' ? j.uk_size : (i.size_type=='US' ? j.us_size : (i.size_type=='EU' ? j.eu_size : 'Select'))]]
+						</option>
+					</select>
+					<span class="color attribute">
+						<label>Quantity</label>
+						<input type="number" ng-model="i.quantity" ng-required>
+					</span>
+                        <button class="remove" type="button" ng-click="removeChoice(i)" ng-if="!$index==0">-</button>
+                        </span>
+                    </div>
+                    <button class="remove" type="button" ng-click="addChoice()">+</button>
+                </div>
+                <div ng-show="user_type=='store_front' && category && free_size">
+                    <div style="padding-top: 10px;padding-left: 99px;">Free Size</div>
+                    <span class="color attribute">
+						<label>Quantity</label>
+						<input type="number" ng-model="free_quantity" ng-required>
+					</span></div>
+            </div>
+            <div class="price-account" ng-show="product_type == 2">
+                <h5>Price</h5>
+                <span class="original-price attribute">
+				<label>Original Price</label>
+				<input type="number" id="org_price" ng-model="original_price" ng-required="product_type==2"
+				>
+			</span>
+                <span class="age attribute">
+				<label>Age: </label>
+				<select ng-model="age_selected" ng-options="i as i.name for i in age" ng-required="product_type==2" ng-change="fasioncalculator()">
+					<option value="">Select Age</option>
+				</select>
+			</span>
+                <span class="condition attribute">
+				<label>Condition: </label>
+				<select ng-model="condition" ng-options="i as i.name for i in conditions" ng-required="product_type==2" ng-change="fasioncalculator()">
+					<option value="">Select Condition</option>
+				</select>
+			</span>
+                <span class="listing-price attribute">
+				<label>Listing Price</label>
+				<!-- <p>Please enter a value between 0 and max-value</p> -->
+				<input id="slider" type="range" min="0" max="0" value="0" step="1" /ng-model="listing_price">
+				<b id="range" >[[listing_price]]</b>
+				<!-- <input type="number" ng-model="listing_price" required> -->
+				<div id="slider"></div>
+			</span>
+                <h5>Account Details</h5>
+
+                <div ng-show="!account_num_edit" new-address="" class="new-address-card size4of12" style="width: 94.3421%;">
+                    <p class="name ng-binding"><b>Account Number</b>: [[account_num]]</p>
+                    <p class="name ng-binding"><b>IFSC Code</b>: [[ifsc_code]]</p>
+                    <span class="button" ng-click="account_num_edit=!account_num_edit">
+			<a style="padding: 1px 60px;">Edit</a>
+			</span>
+                </div>
+                <div ng-show="account_num_edit" class="edit-account">
+                    <span class="account-number attribute">
+					<label>Account Number</label>
+					<input type="text" ng-model="account_num">
+				</span>
+                    <span class="confirm-number attribute">
+					<label>Confirm Account Number</label>
+					<input type="text" name="confirm-number" ng-model="confirm_account_num">
+				</span>
+                    <span class="ifsc attribute">
+					<label>IFSC Code</label>
+					<input type="text" name="ifsc" ng-model="ifsc_code">
+				</span>
+                    <span>
+					<input type="button" value="Submit" ng-click="post_account_num()">
+					<!-- <input type="button" value="Cancel"> -->
+				</span>
+                </div>
+
+            </div>
+            <div class="pickup-address" ng-show="product_type == 2">
+                <div>
+                    <h5>Select Pickup address[[product_type]]</h5>
+                    <!-- ngRepeat: address in addresses -->
+                    <div select-card="[[address.id]]" id="address[[address.id]]" class="address-card size4of12 ng-scope" style="min-width: 280px;" ng-repeat="address in addresses">
+                        <p class="name ng-binding">[[address.name]]</p>
+                        <p class="ng-binding">[[address.address]], [[address.city]], [[address.state]], [[address.pincode]].</p>
+                        <a data="55" ng-click="deleteAddress(address.id)" class="delete"></a>
+                    </div>
+                    <!-- end ngRepeat: address in addresses -->
+                    <div new-address="" class="new-address-card size4of12" ng-click="modal_pop=1" style="min-width: 280px;">
+                        <div class="add">Add New Address</div>
+                    </div>
+                </div>
+            </div>
+
+            <input type="submit" value="Update" id="addProduct">
+        </form><br>
+        <input type="button" value="Reset" ng-click="get_product_datas()">
+    </div>
+</div>
+
+<div id="add-address" class="pri-overlay is_visible" ng-show="modal_pop">
+    <form name="addressForm" ng-submit="save_address()">
+        <div class="glass"></div>
+        <div class="content">
+            <div class="header">Add a new address</div>
+            <div class="body">
+                <div class="input-element"><span>Name</span>
+                    <input type="text" name="username" ng-model="new_name" required>
+                </div>
+                <div class="input-element"><span>Address Line 1</span>
+                    <input type="text" name="addressText1" ng-model="new_address" required>
+                </div>
+                <div class="input-element"><span>City</span>
+                    <input type="text" name="city" ng-model="new_city" required>
+                </div>
+                <div class="input-element"><span>State</span>
+                    <select ng-model="new_state" ng-options="i.id as i.name for i in states" required>
+					<option value="">Select State</option>
+				</select>
+                </div>
+                <div class="input-element"><span>Zip Code</span>
+                    <input type="number" name="zipcode" ng-model="new_pincode" ng-maxlength="6" required>
+                </div>
+                <div class="input-element"><span>Phone</span>
+                    <input type="number" name="phone" ng-model="new_phone" required>
+                </div>
+                <div class="input-element"><span>Email</span>
+                    <input type="email" name="phone" ng-model="new_email" required>
+                </div>
+            </div>
+            <div class="footer">
+                <span class="button cancel" new-address>
+			<a ng-click="modal_pop=0">Cancel</a></span>
+                <input type="submit" class="button submit" id="addAddress">
+                <span class="disable"></span>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="openModal" class="">
+    <div> <a href="#feeds" title="Close" class="close">X</a>
+
+        <h2>No Permission</h2>
+
+        <p>reason1:</p>
+        <p>Reason2:</p>
+    </div>
+</div>
+<style>
+    .modalDialog {
+        color: black;
+        position: fixed;
+        font-family: Arial, Helvetica, sans-serif;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 99999;
+        opacity: 10;
+    }
+    
+    .modalDialog:target {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    
+    .modalDialog > div {
+        width: 400px;
+        position: relative;
+        margin: 10% auto;
+        padding: 5px 20px 13px 20px;
+        border-radius: 10px;
+        background: #fff;
+        background: -moz-linear-gradient(#fff, #999);
+        background: -webkit-linear-gradient(#fff, #999);
+        background: -o-linear-gradient(#fff, #999);
+    }
+    
+    .close {
+        background: #606061;
+        color: #FFFFFF;
+        line-height: 25px;
+        position: absolute;
+        right: -12px;
+        text-align: center;
+        top: -10px;
+        width: 24px;
+        text-decoration: none;
+        font-weight: bold;
+        -webkit-border-radius: 12px;
+        -moz-border-radius: 12px;
+        border-radius: 12px;
+        -moz-box-shadow: 1px 1px 3px #000;
+        -webkit-box-shadow: 1px 1px 3px #000;
+        box-shadow: 1px 1px 3px #000;
+    }
+    
+    .close:hover {
+        background: #00d9ff;
+    }
+    
+    #range {
+        font-size: 22px;
+        line-height: 20px;
+        float: left;
+        padding: 0 15px 0 0;
+        display: block;
+        width: 25px;
+    }
+</style>

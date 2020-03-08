@@ -1,0 +1,96 @@
+<head>
+        <link rel="stylesheet" href="/zapstatic/frontend/styles/style.css?v={{ZAP_ENV_VERSION}}">
+</head>
+<div class="main-content">
+        <div class="main-content">
+            <div class="content">
+                <div class="banner">
+                    <div class="info">
+                        <span class="profile-pic">
+                            <span class="ng-binding">PRELOVED</span>
+                            <img src="{{pic}}">
+                        </span>
+                        <div class="profile-data">
+                            <h6 class="name ng-binding">{{zap_username}}</h6>
+                            <div class="description" style="height: 0;">
+                                <p class="ng-binding" ng-show="edit_desc==false">{{description}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="activity">
+                        <span class="pta ng-binding">{{pta_count}}</span>
+                        <span class="ap ng-binding">{{product_count}}</span>
+                        <span class="dp ng-binding">{{dp_count}}</span>
+                        <span class="order_count ng-binding">{{order_count}}</span>
+                        <span class="return_count ng-binding">{{return_count}}</span>
+                    </div>
+                    <div class="activity">
+                        <span class="products ng-binding is_current" ng-click="current_tab='product'" ng-class="{'is_current':current_tab=='product'}">{{product_count}}</span>
+                        <span class="admirers ng-binding" ng-click="get_admires('admires');current_tab='admires'" ng-class="{'is_current':current_tab=='admires'}">{{admires_count}}</span>
+                        <span class="admiring ng-binding" ng-click="get_admires('admiring');current_tab='admiring'" ng-class="{'is_current':current_tab=='admiring'}">{{admiring_count}}</span>
+                    </div>
+                </div>
+                <div class="tab-content" ng-init="current_tab='product'">
+                    <ul class="admirers-list" ng-class="{'is_visible':current_tab=='admires'}">
+                        <!-- ngRepeat: u in admires -->
+                    </ul>
+                    <ul class="admiring-list" ng-class="{'is_visible':current_tab=='admiring'}">
+                        <!-- ngRepeat: u in admiring -->
+                    </ul>
+
+
+
+                    <div class="product-view is_visible" ng-class="{'is_visible':current_tab=='product'}">
+                        <!-- ngRepeat: card in profiledata.posts -->
+                        {% for p in product_details %}
+                        <div class="size3of12 product-card ng-scope" mouse-hover="">
+                            <div class="product-display">
+                                <img src="/zapstatic/frontend/images/image_loading.png">
+                                <a href="/#/product/{{p.id}}">
+                                    {% for i in p.images %}
+                                    <span style="background-image:url({{i.image}})" class="product-image is_current">
+                                    </span>
+                                    {% endfor %}
+                                </a>
+                                <div class="buy-info">
+                                    <div class="glass"></div>
+                                    <div class="size-brand"><span class="size size4of12 ng-binding" title=""></span><span class="brand size8of12 ng-binding">Abu Jani Sandeep Khosla</span></div>
+                                </div>
+                                <div class="info-tag">
+                                    <span class="discount">{{p.discount}}</span>
+                                    <span class="top-triangle"></span>
+                                    <span class="bottom-triangle"></span>
+                                </div>
+                            </div>
+                            <div class="product-title"><a class="ng-binding" href="#/product/{{p.id}}">{{p.title}}</a></div>
+                            <span class="price" ng-hide="card.discount == 'Inspiration'">
+                            <span class="new icon-rupee ng-binding"></span>
+                            <span class="old-discount icon-rupee">  <span class="old ng-binding"></span>
+                            <!--  <span class='discount'>[[card.discount*100 | limitTo : limit : begin | number]]</span>--></span>
+                            <!-- ngIf: card.liked_by_user == false --><div class="product-love icon-heart-empty ng-scope" ng-if="card.liked_by_user == false" ng-click="like_unlike(card,'like')" data="263" id="G263">
+                                </div><!-- end ngIf: card.liked_by_user == false -->
+                                <!-- ngIf: card.liked_by_user == true -->
+                            </span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <style>
+        .activity .pta:after {
+            content: " To Be Approved";
+        }.activity .ap:after {
+            content: " Approved";
+        }.activity .dp:after {
+            content: " Disapproved";
+        }.activity .order_count:after {
+            content: " Order";
+        }.activity .return_count:after {
+            content: " Return";
+        }
+    </style>

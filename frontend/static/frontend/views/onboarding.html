@@ -1,0 +1,141 @@
+<script src="/zapstatic/frontend/scripts/js/onbording.js"></script>
+<style>
+    footer {
+        display: none;
+    }
+    
+    .hide {
+        display: none;
+    }
+    
+    .redfont {
+        color: red;
+        font-weight: bold;
+    }
+    
+    .greenfont {
+        color: green;
+        font-weight: bold;
+    }
+</style>
+<div id="onboarding-name" class="pri-overlay">
+    <div class="content">
+        <form name="myForm" novalidate ng-show="!otp_page">
+            <div class="header">Welcome to Zapyle!<span style="position: absolute;right: 20px;cursor:pointer" ng-click="logout()">Logout</span></div>
+            <div class="body">
+                <p class="headline icon-happy">Hi [[full_name || username]], We are glad you are here!</p>
+                <p class="tagline">You are just a few steps away from making your fashion super fun and economical. Tell us a little about yourself and help us make Zapyle all about you.</p>
+                <div class="user-info">
+                    <span><span> Your Zap Username: </span>
+                    <input type="text" name="user" ng-model="zap_username" ng-keyup="check_username()" required ng-class="available ? 'greenfont' : 'redfont'">
+                    <span class="error-msg is_visible">[[errors.zap_username]]</span>
+                    </span>
+                    <span><span> Your Email ID: </span>
+                    <input type="email" name="email" ng-model="email" required>
+                    <span class="error-msg is_visible">[[errors.email]]</span>
+                    </span>
+                    <span><span> Mobile number: </span>
+                    <input type="text" name="mon_no" ng-model="mob_no" required>
+                    <span class="error-msg is_visible">[[errors.mob_number]]</span>
+                    </span>
+                    <span id="error-username " class="is_hidden error-msg icon-attention-circled">Sorry! The username is already taken.</span>
+                    <span id="error-email" class=" is_hidden error-msg icon-attention-circled">Sorry! The email ID already exists.</span>
+                </div>
+            </div>
+            <div class="footer">
+                <p class="steps">1 of 2</p>
+                <span class="button">
+            <a id="onboarding_1_button" type="button" ng-disabled=" myForm.user.$invalid || myForm.email.$invalid" ng-click="submit_username()">Next</a>
+            <span class="disable"></span></span>
+            </div>
+        </form>
+        <form name="myForm1" novalidate ng-show="otp_page">
+            <div class="header">Welcome to Zapyle!</div>
+            <div class="body">
+                <p class="headline icon-happy">Hi [[full_name || username]], We are glad you are here!</p>
+                <p class="tagline">You are just a few steps away from making your fashion super fun and economical. Tell us a little about yourself and help us make Zapyle all about you.</p>
+                <div class="user-info">
+                    <span><span> Enter OTP: </span>
+                    <input type="text" name="otp" ng-model="otp" required>
+                    </span>
+                    <span id="error-otp" class="is_hidden error-msg icon-attention-circled">Sorry! The OTP entered is incorrect.</span>
+                </div>
+            </div>
+            <div class="footer">
+                <p class="steps">1 of 2</p>
+                <span class="button">
+            <input id="onboarding_3_button" type="submit" ng-disabled="myForm1.otp.$invalid" ng-click="submit_otp()" value="Submit">
+            <span class="disable"></span></span>
+            </div>
+        </form>
+    </div>
+</div>
+<style type="text/css">
+    input[type=submit]:disabled {
+        cursor: default;
+        pointer-events: none;
+        /*Button disabled - CSS color class*/
+        color: #c0c0c0;
+        background-color: #ffffff;
+    }
+</style>
+<div id="onboarding-style" class="pri-overlay">
+    <div class="content">
+        <div class="header">What is your style preference?</div>
+        <div class="body">
+            <div id="wrapper">
+                <div ng-class="'size3of12 style-card'" data-id="[[btag.id]]" ng-repeat="btag in brandtags">
+
+                    <div ng-class="'select-box'"><a class="title">[[btag.tag]]</a></div>
+                </div>
+            </div>
+        </div>
+        <div class="footer"><span class="button"><a ng-click = "submit_btags()">Next</a><span class="disable"></span></span>
+        </div>
+    </div>
+</div>
+
+<div class="glass"></div>
+<div id="onboarding-brands" class="pri-overlay">
+    <div class="content">
+        <div class="header">What brands do you prefer?</div>
+        <div class="body">
+            <div class="search icon-search">
+                <input type="text" ng-model="searchText">
+            </div>
+            <ul class="brands-list">
+                <li ng-repeat="brand in allbrands | filter:searchText" class="brand is_selected" data-id="[[brand.id]]" toggle-class><a>[[brand.brand]]</a></li>
+            </ul>
+        </div>
+        <div class="footer"><span class="button"><a ng-click = "submit_brands()">Next</a><span class="disable"></span></span>
+        </div>
+    </div>
+</div>
+
+<div id="onboarding-size" class="pri-overlay">
+    <div class="content">
+        <div class="header">What is your size?</div>
+        <div class="body">
+            <div class="generic">
+                <div class="category">Generic</div>
+                <div class="sizes">
+                    <a class="size" size-select data-id="[[oneSize.id]]" ng-repeat="oneSize in cloth_sizes">[[oneSize.size]]</a>
+                </div>
+            </div>
+            <div class="footwear">
+                <div class="category">Foot Wear (US Size)</div>
+                <div class="sizes">
+                    <a class="size" toggle-class data-id="[[size.id]]" ng-repeat="size in foot_sizes">[[size.us_size]]</a>
+                </div>
+            </div>
+            <div class="waist">
+                <div class="category">Waist</div>
+                <div class="sizes">
+                    <a class="size" toggle-class data-id="[[oneWast.id]]" ng-repeat="oneWast in waist_sizes">[[oneWast.size]]</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer"><span class="button "><a id="onboarding_2_button" ng-click= "start_shopping()" >Start Shopping</a><span class="disable"></span></span>
+        </div>
+    </div>
+</div>

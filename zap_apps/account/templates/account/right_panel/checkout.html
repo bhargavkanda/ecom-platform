@@ -1,0 +1,116 @@
+<div class="screen_header">
+	<div class="screen_title">Checkout</div>
+	<!--<a class="screen_back" ng-click="backToCart()">Back</a>-->
+	 <a href="#rp_cart" class="screen_back" data-activates="#cart" ng-click="cart()">Back</a>
+</div>
+<div class="screen_content">
+	<div class="screen_content_inner">
+		<div class="accordion open_one">
+			<div id="order_review" class="step accordion_item open">
+				
+				<h6 class="title">1. Order Review <span class="price">Total Payable:<span class="new" id="total_pay">[[carts.total_listing_price - zapcash_used + carts.total_shipping_charge | number]]</span></span><span class="open"></span></h6>
+				<div class="accordion_item_inner">
+					<div class="line_item inline">
+						<label>Total</label>
+						<div class="icon-rupee">[[carts.total_original_price | number]]</div>
+					</div>
+					<div class="line_item inline" ng-if="carts.seller_discount > 0">
+						<label>Seller Discount</label>
+						<div class="icon-rupee negative_sum">[[carts.seller_discount | number]]</div>
+					</div>
+					<div class="line_item inline" id="zap_discount" ng-if="carts.zapyle_discount > 0">
+						<label>Zapyle Discount</label>
+						<div class="icon-rupee negative_sum">[[carts.zapyle_discount | number]]</div>
+					</div>
+					<div class="line_item inline" ng-if="carts.total_discount > 0">
+						<label>Sub Total</label>
+						<div class="icon-rupee">[[carts.total_original_price-carts.total_discount | number]]</div>
+					</div>
+					<div class="zap_cash" ng-show="zapcash || zapcash_used">
+						<div class="use_zap_cash"><span class="check_box"><span></span></span>Use My Balance<span class="zap_cash_used icon-rupee" ng-show="zapcash_used">[[zapcash_used | number]]</span></div>
+						<div class="balance">Available: <span class="available_zapcash icon-rupee">[[zapcash | number]]</span></div>
+					</div>
+					<div class="line_item inline">
+						<label>Shipping Charges</label>
+						<div class="icon-rupee">[[carts.total_shipping_charge]]</div>
+					</div>
+					<div class="line_item inline total">
+						<label>Total Payable</label>
+						<div class="icon-rupee">[[(carts.total_listing_price - carts.offer_discount - zapcash_used + carts.total_shipping_charge) | number]]</div>
+					</div>
+				</div>
+			</div>
+			<div id="delivery_address" class="step accordion_item">
+				<h6 class="title">2. Delivery Address <span class="address"></span><span class="open"></span></h6>
+				<div class="accordion_item_inner">
+					<ul class="address_list">
+						<li class="address_item selectable radio" ng-repeat="a in addrs" data-id="[[a.id]]">
+							<div class="name">
+								<span class="namee">[[a.name]]</span>
+								<span class="phone">[[a.phone]]</span>
+							</div>
+							<div class="address_line_1">[[a.address]]</div>
+							<div class="address_line_2">[[a.address2]]<span class="city">[[a.city]]</span></div>
+							<div><span class="state">[[a.state]]</span><span class="pincode">[[a.pincode]]</span></div>
+							<!-- <a href="#">Edit Address</a> -->
+							<span class="select show_text"><span class="circle"><span></span></span><span class="text">Select</span></span>
+						</li>
+					</ul>
+					<a href="#rp_add_address" class="waves-effect waves-pink btn-flat full_width center_align" data-activates="#add_address" ng-click="add_address(true)">Add Address</a>
+				</div>
+			</div>
+			<div id="payment_options" class="step accordion_item">
+				<h6 class="title">3. Payment Options</h6>
+				<div class="accordion_item_inner">
+					<ul class="options_list">
+						<li id="pay_now" class="option_item selectable radio" ng-click="enableJuspay()">
+							<h6>Pay Now<br><p class="small_font">[[checkoutData.online_message]]</p></h6><span class="select"><span class="circle"><span></span></span><span class="text">Select</span></span>
+						</li>
+						<li id="emi" class="option_item selectable radio" ng-click="enableJuspayEMI()">
+							<h6>Pay by EMI<br><p class="small_font">[[checkoutData.online_message]]</p></h6><span class="select"><span class="circle"><span></span></span><span class="text">Select</span></span>
+						</li>
+						<li id="cod" class="option_item selectable radio" ng-class="checkoutData.cod ? '' : 'disabled'" ng-click="enableCOD()">
+							<h6>Cash on Delivery<br><p class="small_font">[[checkoutData.cod_message]]</h6><span class="select"><span class="circle"><span></span></span><span class="text">Select</span></span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+<div class="screen_footer">
+	<a id="order_review_cta" class="waves-effect waves-pink btn full_width center_align">Select Delivery Address</a>
+	<a id="delivery_address_cta" class="waves-effect waves-pink btn full_width center_align">Select Payment Method</a>
+	<!-- <a ng-click="confirmOrder()" id="cnf_btn" class="waves-effect waves-pink btn full_width center_align">Proceed to Payment</a> -->
+	<a id="card" class="waves-effect waves-pink btn full_width center_align" ng-click="juspayOrder(carts.total_listing_price - zapcash_used + carts.total_shipping_charge)" ng-if="!cod" data-activates="#juspay_options" onclick="$('#iframe').removeClass('is_visible')">Make Payment</a>
+	<a ng-click="codOrder()" ng-if="cod && checkoutData.cod" id="cod" class="waves-effect waves-pink btn full_width center_align">Confirm Order</a>
+	<div class="absolute full_width loading_wrapper center_align" ng-class="{'is_visible':loader}">
+		<div class="preloader-wrapper small active">
+		    <div class="spinner-layer spinner-white-only">
+		    	<div class="circle-clipper left">
+		       		<div class="circle"></div>
+		     	</div>
+		     	<div class="gap-patch">
+		       		<div class="circle"></div>
+		     	</div>
+		     	<div class="circle-clipper right">
+		       		<div class="circle"></div>
+		     	</div>
+		   </div>
+		</div>
+	</div>
+</div>
+<div class="overlay absolute" id="cvv">
+   <div class="glass under"></div>
+   <div class="content small">
+       <div class="close_btn right"></div>
+       <div class="header">Enter CVV</div>
+       <div class="body">
+           <input type="text" name="promocode" class="center_align">
+       </div>
+       <div class="footer">
+           <a class="btn waves-effect waves-light full_width" href="" ng-click="confirmOrder()">Confirm</a>
+       </div>
+   </div>
+</div>

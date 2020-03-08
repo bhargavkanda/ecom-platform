@@ -1,0 +1,616 @@
+<script type="text/javascript">
+    $('#zap_footer').removeClass('is_visible')
+    $('#zap_footer').addClass('is_hidden')
+    function onReady(callback) {
+        var intervalID = window.setInterval(checkReady, 1000);
+
+        function checkReady() {
+            if (document.getElementsByTagName('body')[0] !== undefined) {
+                window.clearInterval(intervalID);
+                callback.call(this);
+            }
+        }
+    }
+
+    function show_loader(id, value) {
+        document.getElementById(id).style.display = value ? 'block' : 'none';
+    }
+
+    // onReady(function () {
+    //     show('page', true);
+    //     show('loading', false);
+    // });
+</script>
+
+<div id="loading"></div>
+<!--<script src="/zapstatic/frontend/scripts/controllers/mycitrus.js"> </script>-->
+<div class="content">
+    <div class="steps" id="page">
+        <div id="login-step" class="step">
+            <div class="header">
+                <span class="tick icon-ok"><span class="fold"></span> </span>
+                <h6>Login/Register<span class="detail"><span class="name">[[zap_username]]</span></span></h6>
+            </div>
+            <div class="content">
+                <div ng-show="!loggedIn_request" class="signup-module" ng-init="email_login_flag=true">
+                    <div class="email">
+                        <form class="signin" ng-show="email_login_flag==true">
+                            <div ng-hide="frgt_pwd_flag">
+                                <input type="text" ng-model="email_login" placeholder="Email or ZapUsername">
+                                <span class="error-msg is_visible">[[errors.email]]</span>
+                                <input type="password" ng-model="password_login" placeholder="Password">
+                                <span class="error-msg is_visible">[[errors.password]]</span>
+                                <button class="pri-button btn_signin" ng-click="checkout_signin()">Login with Email</button>
+                            </div>
+                            <div ng-show="frgt_pwd_flag">
+                                <input type="text" ng-model="frgt_email" placeholder="Email">
+                                <button class="pri-button email_verify_button" ng-click="send_verification_email(frgt_email,frgt_pwd_flag)">Send Verification Email</button>
+                                <span class="error-msg is_visible">[[success_msg]]</span>
+                            </div>
+                            <div class="signin-footer">
+                                <span ng-hide="frgt_pwd_flag" class="forgot-password" ng-click="frgt_pwd_flag=true">Forgot Password?</span>
+                                <span ng-show="frgt_pwd_flag" class="forgot-password" ng-click="frgt_pwd_flag=false">Login</span>
+                                <span ng-click="email_login_flag=false" login-change="">Not a member? <span class="show-signup">Signup</span></span>
+                            </div>
+<!-- 
+                            
+                            
+                            
+                            
+                            <span ng-hide="frgt_pwd_flag" class="forgot-password" ng-click="frgt_pwd_flag=true">Forgot Password?</span>
+                            <div>Not a member? <span class="show-signup" login-change="" ng-click="email_login_flag=false">Signup</span></div> -->
+                        </form>
+                        <form class="signup" ng-show="email_login_flag==false" ng-submit="checkout_signup()">
+                            <input type="text" ng-model="signup_zap_username" name="Name" placeholder="Username" required>
+                            <span class="error-msg is_visible">[[errors.username]]</span>
+                            <input type="email" name="email" ng-model="signup_email" placeholder="Email" required>
+                            <span class="error-msg is_visible">[[errors.Email]]</span>
+                            <input type="text" name="first_name" ng-model="signup_first_name" placeholder="First Name" required>
+                            <span class="error-msg is_visible">[[errors.fname]]</span>
+                            <input type="text" name="phone_number" ng-model="signup_phone_number" placeholder="Phone Number" required>
+                            <span class="error-msg is_visible">[[errors.phone]]</span>
+                            <!--  <input type="text" name="Username" ng-model="zap_username" placeholder="Username"> -->
+                            <input type="password" ng-model="signup_password" name="Password" placeholder="Password" required>
+                            <span class="error-msg is_visible">[[errors.pwd]]</span>
+                            <input type="password" ng-model="signup_confirm_password" name="Password" placeholder="Confirm Password" required>
+                            <span class="error-msg is_visible">[[errors.cpwd]]</span>
+                            <button class="pri-button btn_signup">Signup with Email</button>
+                            <div><a class="terms-link" target="_blank" href="/#/terms-conditions">Terms and Conditions Apply</a>Already a member? <span class="show-signup" login-change="" ng-click="email_login_flag=true">Login</span></div>
+                        </form>
+                    </div>
+                    <div class="separator"><span>or</span></div>
+                    <div class="social">
+                        <div class="facebook"><a ng-click="FBLogin()"><span class="icon-facebook"></span><span>Login using Facebook</span></a></div>
+                        <div class="instagram"><a ng-click="insta_please_wait()"><span class="icon-instagram"></span><span>Login using Instagram</span></a></div>
+                    </div>
+
+
+                </div>
+                <div ng-show="loggedIn_request" class="header">
+                    <img src="/zapstatic/frontend/images/loading.gif" height="50" width="50">
+                </div>
+            </div>
+
+        </div>
+        <div id="address" class="step">
+            <div class="header">
+                <span class="tick icon-ok"><span class="fold"></span></span>
+                <h6>delivery address<span class="detail"><span class="name">[[address_name]]</span>[[address_selected]]</span></h6>
+            </div>
+            <div class="content">
+                <div ng-show="addresses.length > 0" ng-click="set_continue(address.id)" class="address-card size6of12" select-card="[[address.id]]" ng-repeat="address in addresses">
+                    <p class="name">[[address.name]]</p>
+                    <p>[[address.address]], [[address.city]], [[address.state]], [[address.pincode]].</p>
+                    <p class="num">[[address.phone]]</p>
+                    <a class="edit" ng-click="open_model(address)"></a>
+                    <span class="deliver"></span>
+                    <span class="select icon-ok"></span>
+                </div>
+                <div ng-show="!addresses"><img src="/zapstatic/frontend/images/loading.gif" height="50" width="50"></div>
+                <div class="new-address">
+                    <div class="add"><a ng-click="modal_pop=true">Add Address</a></div>
+                </div>
+                <div id="add-address" class="pri-overlay is_visible" ng-show="modal_pop">
+                    <div class="glass"></div>
+                    <div class="content">
+                        <div class="header">Add a new address</div>
+                        <div class="body">
+                            <form ng-submit="save_address()" name="addressForm">
+                                <div class="input-element"><span>Name</span><input type="text" ng-model="address1.name" required></div>
+                                <div class="input-element"><span>Address</span><input type="text" ng-model="address1.address" required></div>
+                                <div class="input-element"><span>Address Line 2</span><input ng-model="address1.address2" type="text"></div>
+                                <div class="input-element"><span>City</span><input type="text" ng-model="address1.city" required></div>
+                                <div class="input-element"><span>State</span><select ng-model="address1.state" ng-options="i as i.name for i in states" required><option value="">Select State</option>
+                                    </select></div>
+                                <!-- <div class="input-element"><span>Country</span><input type="text" required></div> -->
+                                <div class="input-element"><span>Zip Code</span><input type="text" ng-model="address1.pincode" required><span class="error-msg is_visible">[[errors.pincode]]</span></div>
+                                <!-- <div class="input-element"><span>Email</span><input type="email" ng-model="address1.email" required></div> -->
+                                <div class="input-element"><span>Phone</span><input type="text" ng-model="address1.phone" required><span class="error-msg is_visible">[[errors.phone]]</span></div>
+
+                                <div class="footer">
+                                    <span class="button cancel">
+                                    <a ng-click="modal_pop=0;address1='';">Cancel</a>
+                                    <span class="disable"></span>
+                                    </span>
+                                    <span class="submit button" ng-if="!edit_address_flag==true">
+                                    <button type="submit" id="address_button1">Add Address</button>
+                                    <span class="disable"></span>
+                                    </span>
+                                    <span class="submit button" ng-if="edit_address_flag==true">
+                                    <button type="submit" id="address_button2">Update</button>
+                                    <span class="disable"></span>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div id="review" class="step">
+            <div class="header">
+                <span class="tick icon-ok"><span class="fold"></span></span>
+                <h6>Order Review<span class="detail"><span class="name">Total Payable: </span><span class="icon-rupee">[[CartData.total_price_with_shipping_charge | number:0]]</span></span></h6>
+            </div>
+            <div class="content">
+                <div class="product-info size8of12">
+                    <div class="products">
+                        <div class="header">
+                            <span class="image"></span>
+                            <span class="item">Item</span>
+                            <span class="quantity">Quantity</span>
+                            <span class="price">Price</span>
+                        </div>
+                        <div class="product" ng-repeat="i in CartData.items">
+                            <span class="image"><img class="product-image" src="[[i.product_image]]"></span>
+                            <span class="item">
+                                    <span class="title">[[i.title]]</span>
+                            <span class="brand">[[i.product_brand]]</span>
+                            <span class="size">[[i.product_size]]</span>
+                            </span>
+                            <span class="quantity">
+                                    <!-- <span class="change" id="minus">-</span> -->
+                            <span data-max-quantity="6" id="quantity">[[i.product_quantity]]</span>
+                            <!-- <span class="change" id="plus">+</span> -->
+                            </span>
+                            <span class="price">
+                                    <span class="icon-rupee new">[[i.listing_price | number:0]]</span>
+                            <span class="icon-rupee old">[[i.original_price | number:0]]</span>
+                            <span class="discount">[[i.discount| limitTo : limit : begin | number:0]]</span>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="price-info size4of12">
+                    <div class="summary">
+                        <p>ORDER SUMMARY</p>
+                        <div><span>Total: </span><span class="icon-rupee">[[CartData.total_original_price | number:0]]</span></div>
+                        <div><span>Seller Discount: </span><span class="icon-rupee">- [[CartData.total_discount | number:0]]</span></div>
+                        <div><span>Shipping Charges: </span><span class="icon-rupee">[[CartData.total_shipping_charge | number:0]]</span></div>
+                        <div><span>Sub total: </span><span class="icon-rupee">[[CartData.total_price_with_shipping_charge | number:0]]
+                            </span></div>
+                        <div class="get-off" ng-init="apply_zapcash=false;zapcash_applied=0">
+<!--                             <div class="coupon">
+                                <a id="show-coupon" class="show-link" ng-click="coupon_flag=1" ng-hide="CartData.item.coupon.has_coupon==true">Apply Coupon</a>
+                                <div class="applied coupon" ng-show="CartData.item.coupon.has_coupon==true"><span>Coupon ([[CartData.item.coupon.title]]):
+                                    <a ng-click="coupon_flag=1">Edit</a></span><span class="icon-rupee">-[[(CartData.item.coupon.coupon_discount) | number:0]]</span></div>
+                                <div class="apply coupon" ng-show="coupon_flag==1"><input type="text" ng-model="coupon" placeholder="Coupon Code"><a href="" ng-click="applyCoupon()">Apply</a>
+                                    <a class="close" ng-click="coupon_flag=0"></a>
+                                </div>
+                            </div> -->
+                            <div class="zapcash" ng-show="zapcash>0 || zapcash_applied > 0">
+                                <span><input type="checkbox" id="zapcash_checkbox" ng-click="applyZapCash()">Use My Balance</span>
+                                <span class="applied" ng-show="apply_zapcash"><span class="icon-rupee ng-binding"> -[[zapcash_applied]]</span></span>
+                                <div>Available Balance: <span class="icon-rupee">[[zapcash-zapcash_applied]]</span></div>
+                                <!-- <a id="show-zapcash" class="show-link" ng-click="zapcash_flag=1" ng-show="apply_zapcash==false">Use Zapcash<span>Available Zapcash: <span class="icon-rupee">[[zapcash || 0]]</span></span></a>
+                                <div class="applied zapcash" ng-show="apply_zapcash"><span>Zapcash: <a ng-click="zapcash_edit()">Edit</a></span><span class="icon-rupee"> -[[zapcash_used]]</span></div>
+                                <form ng-submit="applyZapCash(zapcash_input)" ng-show="zapcash_flag==1">
+                                    <div class="apply zapcash" ng-hide="apply_zapcash">
+                                        <input type="number" placeholder="Amount" ng-model="zapcash_input" required>
+                                        <button type="submit">Apply</button>
+                                        <a class="close" ng-click="zapcash_flag=0"></a>
+                                    </div>
+                                </form> -->
+                            </div>
+                        </div>
+                        <div class="total"><span>Total Payable: </span><span class="icon-rupee">[[CartData.total_price_with_shipping_charge | number:0]]</span></div>
+                    </div>
+
+                    <button class="pri-button review-button">CONTINUE</button>
+                </div>
+
+            </div>
+
+        </div>
+        <div id="payment" class="step">
+            <div class="header">
+                <span class="tick icon-ok"><span class="fold"></span></span>
+                <h6>Payment Mode</h6>
+            </div>
+            <div class="content">
+                <!-- <div ng-show="final_price>0"> -->
+                <div class="options" ng-show="CartData.total_price_with_shipping_charge>0">
+                    <ul ng-init="flag=4;card=''">
+                        <li class="li_saved">
+                            <a ng-class="{'is_selected': flag == 4}" href="" ng-click="select_flag(4)">Saved Cards<span class="right-arrow"></span></a>
+                        </li>
+                        <li>
+                            <a ng-class="{'is_selected': flag == 1}" href="" ng-click="select_flag(1);card=''">Debit Card<span class="right-arrow"></span></a>
+                        </li>
+                        <li>
+                            <a ng-class="{'is_selected': flag == 2}" href="" ng-click="select_flag(2);card=''">Credit Card<span class="right-arrow"></span></a>
+                        </li>
+                        <li>
+                            <a ng-class="{'is_selected': flag == 3}" href="" ng-click="select_flag(3)">Net Banking<span class="right-arrow"></span></a>
+                        </li>
+                        <li>
+                            <a ng-class="{'is_selected': flag == 5}" href="" ng-click="select_flag(5)">COD<span class="right-arrow"></span></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="modes" ng-show="CartData.total_price_with_shipping_charge>0">
+                    <div class="mode saved">
+                        <div class="saved" ng-show="flag==4">
+                            <div ng-click="click_to_save($index)" class="card mysavedcards" ng-repeat="i in saved_cards" saved-radio>
+
+                                <input class="card_radio" id="saved_radio_[[$index]]" type="radio" value="[[$index]]&[[i.token]]" name="CitrusWalletPaymentOption" ng-class="i.type=='netbanking' ? 'savedAccountsRadio NetBankingPayments' : 'savedAccountsRadio cardPayments'" />
+                                <span class="card-logos">
+                                        <img ng-if="i.scheme=='VISA'" class="visa" src="/zapstatic/frontend/images/cardimages/visa.png">
+                                        <img ng-if="i.scheme=='MCRD'" class="master" src="/zapstatic/frontend/images/cardimages/master.png">
+                                    </span>
+                                <span class="num" for="citrusPaymentOptionToken">[[i.number]]</span>
+                                <span ng-if="i.type!='netbanking'" class="cvv">
+                                        <input type="password" maxlength="3" placeholder="CVV" id="CitrusMembercvv[[$index]]" required="required">
+                                    </span>
+                                <span class="type">[[i.type=='debit' ? 'DEBIT CARD' : (i.type=='credit' ? 'CREDIT CARD' : 'NETBANKING')]]</span>
+                            </div>
+
+
+                            <div>
+                                <script type="text/javascript">
+                                    // jQuery("#citrusWalletCardPayButton").on("click", function(){makePayment("card", true)});
+                                    // jQuery("#citrusWalletNetbankingButton").on("click", function(){makePayment("netbanking", true)});
+
+                                    function FetchWallet() {
+                                        $.ajax({
+                                            type: "GET",
+                                            url: "/user/mysavedcards/",
+                                            contentType: "application/json; charset=utf-8",
+                                            dataType: "json",
+                                            success: function(json) {
+                                                alert(json)
+                                                var jsonObj = json.data;
+                                                var paymentOptions = jsonObj.paymentOptions;
+                                                var citrusWalletresponse = paymentOptions;
+                                                var wallet = "";
+                                                var len = citrusWalletresponse.length;
+                                                if (len > 0) {
+                                                    for (var i = 0, len = citrusWalletresponse.length; i < len; i++) {
+                                                        //code to render the citrus wallet
+                                                        if (citrusWalletresponse[i] !== undefined && citrusWalletresponse[i] !== null) {
+                                                            if (citrusWalletresponse[i].type == "credit" || citrusWalletresponse[i].type == "debit") {
+                                                                if (citrusWalletresponse[i].scheme === "amex") {
+                                                                    var cvvLength = 4;
+                                                                } else {
+                                                                    var cvvLength = 3;
+                                                                }
+                                                                wallet +=
+                                                                    '<li>' +
+                                                                    '   <input type="radio" value="' + i + '&' + citrusWalletresponse[i].token + '" name="CitrusWalletPaymentOption" class="savedAccountsRadio cardPayments" onclick="selectPaymentOption(this)">' +
+                                                                    '   <span for="citrusPaymentOptionToken">' + citrusWalletresponse[i].number + '</span>' +
+                                                                    '   <input type="password" maxlength="' + cvvLength + '" placeholder="CVV" id="CitrusMembercvv' + i + '" required="required">' +
+                                                                    '<span>' + citrusWalletresponse[i].type + '</span>' +
+                                                                    '</li>';
+                                                            } else {
+                                                                wallet +=
+                                                                    '<li>' +
+                                                                    '   <input type="radio" value="' + citrusWalletresponse[i].token + '" name="CitrusWalletPaymentOption" class="savedAccountsRadio NetBankingPayments" onclick="selectPaymentOption(this)">' +
+                                                                    '   <span class="savedAccountsCard" for="citrusPaymentOptionToken" >' + citrusWalletresponse[i].name.split(" - ")[1] + '</span>' +
+                                                                    '<span>' + citrusWalletresponse[i].type + '</span>' +
+                                                                    '</li>';
+                                                            }
+                                                        }
+                                                        $("#walletData").html(wallet);
+                                                    }
+                                                } else {
+                                                    $("#walletData").html("You have no saved cards yet.");
+                                                }
+
+                                            },
+                                            error: function(json) {
+                                                alert(json.responseText);
+                                            }
+                                        });
+                                    };
+                                    //FetchWallet();
+                                </script>
+                                <input id="citrusEmail" type="hidden" value="[[user_detail.email]]" />
+                                <input id="citrusPassword" type="hidden" value="[[user_detail.phone_number]]" />
+                                <ul id="walletData"></ul> <br/>
+
+                                <input type="hidden" class="PayFromWallet" value="" />
+                            </div>
+
+
+
+
+                        </div>
+
+                    </div>
+                    <div class="mode debit" ng-show="flag==1">
+                        <div class="new">
+                            <div class="card">
+                                <input hidden id="citrusCardType">
+                                <form>
+                                    <span class="data">
+                                            <span class="card-num">
+                                                <input                                                    id="citrusNumber" ng-change="check_cardNumber()" ng-model="card.cardNumber" required type="text" placeholder="Debit card number">
+                                                <span class="card-logos" id="cardlogo">
+                                                    <img class="visa" id="cardvisa" src="/zapstatic/frontend/images/cardimages/visa.png">
+                                                    <img class="master" id="cardmaster" src="/zapstatic/frontend/images/cardimages/master.png">
+                                                </span>
+                                            </span>
+                                    <span class="exp-cvv">
+                                                <span class="expiry">
+                                                    <label>Valid till:</label>
+                                                    <input type="text" placeholder="MM" ng-model="card.month" maxlength="2" ng-change="set_focus('month');expiry=card.month+'/'+card.year" required>
+                                                    <label>/</label>
+                                                    <!-- fake fields are a workaround for chrome autofill getting the wrong fields -->
+                                                    <input style="display:none" type="text" name="fakeusernameremembered"/>
+                                                    <input style="display:none" type="password" name="fakepasswordremembered"/>
+                                                    <input type="text" placeholder="YY" ng-model="card.year" id="year_box" ng-change="set_focus('year');expiry=card.month+'/'+card.year"
+                                            maxlength="2" autocomplete="false" required>
+                                                </span>
+                                    <span class="cvv">
+                                                    <label>CVV:</label>
+                                                    <input type="password" id="citrusCvv"
+                                                        ng-change="set_focus('cvv')"
+                                                        required ng-model="card.cvv" maxlength="3">
+                                                </span>
+                                    </span>
+                                    <span>
+                                                <input id="citrusCardHolder" type="text" placeholder="Name on Card" required ng-model="card.name">
+                                            </span>
+
+                                    </span>
+                                    
+                                    
+                                    <input type="text" id="citrusScheme" value="VISA" hidden>
+                                    <input type="text" id="citrusExpiry" value="[[expiry]]" placeholder="EXPIRY" / ng-model="expiry" hidden>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mode credit" ng-show="flag==2">
+                        <div class="new">
+                            <div class="card">
+                                <input hidden id="citrusCardType">
+                                <form>
+                                    <span class="data">
+                                            <span class="card-num">
+                                                <input                                                    id="citrusNumber" ng-change="check_cardNumber()" ng-model="card.cardNumber" required type="text" placeholder="Credit card number">
+                                                <span class="card-logos" id="cardlogo">
+                                                    <img class="visa" id="cardvisa" src="/zapstatic/frontend/images/cardimages/visa.png">
+                                                    <img class="master" id="cardmaster" src="/zapstatic/frontend/images/cardimages/master.png">
+                                                </span>
+                                            </span>
+                                    <span class="exp-cvv">
+                                                <span class="expiry">
+                                                    <label>Valid till:</label>
+                                                    <input type="text" placeholder="MM" ng-model="card.month" maxlength="2" ng-change="set_focus('month');expiry=card.month+'/'+card.year" required>
+                                                    <label>/</label>
+                                                    <!-- fake fields are a workaround for chrome autofill getting the wrong fields -->
+                                                    <input style="display:none" type="text" name="fakeusernameremembered"/>
+                                                    <input style="display:none" type="password" name="fakepasswordremembered"/>
+                                                    <input type="text" placeholder="YY" ng-model="card.year" id="year_box" ng-change="set_focus('year');expiry=card.month+'/'+card.year"
+                                            maxlength="2" autocomplete="false" required>
+                                                </span>
+                                    <span class="cvv">
+                                                    <label>CVV:</label>
+                                                    <input type="password" id="citrusCvv"
+                                                        ng-change="set_focus('cvv')"
+                                                        required ng-model="card.cvv" maxlength="3">
+                                                </span>
+                                    </span>
+                                    <span>
+                                                <input id="citrusCardHolder" type="text" placeholder="Name on Card" required ng-model="card.name">
+                                            </span>
+
+                                    </span>
+                                    <input type="text" id="citrusScheme" value="VISA" hidden>
+                                    <input type="text" id="citrusExpiry" value="[[expiry]]" placeholder="EXPIRY" / ng-model="expiry" hidden>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mode internet" ng-show="flag==3">
+                        <div class="saved"></div>
+                        <div class="new"><select id="citrusAvailableOptions"> </select>
+                            <input type="button" value="Pay by netbanking" id="citrusNetbankingButton" hidden/></div>
+                    </div>
+                    <div class="mode internet" ng-show="flag==5">
+                        <div class="saved">
+                            
+                        </div>
+                        <div class="new">
+                            Total payable amount at the time of delivery: Rs. [[CartData.total_price_with_shipping_charge | number:0]]
+                        </div>
+                    </div>
+                </div>
+                <!-- </div> -->
+                <div style="text-align:center;margin:20px 0;"><button id="paynow_button" ng-click="confirmOrder()" class="pri-button">PAY NOW</button></div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+</div>
+
+
+
+
+
+<div class="content" ng-init="confirm_flag=0">
+    <div>
+        <div class="pri-overlay is_visible" ng-show="phone_model">
+            <form name="PhoneNumber" ng-submit="save_phone_num()">
+                <div class="glass"></div>
+                <div class="content">
+                    <div class="header">Please [[confirm_number ? 'verify':'enter']] your phone number</div>
+                    <div class="body">
+                        <div class="input-element"><span>Mobile number</span>
+                            <input type="text" name="confirm_number" ng-model="confirm_number" required>
+                            <span class="error-msg is_visible">[[error_msg_phone.phone_number]]</span>
+                        </div>
+                    </div>
+                    <div class="footer">
+                        <span class="button cancel">
+                        <a ng-click="phone_model=false;phone_model_cancel()">Cancel</a>
+                        <input type="submit" value="Verify now" class="button submit">
+                        <span class="disable"></span></span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div ng-init="otp_final=''" class="pri-overlay is_visible" ng-show="otp_final_pop">
+            <form name="OTPFormFinal" ng-submit="send_otp_final()">
+                <div class="glass"></div>
+                <div class="content">
+                    <div class="header">Please enter OTP sent to [[confirm_number | limitTo:2]]*****[[confirm_number | limitTo:10:7]].</div>
+                    <div class="body">
+                        <div class="input-element"><span>OTP</span>
+                            <input type="text" name="otp_final" ng-model="otp_final" required>
+                        </div>
+                    </div>
+                    <div class="footer">
+                        <span class="button cancel">
+                        <a ng-click="otp_pop_final=false;otp_cancel()">Cancel</a>
+                        <input type="submit" value="Confirm" class="button submit">
+                        <span class="disable"></span></span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="add-address" class="pri-overlay is_visible" ng-show="modal_phone_pop">
+            <form name="phoneForm" ng-submit="save_email_num()">
+                <div class="glass"></div>
+                <div class="content">
+                    <div class="header">Please Confirm/Enter Your Username, Email & Phone Number.</div>
+                    <div class="body">
+                        <div class="input-element"><span>Username</span>
+                            <input type="text" name="confirm_zap_username" ng-model="confirm_zap_username" required>
+                            <span class="error-msg is_visible">[[errors_confirm.zap_username]]</span>
+                        </div>
+                        <div class="input-element"><span>Email</span>
+                            <input type="email" name="confirm_email" ng-model="confirm_email" required>
+                            <span class="error-msg is_visible">[[errors_confirm.email]]</span>
+                        </div>
+                        <div class="input-element"><span>Phone</span>
+                            <input type="text" name="confirm_number" ng-model="confirm_number" required>
+                            <span class="error-msg is_visible">[[errors_confirm.phone_number]]</span>
+                        </div>
+                    </div>
+                    <div class="footer">
+                        <span class="button cancel">
+                <a ng-click="modal_phone_pop=false;modal_phone_pop_cancel()">Cancel</a></span>
+                        <input type="submit" value="Confirm" class="button submit">
+                        <span class="disable"></span>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+        <div id="add-address" class="pri-overlay is_visible" ng-show="modal_pop11">
+            <form name="addressForm" ng-submit="save_address()">
+                <div class="glass"></div>
+                <div class="content">
+                    <div class="header">Add a new address</div>
+                    <div class="body">
+                        <div class="input-element"><span>Name</span>
+                            <input type="text" name="username" ng-model="new_name" required>
+                        </div>
+                        <div class="input-element"><span>Address Line 1</span>
+                            <input type="text" name="addressText1" ng-model="new_address" required>
+                        </div>
+                        <div class="input-element"><span>City</span>
+                            <input type="text" name="city" ng-model="new_city" required>
+                        </div>
+                        <div class="input-element"><span>State</span>
+                            <select ng-model="new_state" ng-options="i.id as i.name for i in states" required>
+                        <option value="">Select State</option>
+                    </select>
+                        </div>
+                        <div class="input-element"><span>Zip Code</span>
+                            <input type="number" name="zipcode" ng-model="addr_pincode" ng-maxlength="6" required>
+                        </div>
+                        <div class="input-element"><span>Phone</span>
+                            <input type="number" name="phone" ng-model="new_phone" required>
+                        </div>
+                        <div class="input-element"><span>Email</span>
+                            <input type="email" name="phone" ng-model="new_email" required>
+                        </div>
+                    </div>
+                    <div class="footer">
+                        <span class="button cancel" new-address>
+                <a ng-click="modal_pop=false">Cancel</a></span>
+                        <input type="submit" class="button submit" id="addAddress">
+                        <span class="disable"></span>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+        <form>
+            <input type="hidden" id="citrusFirstName" value="[[user_detail.zap_username ? user_detail.zap_username : 'myfirstname']]" />
+            <input type="hidden" id="citrusLastName" value="[[user_detail.last_name ? user_detail.last_name : 'mylastname']]" />
+            <input type="hidden" id="citrusEmail" value="[[user_detail.email]]" />
+            <input type="hidden" id="citrusStreet1" value="" />
+            <input type="hidden" id="citrusStreet2" value="" />
+            <input type="hidden" id="citrusCity" value="" />
+            <input type="hidden" id="citrusState" value="" />
+            <input type="hidden" id="citrusCountry" value="" />
+            <input type="hidden" id="citrusZip" value="" />
+            <input type="hidden" id="citrusMobile" value="[[user_detail.phone_number]]" />
+        </form>
+        </br>
+        <form>
+            <input type="hidden" readonly id="citrusAmount" value="[[citrus_var.amount.value]]" />
+            <input type="hidden" readonly id="citrusMerchantTxnId" value="[[citrus_var.merchantTxnId]]" />
+            <input type="hidden" readonly id="citrusSignature" value="[[citrus_var.requestSignature]]" />
+            <input type="hidden" readonly id="citrusReturnUrl" value="[[citrus_var.returnUrl]]" />
+            <input type="hidden" readonly id="citrusNotifyUrl" value="[[citrus_var.notifyUrl]]" />
+        </form>
+
+    </div>
+</div>
+<script type="text/javascript">
+    function handleCitrusPaymentOptions(citrusPaymentOptions) {
+        if (citrusPaymentOptions.netBanking != null)
+            alert('options')
+            for (i = 0; i < citrusPaymentOptions.netBanking.length; i++) {
+                var obj = document.getElementById("citrusAvailableOptions");
+                var option = document.createElement("option");
+                option.text = citrusPaymentOptions.netBanking[i].bankName;
+                option.value = citrusPaymentOptions.netBanking[i].issuerCode;
+                obj.add(option);
+            }
+    }
+</script>
+<script type="text/javascript">
+    function citrusServerErrorMsg(errorResponse) {
+        $("#paynow_button").text('Pay Now')
+        $("#paynow_button").prop('disabled', false)
+    }
+
+    function citrusClientErrMsg(errorResponse) {
+        $("#paynow_button").text('Pay Now')
+        $("#paynow_button").prop('disabled', false)
+        alert(errorResponse)
+        console.log(errorResponse);
+    }
+</script>

@@ -1,0 +1,9 @@
+<div ng-show="loginPurpose" class="message">To <span id="purpose">[[loginPurpose]]</span>, create an account on Zapyle! It's super simple.</div>
+<h5>Login With</h5>
+<ul class="options">
+	<li class="facebook"><a ng-click="FBLogin()">Facebook</a></li>
+	<!-- data-activates="#my_profile" href="#rp_my_profile" -->
+	<li class="instagram"><a ng-click="insta_login()">Instagram</a></li>
+	<li class="email"><a data-activates="#signin_form" href="#signin_form">Sign In</a>
+	                  <a data-activates="#signup_form" href="#signup_form">Sign Up</a></li>
+</ul>

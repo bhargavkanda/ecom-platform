@@ -1,0 +1,82 @@
+<div class="screen_header">
+	<div class="screen_title">Payment Options</div>
+	<!-- <a class="screen_back" ng-click="backToCheckout()">Back</a> -->
+	<a href="#rp_checkout" class="screen_back" data-activates="#checkout">Back</a>
+</div>
+<div class="screen_content no_footer">
+	<div class="screen_content_inner">
+        <div class="emi_options" ng-if="emi">
+            <div class="full_width">
+                <a class="overlay_trigger underline" data-overlay="#emi_plans" style="margin-bottom:10px; display:block;">EMI Plans</a>
+            </div>
+            <div class="inline">
+                <div class="input-field size6of12">
+                    <select ng-model="emi_Bank" ng-options="bank as bank for (bank,i) in emi_banks track by bank" ng-change="get_tenure(emi_Bank)" id="selectedBank">
+                      <option value="">Choose Bank</option>
+                    </select>
+                    <label style="letter-spacing: 0.5px;">Bank</label>
+                </div>
+                <div class="input-field size6of12" ng-show="emi_Bank">
+                    <select ng-model="tenure" ng-change="calc_amount()" id="emi_tenure">
+                      <option value="" selected>Choose Tenure</option>
+                      <option value="[[key]]" data-interest="[[val]]" ng-repeat="(key,val) in bank_tenures">[[key]] Months - [[ val[0] ]]%</option>
+                    </select>
+                    <label style="letter-spacing: 0.5px;">Tenure - Interest Rate</label>
+                </div>
+            </div>
+
+            <div class="emi_data inline full_width" ng-if="emi_tenure">
+                <div class="size6of12"><b>Monthly Installment</b> - <span class="icon-rupee">[[monthly_amount]]</span></div>
+                <div class="size6of12"><b>Total Payment</b> - <span class="icon-rupee">[[total_amount]]</span></div>
+            </div>
+            <a class="btn mobile_only full_width" onclick="$('#iframe').addClass('is_visible')" style="margin: 20px 0;">Pay Now</a>
+        </div>
+        <div id="iframe"></div>
+        <div id="loading" style="height: 100%;width: 100%;position: absolute;background-color: rgba(255, 255, 255, 0.5);z-index:2 !important; min-height:500px;" class="payment_loader"></div>
+    </div>
+</div>
+<!-- <input id="citrusEmail" type="hidden" value="[[user_detail.email]]" /> -->
+<!-- <input id="citrusPassword" type="hidden" value="[[user_detail.phone_number]]" />
+<input type="hidden" class="PayFromWallet" value="" />
+<ul id="walletData"></ul>
+<form>
+    <input type="hidden" id="citrusFirstName" value="[[user_detail.zap_username ? user_detail.zap_username : 'myfirstname']]" />
+    <input type="hidden" id="citrusLastName" value="[[user_detail.last_name ? user_detail.last_name : 'mylastname']]" />
+    <input type="hidden" id="citrusEmail" value="[[user_detail.email]]" />
+    <input type="hidden" id="citrusStreet1" value="" />
+    <input type="hidden" id="citrusStreet2" value="" />
+    <input type="hidden" id="citrusCity" value="" />
+    <input type="hidden" id="citrusState" value="" />
+    <input type="hidden" id="citrusCountry" value="" />
+    <input type="hidden" id="citrusZip" value="" />
+    <input type="hidden" id="citrusMobile" value="[[user_detail.phone_number]]" />
+</form>
+<form>
+    <input type="hidden" readonly id="citrusAmount" value="[[citrus_var.amount.value]]" />
+    <input type="hidden" readonly id="citrusMerchantTxnId" value="[[citrus_var.merchantTxnId]]" />
+    <input type="hidden" readonly id="citrusSignature" value="[[citrus_var.requestSignature]]" />
+    <input type="hidden" readonly id="citrusReturnUrl" value="[[citrus_var.returnUrl]]" />
+    <input type="hidden" readonly id="citrusNotifyUrl" value="[[user_detail.current_site]]/notifyurl/" />
+</form>
+<script type="text/javascript">
+    function handleCitrusPaymentOptions(citrusPaymentOptions) {
+	    var scope = angular.element(document.querySelector('[ng-controller="HeaderController"]')).scope();
+        if (citrusPaymentOptions.netBanking != null)
+		    scope.$apply(function(){
+            	scope.netBankingOptions(citrusPaymentOptions.netBanking);
+		    })
+    }
+    function citrusServerErrorMsg(errorResponse) {
+        console.log(errorResponse);
+        Materialize.toast(errorResponse, 3000);
+    }
+    function citrusClientErrMsg(errorResponse) {
+        console.log(errorResponse);
+    	var scope = angular.element(document.querySelector('[ng-controller="HeaderController"]')).scope();
+        Materialize.toast(errorResponse, 3000);
+         scope.$apply(function(){
+	    	scope.citrusClientErrMsg();
+	    })
+
+    }
+    </script> -->

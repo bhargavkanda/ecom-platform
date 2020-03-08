@@ -1,0 +1,31 @@
+<div class="screen_header">
+	<div class="screen_title">My Sales</div>
+	<a href="#rp_my_account" class="screen_back" data-activates="#my_account">Back</a>
+</div>
+<div class="screen_content no_footer" ng-class="{'empty':!mysales.length}">
+	<ul class="orders_list">
+		<li class="order_item" ng-repeat="o in mysales">
+			<a ng-href="/product/[[o.id]]/[[o.title | spaceless]]">
+				<img ng-src="[[o.image.replace('100x100','500x500')]]">
+				<h6 class="title">[[o.title]]</h6>
+			</a>
+			<div class="price"><span class="new">[[o.listing_price]]</span><span class="old" ng-if="o.original_price>o.listing_price">[[o.original_price]]</span></div>
+			<div class="date">
+				<label>Placed on</label>
+				<div>March 14, 2016</div>
+			</div>
+			<div class="status inline">
+				<label>Status</label>
+				<div>[[o.status]]</div>
+			</div>
+			<a href="#rp_order_details" class="see_details icon-right_arrow" data-activates="#order_details" ng-click="order_details(o.order_id,'sale_page')"></a>
+		</li>
+	</ul>
+	<div class="empty_state full_height">
+		<div class="content">
+			<h6 class="title">You haven't made any sale yet</h6>
+			<p class="description">Review what's in your closet!</p>
+		</div>
+		<a href="/sell" class="btn waves-effect waves-light">Review My Closet</a>
+	</div>
+</div>

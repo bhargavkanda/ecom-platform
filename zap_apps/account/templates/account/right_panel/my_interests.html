@@ -1,0 +1,27 @@
+<div class="screen_header">
+	<div class="screen_title">My Interests</div>
+	<a href="#rp_my_preferences" class="screen_back" data-activates="#my_preferences">Back</a>
+</div>
+<div class="screen_content give_padding">
+	<div class="following" ng-show="mybrandtags.length">
+		<h6 class="title">You are following:</h6>
+		<ul class="tags_list">
+			<li class="tag_item selected" data-id="[[bt.id]]" ng-repeat="bt in mybrandtags">[[bt.tag]]</li>
+		</ul>
+	</div>
+	<div class="not_following">
+		<h6 class="title">Pick <span ng-show="mybrandtags.length">more</span> styles to follow:</h6>
+		<ul class="tags_list">
+			<li class="tag_item" data-id="[[bt.id]]" ng-repeat="bt in allbrandtags">[[bt.tag]]</li>
+		</ul>
+	</div>
+	<!-- <div class="input-field submit" ng-if="onboardingStep==2">
+		<button ng-click="submitBTags()" class="btn waves-effect waves-light full_width" type="submit" name="action">Continue</button>
+	</div> -->
+</div>
+<div class="screen_footer center_align">
+	<a href="" class="btn_link">See how this helps</a>
+</div>
+<div class="screen_footer" ng-if="onboardingStep==2">
+	<button ng-click="submitBTags()" class="btn waves-effect waves-light full_width" type="submit" name="action">Continue</button>
+</div>

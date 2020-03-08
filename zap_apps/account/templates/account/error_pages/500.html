@@ -1,0 +1,92 @@
+{% extends "account/base.html" %}
+{% block body %} 
+	<main>
+		<div class="page_content">
+			<div class="center_size6of12 center_align">
+				<div class="error icon">
+					<h2>Oops! It's a 500.</h2>
+					<p class="intro">This section of the website seems to be misbehaving.</p>
+				</div>
+				
+				<div class="explore">
+					<h3>But it ain't the end.</h3>
+					<p class="intro">Zapyle is broadly of 3 sections. Go explore!</p>
+					<div class="explore_links">
+						<a href="#" class="all_caps btn-flat waves-effect waves-pink pink">Discover</a>
+						<a href="#" class="all_caps btn-flat waves-effect waves-pink pink">Sell</a>
+						<a href="#" class="all_caps btn-flat waves-effect waves-pink pink">Buy</a>
+					</div>
+					<p class="is_hidden">Or start shopping right away.</p>
+					<div class="search" class="is_hidden">
+						<div id="search">
+							<div class="search_box">
+								<input type="text" name="Search for a Brand, Occasion, Style">
+								<a href="" class="btn">Search</a>
+							</div>
+							<div class="search_suggestions">
+								<ul class="tabs">
+									<li class="tab"><a class="active" href="#products">Products</a></li>
+									<li class="tab"><a href="#closets">Closets</a></li>
+								</ul>
+								<div id="products">
+									<div class="filter_suggestions">
+										<ul>
+											<li class="suggestion"><span class="string">Tops in Red</span><span class="use_this">Use</span></li>
+											<li class="suggestion"><span class="string">Tops in Red for Wedding</span><span class="use_this">Use</span></li>
+											<li class="suggestion"><span class="string">Tops from Anushree Reddy</span><span class="use_this">Use</span></li>
+										</ul>
+									</div>
+									<div class="product_suggestions">
+										<div class="suggestion">
+											<img src="">
+											<h6>Product Title</h6>
+											<p>Product Description</p>
+											<p><span class="price">4000</span><span class="price old">8000</span></p>
+										</div>
+										<div class="suggestion">
+											<img src="">
+											<h6>Product Title</h6>
+											<p>Product Description</p>
+											<p><span class="price">4000</span><span class="price old">8000</span></p>
+										</div>
+										<div class="suggestion">
+											<img src="">
+											<h6>Product Title</h6>
+											<p>Product Description</p>
+											<p><span class="price">4000</span><span class="price old">8000</span></p>
+										</div>
+									</div>
+								</div>
+								<div id="closets">
+									<div class="closet_suggestions">
+										<div class="suggestion">
+											<img src="">
+											<h6>Closet Name</h6>
+											<p class="closet_handle">Handle</p>
+											<p><span class="products_count">12</span><span class="admirers_count">34</span></p>
+											<a href="#" class="admire_button">Admire</a>
+										</div>
+										<div class="suggestion">
+											<img src="">
+											<h6>Closet Name</h6>
+											<p class="closet_handle">Handle</p>
+											<p><span class="products_count">12</span><span class="admirers_count">34</span></p>
+											<a href="#" class="admire_button">Admire</a>
+										</div>
+										<div class="suggestion">
+											<img src="">
+											<h6>Closet Name</h6>
+											<p class="closet_handle">Handle</p>
+											<p><span class="products_count">12</span><span class="admirers_count">34</span></p>
+											<a href="#" class="admire_button">Admire</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+{% endblock %}

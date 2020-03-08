@@ -1,0 +1,130 @@
+<script type="text/javascript">
+    $('#zap_footer').removeClass('is_visible')
+    $('#zap_footer').addClass('is_hidden')
+    document.title = "Buy | Zapyle"
+    function onReady(callback) {
+        var intervalID = window.setInterval(checkReady, 1000);
+        function checkReady() {
+            if (document.getElementsByTagName('body')[0] !== undefined) {
+                window.clearInterval(intervalID);
+                callback.call(this);
+            }
+        }
+    }
+    function show_loader(id, value) {
+        document.getElementById(id).style.display = value ? 'block' : 'none';
+    }
+    // onReady(function () {
+    //     show('page', true);
+    //     show('loading', false);
+    // });
+    $(document).ready(function() {
+        setFiltersWidth();
+    });
+    $(window).resize(function() {
+        setFiltersWidth();
+    });
+    function setFiltersWidth() {
+        filter_options = $('.filter-values li');
+        total_width = 0;
+        filter_options.each(function() {
+            width = $(this).width();
+            total_width = total_width + width;
+        });
+        $('.filter-values').width(total_width);
+    }
+</script>
+
+<div class="main-content buy">
+    <!-- <div class="view-switch content">
+        <input type="text" ng-show="pageView=='productPage'" ng-model="search_product" class="search_product" placeholder="Search Product" ng-keyup="product_search()" style="    margin-right: 10px;">
+        <span>
+            <span id='product-view' class='is_selected icon-th' ng-click="productView()"> </span>
+            <span id='seller-view' class='icon-menu' ng-click="sellerView()"> </span>
+        </span>
+    </div> -->
+    <div class="sub-menu content">
+      <div class="filter-types">
+      <span class="chosen-type">Category</span>
+      <ul class="types">
+        <li data="category"><span>Category</span></a></li>  
+        <li data="occasion"><span>Occasion</span></li>  
+        <li data="style"><span>Style</span></li>  
+        <li data="brand"><span>Brand</span></li>  
+      </ul>
+      </div>
+      <div class="filter-values-wrapper">
+          <ul class="filter-values">
+            <li class="class_0"><a ng-click="test('All',0)">All</a></li>
+            <li  ng-repeat="li in sub_types" class="class_[[$index+1]]" ng-class="{'selected':itemName==li.title}">
+                <a ng-click="test(li.title,$index+1)">[[li.title]]</a>
+            </li>
+          </ul>
+      </div>
+      
+    </div>
+    <!-- <div class="content seller-view" ng-if="pageView == 'sellerPage'">
+        <div class="seller-snippet" ng-repeat="feed in feeds">
+            <div class="seller-info">
+                <a href="#/profile/[[feed.id]]">
+                    <img src="[[feed.profile_pic]]">
+                    <span class="name">[[feed.zap_username]]</span>
+                    <span class="style">[[feed.admires_count]] Admirers</span><span class="closet-size">[[feed.num_of_products]] Products</span></a>
+            </div>
+            <button ng-click="admire(feed)" class="pri-button" ng-class="{'admiring':feed.admire_or_not==true}" ng-hide="feed.id == user_id"></button>
+            <ul class="products-list">
+                <li ng-repeat="product in feed.products">
+                    <a href="#/product/[[product.id]]"><img src="[[product.image]]"></a>
+                </li>
+            </ul>
+        </div>
+    </div> -->
+    <div id="loading" class="content product-view"></div>
+    <div id="page" class="content product-view" ng-if="pageView == 'productPage'">
+        <div class="size3of12 product-card" ng-repeat="grid in products" mouse-hover>
+            <div class="product-display">
+                <img src="/zapstatic/frontend/images/image_loading.png">
+                <a href="#/product/[[grid.id]]">
+                    <span style="background-image:url([[gridimg.image]])" class="product-image is_current" ng-repeat="gridimg in grid.images | reverse">
+                </span>
+                </a>
+                <div class="buy-info">
+                    <div class="glass"></div>
+                    <div class="size-brand"><span class='size size4of12' title=[[grid.size]]>[[grid.size]]</span><span class='brand size8of12'>[[grid.brand.brand]]</span></div>
+                </div>
+                <div class="info-tag">
+                    <span class='discount' ng-show="grid.size">[[grid.discount]]</span>
+                    <span class='discount' ng-hide="grid.size">Sold Out</span>
+                    <span class="top-triangle"></span><span class="bottom-triangle"></span>
+                </div>
+            </div>
+            <!-- <div class="product-tag">
+                <span class='discount' ng-show="grid.size">[[grid.discount]]</span>
+                <span class='discount' ng-hide="grid.size">Sold Out</span>
+            </div> -->
+            <div class="product-title"><a href="#/product/[[grid.id]]">[[grid.title]]</a></div>
+            <span class='price'>
+                <span class='new icon-rupee'>[[grid.listing_price | number:0]]</span>
+            <span class="old-discount"> <span class='old icon-rupee' ng-if="grid.original_price!=null">[[grid.original_price | number:0]]</span> </span>
+            <div class="product-love icon-heart-empty" ng-if="grid.liked_by_user == false" ng-click="like_unlike(grid,'like')" data="[[grid.id]]" id="G[[grid.id]]">
+                </div>
+                <div class="product-love icon-heart" ng-if="grid.liked_by_user == true" ng-click="like_unlike(grid,'unlike')" data="[[grid.id]]" id="G[[grid.id]]">
+                </div>
+            </span>
+        </div>
+    </div>
+    <span id="load-more" class="button ng-scope" ng-if="loadmoreVisibilityStatus"><a ng-click="loadMore()" ng-class="{'loading':loadMore_flag}">Load More</a><span class="error-msg" id="loadmore_error">Oops! No more results to show.</span></span>
+    <!-- <div class="static-footer" ng-show="totalPages>1">
+        <div align="center" id="paginationholder" >
+            <ul id="pagination-demo" class="pagination-sm pagination"></ul>
+        </div>
+    </div> -->
+</div>
+<style type="text/css">
+    .pagination {
+        display: inline-block;
+        padding-left: 0;
+        margin: 20px 0;
+        border-radius: 4px;
+    }
+</style>

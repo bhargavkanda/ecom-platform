@@ -1,0 +1,20 @@
+<div class="CSSTableGenerator" style="width:100%">
+    <table border="1">
+        <tr><th>OrderNumber</th><th>orderID</th><th>ReturnId</th><th>Time</th><th>Consignor</th><th>Consignee</th><th>Action</th></tr>
+        <tr ng-repeat="b_f_data in before_process_data">
+            <td>[[b_f_data.order_number]]</td>
+            <td>[[b_f_data.type == 'order' ? b_f_data.id : '']]</td>
+            <td>[[b_f_data.type == 'return' ? b_f_data.id : '']]</td>
+            <td>[[b_f_data.time | date:'MM/dd/yyyy @ h:mma']]</td>
+            <td>[[b_f_data.consignor]]</td>
+            <td>[[b_f_data.consignee]]</td>
+            <td>
+                <button ng-hide="b_f_data.cancelled" ng-click="cancel_before_process(b_f_data,'cancel')">Cancel</button>
+                <p ng-show="b_f_data.cancelled" >Cancelled 
+                <button ng-show="b_f_data.cancelled" ng-click="cancel_before_process(b_f_data,'undo')">Undo Cancel</button></p>
+                <button ng-hide="b_f_data.cancelled" ng-click="cancel_before_process(b_f_data,'logistics')">Trigger Logistics</button>
+            </td>
+        </tr>
+
+    </table>
+</div>

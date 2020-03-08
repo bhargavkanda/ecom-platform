@@ -1,0 +1,52 @@
+<div class="screen_header">
+	<div class="screen_title">Discounts</div>
+	<a class="screen_back" data-activates="#my_profile" href="#rp_my_profile" ng-click="my_profile()">Back</a>
+</div>
+<div class="screen_content">
+{#	<div class="wallet_details">#}
+{#		<h6>Your Earnings</h6>#}
+{#		<div class="available_cash">[[mywallet.zapcash]]</div>#}
+{#	</div>#}
+{#	<div class="invite">#}
+{#		<h6>Invite and Earn</h6>#}
+{#		<div>Gift your friends <span class="friend_reward">[[mywallet.friend_amount]]</span> to shop.<br>Get <span class="referral_reward">[[mywallet.referrer_amount]]</span> when they shop or sell.</div>#}
+{#	</div>#}
+{#	<div class="referral_url">#}
+{#		<div class="inline input-field">#}
+{#			<input disabled value="www.zapyle.com/ram_kanda" id="disabled username" type="text" name="username">#}
+{#			<button class="copy_referral_url btn-flat waves-effect waves-pink">Copy</button>#}
+{#		</div>#}
+{#		<div class="promt">Press 'Ctrl/Cmd + C' to copy</div>#}
+{#	</div>#}
+	<a class="enter_promocode overlay_trigger" data-overlay="#promocode">Promo Code</a>
+</div>
+<div class="screen_footer">
+	<a class="waves-effect waves-pink btn full_width center_align overlay_trigger" data-overlay="#invite_friends">Invite Friends</a>
+</div>
+<div class="overlay absolute" id="promocode">
+	<div class="glass under"></div>
+	<div class="content small">
+		<div class="close_btn right"></div>
+		<div class="header">Enter Promocode</div>
+		<div class="body">
+			<input type="text" name="promocode" class="center_align" ng-model="promocode">
+		</div>
+		<div class="footer">
+			<a class="btn waves-effect waves-light full_width" href="" ng-click="getCredits(promocode)">Get Credits</a>
+		</div>
+	</div>
+</div>
+<div class="overlay absolute" id="invite_friends">
+	<div class="glass under"></div>
+	<div class="content small">
+		<div class="close_btn right"></div>
+		<div class="header">Invite your friends</div>
+		<div class="body">
+			<div class="share_url">
+				<a target="_blank" href="mailto:?subject=Look at this website&body=Hi,I found this website and thought you might like it http://www.zapyle.com. Use this url - THIS_URL to sign up and you will get Rs. 200 immediately to shop." class="icon-email"></a>
+				<a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=Check out this website http://www.zapyle.com. Shop luxury at great prices now! Use this url - THIS_URL to sign up and you will get Rs. 200 immediately to shop." class="icon-facebook"></a>
+				<a target="_blank" href="whatsapp://send?text=Hey I found this great website for fashion - http://www.zapyle.com. Use this url - THIS_URL to sign up and you will get Rs. 200 immediately to shop." class="mobile_only icon-whatsapp"></a>
+			</div>
+		</div>
+	</div>
+</div>

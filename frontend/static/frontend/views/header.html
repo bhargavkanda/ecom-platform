@@ -1,0 +1,38 @@
+<div ng-controller="HeaderController" select-menu>
+    <!-- <div id="please-wait-header" class="pri-overlay">
+        <div class="glass"></div>
+        <div class="content">
+            <div class="header">Please wait..</div>
+            <div class="body">
+            </div>
+        </div>
+</div> -->
+    <div class="content">
+    <div class="logo">
+        <ul class="nav-bar left">
+            <li id="discover"><a href="#/discover">Discover</a></li>
+            <li id="sell"><a href="#/sell">Sell</a></li>
+            <li id="feeds"><a href="#/feeds">Buy</a></li>
+        </ul>
+        <a data-icon="a" href="#/"></a>
+        <ul class="nav-bar right">
+            <li id="blog"><a target="_blank" href="http://blog.zapyle.com/blog">Blog</a></li>
+            <li id="authenticity"><a href="#/authenticity">Authenticity</a></li>
+            <li id="login"><span id="header-notlogin" class='signup-login-links' ng-show="!$root.loggedIn" pop-up>
+                    <a>Login</a></span>
+            </li>
+        </ul>
+    </div>
+
+        <span id="header-login" log-status ng-show="$root.loggedIn" class="logged-in"> <a><img ng-src="[[profilePic]]"><!-- [[zap_username]] -->
+            </a> 
+            <ul class="user-options">
+            <li><a href = "#/profile/[[user_id]]/">My Profile</a></li>
+            <li><a ng-click = "logout()">Sign Out</a></li>
+            </ul> </span>
+        <!-- </span> -->
+        
+        <span responsive-menu="" id="show-menu" class="icon-menu"></span>
+
+    </div>
+</div>

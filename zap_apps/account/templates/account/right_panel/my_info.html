@@ -1,0 +1,66 @@
+<div class="screen_header">
+	<a href="#rp_my_account" class="screen_back" data-activates="#my_account">Back</a>
+	<div class="screen_title">My Info</div>
+</div>
+<div class="screen_content">
+	<div class="input-fields">
+		<div class="input-field text">
+			<span class="text_input">
+				<label for="username" ng-class="{'active':user.zap_username}">Username<span class="input_error"></span></label>
+				<input disabled value="[[user.zap_username]]" type="text" class="validate" name="username" id="username">
+			</span>
+		</div>
+		<div class="input-field text">
+			<span class="text_input">
+				<label for="name" ng-class="{'active':user.full_name}">Name<span class="input_error">Error</span></label>
+				<input type="text" name="name" ng-model="user.full_name" id="name">
+			</span>
+		</div>
+		<div class="input-field text description">
+			<span class="text_input" ng-class="{'error':updateErrors.description}">
+				<label for="description">Description<span class="input_error">[[updateErrors.description]]</span></label>
+				<textarea id="description" class="materialize-textarea" placeholder="Tell us a little about your style preferences" ng-model="user.description">[[user.description]]</textarea>
+				<span class="input_error"></span>
+			</span>
+		</div>
+		<div class="input-field text">
+			<span class="text_input" ng-class="{'error':updateErrors.phone}">
+				<label for="phone" ng-class="{'active':user.phone_number}">Phone<span class="input_error">Error</span></label>
+				<input disabled type="text" name="phone" value="[[user.phone_number]]" id="phone">
+				<span class="input_error"></span>
+			</span>
+		</div>
+		<div class="input-field text">
+			<span class="text_input">
+				<label for="email" ng-class="{'active':user.email}">Email<span class="input_error">Error</span></label>
+				<input disabled type="text" name="email" value="[[user.email]]" id="email">
+				<span class="input_error"></span>
+			</span>
+		</div>
+		<div class="input-field radio inline" ng-class="{'error':updateErrors.gender}">
+			<label>Gender<span class="input_error">[[updateErrors.gender]]</span></label>
+			<ul class="radio_input">
+				<li id="female" ng-class="{'is_selected':user.gender=='Female'}"><span class="box"><span></span></span><label>Female</label></li>
+				<li id="male" ng-class="{'is_selected':user.gender=='Male'}"><span class="box"><span></span></span><label>Male</label></li>
+			</ul>
+		</div>
+		<div class="input-field radio">
+			<span class="date_input">
+				<label for="dob">Date of Birth<span class="input_error">Error</span></label>
+				<input type="date" class="datepicker" placeholder="dd/mm/yyyy" id="dob">
+			</span>
+		</div>
+		<div class="input-field dropdown">
+			<div class="select_input" ng-class="{'error':updateErrors.state}">
+				<select ng-model="user.selected_location_id">
+					<option value="" disabled selected>Choose your option</option>
+					<option value=[[city.id]] ng-repeat="city in user.locations">[[city.name]]</option>
+				</select>
+				<label>Location<span class="input_error">[[updateErrors.state]]</span></label>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="screen_footer absolute">
+	<a class="waves-effect waves-pink btn full_width center_align" ng-click="update_myinfo(user)">Update</a>
+</div>

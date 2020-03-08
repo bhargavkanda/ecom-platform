@@ -1,0 +1,144 @@
+<div class="screen_header">
+	<div class="screen_title">[[order.product.title]]</div>
+	<a href="#rp_my_orders" ng-click="my_orders()" class="screen_back" data-activates="#my_orders" id="order_details_page_back_btn">Back</a>
+</div>
+<div class="screen_content no_footer">
+	<div class="product_details">
+		<a href="/product/[[order.product.id]]/[[order.product.title | spaceless]]" class="black">
+			<h6 class="title normal_weight underline uppercase">[[order.product.title]]</h6>
+			<div class="inline">
+				<div class="quantity inline"><label>Quantity</label><div>[[order.quantity]]</div></div>
+				<div class="quantity inline"><label>Size</label><div>[[order.size]]</div></div>
+			</div>
+		</a>
+	</div>
+	<div class="order_details expandable" id="order_info" data-orderid="[[order.id]]">
+		<div class="expandable_inner">
+			<ul class="details_list">
+				<li class="detail_item size6of12">
+					<label>Order ID</label>
+					<div>[[order.order_number]]</div>
+				</li>
+				<li class="detail_item size6of12">
+					<label>Seller</label>
+					<div>[[order.seller]]</div>
+				</li>
+				<li class="detail_item size6of12">
+					<label>Order Date</label>
+					<div>[[order.placed_at]]</div>
+				</li>
+				<li class="detail_item size6of12">
+					<label>Amount Paid</label>
+					<div class="icon-rupee">[[order.amount_paid]]</div>
+				</li>
+				<li class="detail_item size6of12">
+					<label>Payment Mode</label>
+					<div>[[order.payout_mode]]</div>
+				</li>
+				<li class="detail_item size6of12">
+					<label>Zap Cash Used</label>
+					<div class="icon-rupee">[[order.zapwallet_used]]</div>
+				</li>
+			</ul>
+			<div class="delivery_address">
+				<label>Delivery Details</label>
+				<div>
+					<div>
+						<span class="name">[[order.delivery_address.name]]</span>
+						<span class="phone">[[order.delivery_address.phone]]</span>
+					</div>
+					<div class="address_line_1">[[order.delivery_address.address]]</div>
+					<div class="address_line_2">[[order.delivery_address.address2]]<span class="city">[[order.delivery_address.city]]</span></div>
+					<div><span class="state">[[order.delivery_address.state]]</span><span class="pincode">[[order.delivery_address.pincode]]</span></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<a data-expands="#order_info" class="expand_trigger inline_btn grey small underline details contracted">order details</a>
+	<div class="order_status_block center_align pink_bg">
+		<div class="status">[[order.tracker.steps[order.tracker.current_step].title]]</div>
+		<div class="description small">[[order.tracker.description]]</div>
+		<div class="rating" ng-class="rating !== false ? 'is_visible' : ''">
+			<label class="black">How do you like the product?</label>
+			<ul class="stars inline">
+				<li class="star_item" data-rating="1" ng-class="rating >= 1 ? 'selected' : ''"></li>
+				<li class="star_item" data-rating="2" ng-class="rating >= 2 ? 'selected' : ''"></li>
+				<li class="star_item" data-rating="3" ng-class="rating >= 3 ? 'selected' : ''"></li>
+				<li class="star_item" data-rating="4" ng-class="rating >= 4 ? 'selected' : ''"></li>
+				<li class="star_item" data-rating="5" ng-class="rating >= 5 ? 'selected' : ''"></li>
+			</ul>
+			<span class="block small rating_response is_hidden">Thank you for your feedback! :)</span>
+			<!--<a class="inline_btn underline pink">Submit</a>-->
+		</div>
+		<a class="return inline_btn grey small underline" ng-click="showReason()" ng-show="order.tracker.cta">Return</a>
+	</div>
+	<div class="order_tracker">
+		<ul class="steps_list">
+			<li class="step_item" ng-repeat="step in order.tracker.steps" ng-class="order.tracker.current_step > $index ? 'done' : order.tracker.current_step == $index ? 'current' : ''">
+				<div class="order_status">
+					<span>[[step.title]]</span>
+				</div>
+				<div class="description">
+					<span>[[order.tracker.current_step > $index ? step.time : order.tracker.current_step == $index ? order.tracker.description : '']]</span>
+				</div>
+				<div class="indicator"></div>
+				<div class="connector"></div>
+			</li>
+		</ul>
+	</div>
+</div>
+<div id="return_reason" class="overlay absolute">
+   <div class="glass under"></div>
+   <div class="content small">
+       <div class="close_btn right"></div>
+       <div class="header">Reason for Return</div>
+       <div class="body no_padding"> 
+       		<p>Please specify reason for return</p>
+       		<ul class="selectable_list">
+	       		<li class="selectable radio" data-reason="0">
+					<div class="left_align small">The product is not in the size I ordered</div>
+					<span class="select show_text"><span class="circle"><span></span></span></span>
+				</li>
+				<li class="selectable radio" data-reason="1">
+					<div class="left_align small">The product is damaged</div>
+					<span class="select show_text"><span class="circle"><span></span></span></span>
+				</li>
+				<li class="selectable radio" data-reason="2">
+					<div class="left_align small">The product is not as described</div>
+					<span class="select show_text"><span class="circle"><span></span></span></span>
+				</li>
+				<li class="selectable radio" data-reason="3">
+					<div class="left_align small">The product is a replica</div>
+					<span class="select show_text"><span class="circle"><span></span></span></span>
+				</li>
+				<li class="selectable radio" data-reason="4">
+					<div class="left_align small">Other</div>
+					<span class="select show_text"><span class="circle"><span></span></span></span>
+				</li>
+			</ul>
+		</div>
+		<div class="footer inline">
+            <a class="btn waves-effect waves-light grey size6of12_nomargin">Cancel</a>
+           	<div class="relative inline_block size6of12_nomargin">
+           		<a class="btn waves-effect waves-light full_width" ng-click="returnOrder(order.tracker)">Return</a>
+		           <div class="absolute full_width loading_wrapper" id="returnLoader">
+	                    <div class="preloader-wrapper small active">
+                          <div class="spinner-layer spinner-white-only">
+                            <div class="circle-clipper left">
+                                      <div class="circle"></div>
+                            </div>
+                            <div class="gap-patch">
+                                      <div class="circle"></div>
+                            </div>
+                            <div class="circle-clipper right">
+                                      <div class="circle"></div>
+                            </div>        
+                          </div>
+	                    </div>
+		           </div>
+		   </div>
+		</div>
+
+   </div>
+</div>

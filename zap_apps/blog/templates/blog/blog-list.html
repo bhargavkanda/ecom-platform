@@ -1,0 +1,36 @@
+{% extends "account/base.html" %}
+{% block extra_head %}
+<title>Zapyle Blog - One Stop for Everything Fashion.</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.1.8/imagesloaded.pkgd.min.js"></script>
+<script src="/zapstatic/blog/js/thirdparty/masonry.pkgd.min.js"></script>
+<script src="/zapstatic/blog/js/blogController.js"></script>
+<link rel="stylesheet" href="/zapstatic/blog/css/blog-style.css">
+{% endblock %}
+{% block body %}
+{% load humanize %}
+    <main ng-controller="BlogController" class="content blog_page">
+        <div class="filter">
+            <a data-filter="all" ng-click="filterPosts($event)" class="selected">All</a>
+            <a data-filter="[[cat.slug]]" ng-repeat="cat in MetaData.categories" ng-click="filterPosts($event)">[[cat.name]]</a>
+            <span class="highlighter is_hidden"></span>
+        </div>
+        <div class="posts" id="blog-posts">
+            <div class="post-card big" ng-repeat="blog in blogs" data-category="[[blog.category.slug]]" on-finish-render="setShuffle">
+                <a class="edit_btn" ng-if="blog.editable && blog.category.slug!='look-book'" href="/blog/post/[[blog.id]]/edit">Edit</a>
+                <a class="edit_btn" ng-if="blog.editable && blog.category.slug=='look-book'" href="/look/post/[[blog.id]]/edit">Edit</a>
+                <div class="post-card__inner">
+                    <a id="post-picture" href="/blog/post/[[blog.id]]/[[blog.slug]]">
+                        <img class="post-cover" ng-src="[[blog.cover_pic]]">
+                    </a>
+                    <div class="post-details">
+                        <a class="post-category" href="/blog/category/[[blog.category.slug]]">[[blog.category.name]]</a>
+                        <a class="post-title" href="/blog/post/[[blog.id]]/[[blog.slug]]">[[blog.title]]</a>
+                        <div class="post-time">[[blog.time]]</div>
+                        <a class="love_btn no_text" ng-class="blog.loved_by_user ? 'loved' : ''"
+                           ng-click="love_or_unlove_blog(blog, $event)"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

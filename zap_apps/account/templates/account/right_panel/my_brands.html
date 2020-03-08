@@ -1,0 +1,54 @@
+<div class="screen_header">
+	<div class="screen_title">My Brands</div>
+	<a href="#rp_my_preferences" class="screen_back" data-activates="#my_preferences">Back</a>
+</div>
+<div class="screen_content scroll_parent" ng-class="{'no_footer':!(onboardingStep==3)}">
+	<div class="search">
+		<input class="full_width" type="search_query" name="search" placeholder="Search for your favourite brands" ng-model="searchText">
+		<div class="a_z_navigator">
+			<ul class="letters_list">
+				<li class="letter_item">A</li>
+				<li class="letter_item">B</li>
+				<li class="letter_item">C</li>
+				<li class="letter_item">D</li>
+				<li class="letter_item">E</li>
+				<li class="letter_item">F</li>
+				<li class="letter_item">G</li>
+				<li class="letter_item">H</li>
+				<li class="letter_item">I</li>
+				<li class="letter_item">J</li>
+				<li class="letter_item">K</li>
+				<li class="letter_item">L</li>
+				<li class="letter_item">M</li>
+				<li class="letter_item">N</li>
+				<li class="letter_item">O</li>
+				<li class="letter_item">P</li>
+				<li class="letter_item">Q</li>
+				<li class="letter_item">R</li>
+				<li class="letter_item">S</li>
+				<li class="letter_item">T</li>
+				<li class="letter_item">U</li>
+				<li class="letter_item">V</li>
+				<li class="letter_item">W</li>
+				<li class="letter_item">X</li>
+				<li class="letter_item">Y</li>
+				<li class="letter_item">Z</li>
+			</ul>
+		</div>
+	</div>
+	<div class="brands_list_wrapper scroll_this">
+		<ul class="brands_list">
+			<li class="brand_item" ng-repeat="b in brands.selected_brands | orderBy:'brand'| filter:searchText">
+				<span>[[b.brand]]</span>
+				<a class="follow selected" data-id="[[b.id]]"></a>
+			</li>
+			<li class="brand_item" id="scroll_[[b.brand[0] ]]" ng-repeat="b in brands.unselected_brands | orderBy:'brand'| filter:searchText">
+				<span>[[b.brand]]</span>
+				<a class="follow" data-id="[[b.id]]"></a>
+			</li>
+		</ul>
+	</div>
+</div>
+<div class="screen_footer" ng-if="onboardingStep==3">
+	<button ng-click="submitBrands()" class="btn waves-effect waves-light full_width" type="submit" name="action">Continue</button>
+</div>

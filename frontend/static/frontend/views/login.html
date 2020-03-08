@@ -1,0 +1,60 @@
+<div class="main-content"><div class="content">
+    <div class="signup-module">
+        <div class="email">
+            <div ng-if="q_email" class="signin-footer">
+                <span class="forgot-password">Hi [[q_email]], Welcome back.</span>
+            </div>
+            <form class="signin" ng-show="email_login_flag==true" ng-submit="checkout_signin()">
+                <div ng-hide="frgt_pwd_flag || reset_token">
+                    <input type="text" ng-model="l.email_login" placeholder="Email or ZapUsername" required>
+                    <span class="error-msg is_visible">[[errors.email]]</span>
+                    <input type="password" ng-model="l.password_login" placeholder="Password" required>
+                    <span class="error-msg is_visible">[[errors.password]]</span>
+                    <button class="pri-button checkout_signin" >Login with Email</button>
+                </div>
+                <div ng-show="frgt_pwd_flag"> <!-- || reset_token=='' -->
+                    <!-- <form ng-submit="send_verification_email(frgt_email)"> -->
+                        <input type="email" ng-model="frgt_email" placeholder="Email">
+                        <button class="pri-button email_verify_button" ng-click="send_verification_email(frgt_email,frgt_pwd_flag)">Send Verification Email</button>
+                        <span class="error-msg is_visible">[[success_msg]]</span>
+                    <!-- </form> -->
+                </div>
+                <div ng-show="reset_token && !frgt_pwd_flag">
+                    <!-- <form ng-submit="reset_password(new_pwd,confirm_new_pwd)"> -->
+                        <input type="password" ng-model="new_pwd" placeholder="New Password">
+                        <input type="password" ng-model="confirm_new_pwd" placeholder="Confirm New Password">
+                        <button class="pri-button reset_btn" ng-click="reset_password(new_pwd,confirm_new_pwd)">Change Password</button>
+                        <span class="error-msg is_visible">[[success_msg]]</span>
+                    <!-- </form> -->
+                </div>
+                <div class="signin-footer" ng-show="email_login_flag">
+                    <span ng-hide="frgt_pwd_flag" class="forgot-password" ng-click="frgt_pwd_flag=true">Forgot Password?</span>
+                    <span ng-show="frgt_pwd_flag" class="forgot-password" ng-click="frgt_pwd_flag=false">Login</span>
+                    <span ng-click="email_login_flag=false" login-change="">Not a member? <span class="show-signup">Signup</span></span>
+                </div>
+            </form>
+            <form class="signup" ng-show="email_login_flag==false" ng-submit="checkout_signup()">
+                <input type="text" ng-model="s.signup_zap_username" name="Name" placeholder="Username" required>
+                <span class="error-msg is_visible">[[errors.username]]</span>
+                <input type="email" name="email" ng-model="s.signup_email" placeholder="Email" required>
+                <span class="error-msg is_visible">[[errors.Email]]</span>
+                <input type="text" name="first_name" ng-model="s.signup_first_name" placeholder="First Name" required>
+                <span class="error-msg is_visible">[[errors.fname]]</span>
+                <input type="text" name="phone_number" ng-model="s.signup_phone_number" placeholder="Phone Number" required>
+                <span class="error-msg is_visible">[[errors.phone]]</span>
+                <!--  <input type="text" name="Username" ng-model="zap_username" placeholder="Username"> -->
+                <input type="password" ng-model="s.signup_password" name="Password" placeholder="Password" required>
+                <span class="error-msg is_visible">[[errors.pwd]]</span>
+                <input type="password" ng-model="s.signup_confirm_password" name="Password" placeholder="Confirm Password" required>
+                <span class="error-msg is_visible">[[errors.cpwd]]</span>
+                <button class="pri-button btn_signup">Signup with Email</button>
+                <div><a class="terms-link" target="_blank" href="/#/terms-conditions">Terms and Conditions Apply</a>Already a member? <span class="show-signup" login-change="" ng-click="email_login_flag=true">Login</span></div>
+            </form>
+        </div>
+        <div class="separator"><span>or</span></div>
+        <div class="social">
+            <div class="facebook"><a ng-click="FBLogin()"><span class="icon-facebook"></span><span>Login using Facebook</span></a></div>
+            <div class="instagram"><a ng-click="insta_please_wait()"><span class="icon-instagram"></span><span>Login using Instagram</span></a></div>
+        </div>
+    </div>
+</div></div>

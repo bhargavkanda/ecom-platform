@@ -1,0 +1,46 @@
+---
+- hosts: test_server
+  remote_user: zapyle
+  vars:
+    folder: /home/zapyle/zapyle_new
+    git_repo: git@github.com:Zapyle/zapyle_new.git
+    branch: test
+    zapenv: /home/zapyle/zapyle_new/env
+  tasks:
+  - name: Pulling 'test' branch from 'zapyle_new' Repository.
+    git: 
+      repo: "{{git_repo}}" 
+      dest: "{{folder}}" 
+      version: "{{branch}}"
+      force: yes
+  - name: Minification of js Files 
+    shell: "{{zapenv}}/bin/python manage.py minifyjs --settings=zapyle_new.settings.test"
+    args:
+      chdir: "{{folder}}"
+  - name: Collecting static files
+    shell: "{{zapenv}}/bin/python manage.py collectstatic --noinput --settings=zapyle_new.settings.test"
+    args:
+      chdir: "{{folder}}"
+  - name: Database makemigrations
+    shell: "{{zapenv}}/bin/python manage.py makemigrations --settings=zapyle_new.settings.test"
+    args:
+      chdir: "{{folder}}"
+  - name: Database migrate
+    shell: "{{zapenv}}/bin/python manage.py migrate --settings=zapyle_new.settings.test"
+    args:
+      chdir: "{{folder}}"
+  - name: Test server is restarting test_server
+    shell: sudo supervisorctl restart test_server
+    sudo: yes 
+  - name: Test server is restarting testcelery
+    shell: sudo supervisorctl restart testcelery
+    sudo: yes 
+  - name: Test server is restarting testcelerycam
+    shell: sudo supervisorctl restart testcelerycam
+    sudo: yes 
+  - name: Test server is restarting testtornado-8003
+    shell: sudo supervisorctl restart testtornado-8003
+    sudo: yes 
+  - name: Test server is restarting nginx
+    service: name=nginx state=restarted
+    sudo: yes      

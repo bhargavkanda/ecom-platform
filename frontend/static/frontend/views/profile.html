@@ -1,0 +1,144 @@
+<script type="text/javascript">
+    function onReady(callback) {
+        var intervalID = window.setInterval(checkReady, 1000);
+        function checkReady() {
+            if (document.getElementsByTagName('body')[0] !== undefined) {
+                window.clearInterval(intervalID);
+                callback.call(this);
+            }
+        }
+    }
+    function show_loader(id, value) {
+        document.getElementById(id).style.display = value ? 'block' : 'none';
+    }
+    // onReady(function () {
+    //     show('page', true);
+    //     show('loading', false);
+    // });
+</script>
+<div id="loading"></div>
+
+<div class="profile" id="page">
+    <div class="main-content">
+        <div class="main-content">
+            <div class="content">
+                <div class="banner">
+                    <div class="info">
+                        <span class="profile-pic"><span>[[profiledata.user_type]]
+                    </span><img src="[[profiledata.profile_pic]]"></span>
+                        <div class="profile-data">
+                            <h6 class="name">[[profiledata.zap_username]]</h6>
+                            <div class="description">
+                                <p ng-show="edit_desc==false">[[profiledata.description]]</p>
+                                <textarea class="edit-description" ng-class="{'is_visible':edit_desc==true}" id="inputbox_fordesc" ng-model="profiledata.description"></textarea></div>
+                        </div>
+                    </div>
+                    <span class="button">
+                    <a ng-show="profiledata.id == user_id && edit_desc==false" ng-click="edit_desc=true">Edit</a>
+                    <a ng-show="edit_desc==true" ng-click="editProfile()">Save</a>
+                    <a id="admire" ng-click="admire2('admire')" ng-if="profiledata.admired_by_user==false && profiledata.id != user_id">Admire</a>
+                    <a id="admiring" ng-click="admire2('unadmire')" href="" ng-if="profiledata.admired_by_user==true && profiledata.id != user_id">Admiring</a>
+                </span>
+                    <div class="activity">
+                        <span class="products" ng-click="current_tab='product'" ng-class="{'is_current':current_tab=='product'}">[[profiledata.no_of_posts]]</span>
+                        <span class="admirers" ng-click="get_admires('admires');current_tab='admires'" ng-class="{'is_current':current_tab=='admires'}">[[profiledata.admirers]]</span>
+                        <span class="admiring" ng-click="get_admires('admiring');current_tab='admiring'" ng-class="{'is_current':current_tab=='admiring'}">[[profiledata.admiring]]</span>
+                    </div>
+                </div>
+                <div class="tab-content" ng-init="current_tab='product'">
+                    <ul class="admirers-list" ng-class="{'is_visible':current_tab=='admires'}">
+                        <li class="seller-snippet" ng-repeat="u in admires">
+                            <a href="#/profile/[[u.id]]" class="name">[[u.zap_username]]</a>
+                            <button ng-click="admire(u)" class="pri-button" ng-class="{'admiring':u.admire_or_not==true}" ng-hide="u.id == user_id"></button>
+                            <a class="user-dp" href="#/profile/[[u.id]]"><img src="[[u.profile_pic]]"></a>
+                            <ul class="products-list">
+                                <li ng-repeat="img in u.product_images">
+                                    <a href="#/product/[[img.id]]"><img src="[[img.url]]"></a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="admiring-list" ng-class="{'is_visible':current_tab=='admiring'}">
+                        <li class="seller-snippet" ng-repeat="u in admiring">
+                            <a href="#/profile/[[u.id]]" class="name">[[u.zap_username]]</a>
+                            <button ng-click="admire(u)" class="pri-button" ng-class="{'admiring':u.admire_or_not==true}" ng-hide="u.id == user_id"></button>
+                            <a class="user-dp" href="#/profile/[[u.id]]"><img src="[[u.profile_pic]]"></a>
+                            <ul class="products-list">
+                                <li ng-repeat="img in u.product_images">
+                                    <a href="#/product/[[img.id]]"><img src="[[img.url]]"></a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+
+
+                    <div class="product-view" ng-class="{'is_visible':current_tab=='product'}">
+                        <div class="size3of12 product-card" ng-repeat="card in profiledata.posts" mouse-hover>
+                            <div class="product-display">
+                                <img src="/zapstatic/frontend/images/image_loading.png">
+                                <a href="#/product/[[card.id]]">
+                                    <span style="background-image:url([[cardimg.image]])" class="product-image is_current" ng-repeat="cardimg in card.images | reverse">
+                                </span>
+                                </a>
+                                <div class="buy-info">
+                                    <div class="glass"></div>
+                                    <div class="size-brand"><span class='size size4of12' title=[[card.size]]>[[card.size]]</span><span class='brand size8of12'>[[card.brand.brand]]</span></div>
+                                </div>
+                                <div class="info-tag">
+                                    <span class='discount' ng-show="card.size">[[card.discount]]</span>
+                                    <span class='discount' ng-hide="card.size">Sold Out</span>
+                                    <span class="top-triangle"></span><span class="bottom-triangle"></span>
+                                </div>
+                            </div>
+                            <div class="product-title"><a href="#/product/[[card.id]]">[[card.title]]</a></div>
+                            <span class='price' ng-hide="card.discount == 'Inspiration'">
+                            <span class='new icon-rupee'>[[card.listing_price | number]]</span>
+                            <span class="old-discount icon-rupee">  <span class='old'>[[card.original_price | number]]</span>
+                            <!--  <span class='discount'>[[card.discount*100 | limitTo : limit : begin | number]]</span>--></span>
+                            <div class="product-love icon-heart-empty" ng-if="card.liked_by_user == false" ng-click="like_unlike(card,'like')" data="[[card.id]]" id="G[[card.id]]">
+                                </div>
+                                <div class="product-love icon-heart" ng-if="card.liked_by_user == true" ng-click="like_unlike(card,'unlike')" data="[[card.id]]" id="G[[card.id]]">
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+
+        <!--        <div class="content">
+            <div class="banner">                
+            </div>
+            <div class="product-view">
+                <div class="size3of12 product-card" ng-repeat="card in profiledata.posts" mouse-hover>
+            <div class="product-tag">[[card.user.user_type == 'store_front' ? 'Store-front' : 'Pre Loved']]</div>
+            <div class="product-display">
+                <div class="product-love icon-heart-empty"
+                   ng-if="card.liked_by_user == false" ng-click="like_unlike(card,'like')" data="[[card.id]]" id="G[[card.id]]"></div>
+                   <div class="product-love icon-heart"
+                   ng-if="card.liked_by_user == true" ng-click="like_unlike(card,'unlike')" data="[[card.id]]" id="G[[card.id]]"></div><a href="#/product/[[card.id]]">
+                <span style="background-image:url([[cardimg.image]])" class="product-image is_current" ng-repeat="cardimg in card.images | reverse">
+                </span>
+                </a>
+                <div class="buy-info">
+                    <div class="glass"></div>
+                    <div class="size-brand"><span class='size size4of12'>UK 6</span><span class='brand size8of12'>[[card.brand.brand]]</span></div>
+                </div>
+            </div>
+            <div class="product-title"><a href="#/product/[[card.id]]">[[card.title]]</a></div>
+            <span class='price'>
+                <span class='new icon-rupee'>[[card.listing_price]]</span>
+                <a href="#discover-style" class='style'>[[card.style.style_type]]</a>
+                <span class="old-discount"> <span class='old icon-rupee'>[[card.original_price]]</span> <span class='discount'>[[card.discount*100 | limitTo : limit : begin]]</span> </span>
+            </span>         
+        </div>
+            </div>
+        </div> -->
+    </div>
+</div>

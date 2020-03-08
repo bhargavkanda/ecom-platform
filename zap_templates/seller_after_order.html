@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title></title>
+        <style type="text/css">
+        body {margin: 0; padding: 0; min-width: 100%!important;}
+        .content {width: 100%; max-width: 600px;}
+        @media only screen and (max-width: 480px){
+            .templateColumnContainer{
+                display:block !important;
+                width:100% !important;
+            }.vertical-spacer-container {
+                height: 0 !important;
+            }.text-on-girl{
+                padding-top: 340px !important;
+            }
+            
+        }
+        
+        </style>
+    </head>
+    <body yahoo bgcolor="#f6f8f1" >
+        <table width="100%" bgcolor="#f2f2f2" border="0" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;" >
+            <tr class="logo" bgcolor="#000000">
+                <td>
+                    <table class="content" align="center" cellpadding="7" cellspacing="0" border="0">
+                        <tr>
+                            <td style="text-align:center;">
+                                <img alt="ZAPYLE" src="http://zapmob.cloudapp.net/media/email/welcome/logo.png" style="height: 46px;" style="font-size:40px; color:#fff;">
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class="green-bar">
+                <td height="10" bgcolor="#52FDB9"></td>
+            </tr>
+            <tr>
+                <td>
+                    <h4 style="text-align:left;margin:10px;">Hi {{seller_name}},</h4>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">Congratulations on scoring a sale!</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">To proceed the sale, your item will be picked up from the following address which you’ve saved on your Zapyle profile. </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">{{from_name}},<br>{{from_add}},<br>{{from_city}},{{from_state}},<br>pin-{{from_pincode}}, {{from_country}}.</p>
+                </td>
+            </tr>
+            
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">Here are the details of your order:</p>
+                </td>
+            </tr>
+            <tr>
+
+                <td>
+                <table width=100% style="border-top:1px solid; border-bottom:1px solid; border-collapse:collapse !important;" >
+                    <tr class="border_bottom">
+                        <td colspan="2" style="text-align:right; padding-right:30px; border-bottom:1pt solid black !important; font-size: small !important;" width=50%>PRODUCT NAME</td> 
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;" width=10%>SIZE</td> 
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;" width=20%>COLOUR</td>
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;" width=20%; >QTY.</td>  
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;" width=20%; >TOTAL PRICE</td> 
+                    </tr>
+                    
+                    <tr class="border_bottom">
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;"  width=20%><a href={{productLink}} target="_blank"><img src={{img}} height="150px;" style="padding-top: 10px; padding-bottom: 10px;"></a></td> 
+                        <td style="text-align:left; border-bottom:1pt solid black !important; font-size: small !important;"  width=30%>{{productName}}</td> 
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;"  width=10%>{{productSize}}</td> 
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;"  width=20%>{{productColor}}</td>
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;"  width=20%>{{productQuantity}}</td> 
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;" width=20%>Rs. {{productPrice}}</td> 
+                    </tr>
+                    
+                </table>
+                </td>
+            </tr>
+            
+            <tr class="user_type" >
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;" >If this isn’t the right address, please reply on this mail with the right one. You don't want your order to be cancelled for wrong address.</p>
+                </td>
+            </tr>
+            
+           {% if accountDecider == 1 %}
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">Also here’s informing you that your bank details have not been saved on your Zapyle profile. Please update the My Account page on your Zapyle profile.</p>
+                </td>
+            </tr>
+            {% endif %}
+           
+            
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">Thanks for your time!</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">Love,<br>The Zapyle Team</p>
+                </td>
+            </tr>
+
+        </table>
+    </body>
+</html>

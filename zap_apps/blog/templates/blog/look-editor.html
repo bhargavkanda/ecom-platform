@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Zapyle Blog Editor</title>
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="/zapstatic/blog/dist/css/medium-editor.css">
+    <link rel="stylesheet" href="/zapstatic/blog/dist/css/themes/flat.css">
+    <link rel="stylesheet" type="text/css" href="/zapstatic/account/css/materialize.css">
+    <link rel="stylesheet" type="text/css" href="/zapstatic/account/fonts/font.css">
+    <link rel="stylesheet" href="/zapstatic/blog/css/blog-style.css">
+    <link rel="stylesheet" href="/zapstatic/blog/css/editor-style.css">
+    <script type="text/javascript" src="/zapstatic/blog/js/jquery/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="/zapstatic/blog/js/jquery/jquery-migrate-1.2.1.min.js"></script>
+</head>
+<body ng-app="BlogEditor" ng-controller="lookEditorController" ng-cloak>
+    <header>
+        <div class="left inline">
+            <a class="icon-left_arrow" href="/blog" style="font-size: 18px;padding: 5px 15px 0 5px;"></a>
+            <span class="logo">
+                <img src="/zapstatic/website/images/logo_black.png" style="height: 25px;display: block;">
+            </span>
+            <div class="inline_block relative" style="vertical-align: text-top;padding-left: 15px;">
+                <a class="button" onclick="$('.create_options').toggleClass('is_visible')">New</a>
+                <div class="create_options">
+                    <a href="/blog/create" class="block">Blog Post</a>
+                    <a href="/look/create" class="block">Look</a>
+                </div>
+            </div>
+        </div>
+        <div class="actions right">
+            <a class="button white" ng-click="save_post()" ng-if="post.status!='PB'">Save</a>
+            <a class="button white modal-trigger" data-target="save-published" ng-if="post.status=='PB'">Save</a>
+            <a class="button" ng-click="save_post(true)" ng-if="post.status!='PB'">Publish</a>
+            <a class="button" ng-click="unpublish_post()" ng-if="post.status=='PB'">Unpublish</a>
+        </div>
+    </header>
+    <main>
+        <div class="content inline">
+            <div class="look_data size6of12">
+                <div class="post-title">
+                    <span id="post-title" class="input-field">
+                        <input type="text" name="title" placeholder="Post Title" value="[[post.title]]">
+                    </span>
+                </div>
+                <div class="post-body">
+                    <textarea id="post-body" class="materialize-textarea" placeholder="Post Description">[[post.body]]</textarea>
+                </div>
+                <div class="input-field" id="post-author">
+                    <select class="icons">
+                        <option value="" disabled selected>Choose Stylist</option>
+                        <option ng-repeat="author in MetaData.authors" ng-selected="author.id==post.author" value="[[author.id]]" data-icon="[[author.profile_pic]]" class="left circle" on-finish-render="materializeSelect">[[author.name]]</option>
+                    </select>
+                </div>
+                <div class="post-pic">
+                    <div class="file-field input-field">
+                        <div class="btn relative">
+                            <span>Select Cover Picture</span>
+                            <input id="fileupload" type="file" name="files" style="height: 100%;">
+                        </div>
+                    </div>
+                    <div class="preview" style="padding-top: 50px;">
+                        <img ng-src="[[post.cover_pic]]">
+                    </div>
+                </div>
+            </div>
+            <div class="products size6of12">
+                <h5>Add Products</h5>
+                <span id="product-ids" class="input-field">
+                    <input type="text" name="title" placeholder="Enter Product ID(s)" style="width: calc(100% - 100px);">
+                    <a class="btn" style="font-size: 12px;padding: 5px 20px;height: calc(2rem + 10px);line-height: 2rem;" ng-click="fetch_products()">Fetch</a>
+                </span>
+                <div id="products">
+                    <div class="product-item" ng-repeat="p in post.products" data-id="[[p.id]]" ng-class="{'sold_out':!p.available, 'designer_product':p.user_type == 'designer'}">
+                        <div class="remove_btn icon-cross" ng-click="remove_item($event, p)"></div>
+                        <div class="product_item_inner">
+                            <div class="product_display">
+                                <a ng-href="/product/[[p.id]]/[[p.title]]">
+                                    <div class="image_holder">
+                                        <img ng-src="[[p.image]]" alt="[[ p.title ]]">
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="product_details">
+                                <h3 class="title">[[ p.title ]]</h3></a>
+                                <div class="price">
+                                    <span class="new">[[p.listing_price]]</span>
+                                    <span class="old" ng-show="p.original_price>p.listing_price">[[p.original_price]]</span>
+                                    <span class="discount" ng-class="{'show_percent':!p.discount.indexOf('off')}" ng-show="p.original_price>p.listing_price || !p.available">[[p.discount]]%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="confirm-publish" class="modal">
+            <div class="modal-content">
+                <h4>Sure?</h4>
+                <p>Are you sure you want to publish?</p>
+            </div>
+            <div class="modal-footer">
+                <a class="modal-action modal-close waves-effect waves-green btn-flat" ng-click="publish_post()">Yes</a>
+                <a class="modal-action modal-close waves-effect waves-green btn-flat">Wait! No</a>
+            </div>
+        </div>
+        <div id="save-published" class="modal">
+            <div class="modal-content">
+                <h4>This Post is live</h4>
+                <p>This Post is live and any changes saved will reflect immediately. Are you sure you want to proceed?</p>
+            </div>
+            <div class="modal-footer">
+                <a class="modal-action modal-close waves-effect waves-green btn-flat" ng-click="save_post()">Yes</a>
+                <a class="modal-action modal-close waves-effect waves-green btn-flat" ng-click="unpublish_post(); save_post()">No, unpublish this post and save</a>
+            </div>
+        </div>
+        <div class="glass save"></div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+    <script src="/zapstatic/blog/js/thirdparty/jquery.ui.widget.js"></script>
+    <!--<script src="/zapstatic/blog/js/thirdparty/jquery.iframe-transport.js"></script>-->
+    <script src="/zapstatic/blog/js/thirdparty/jquery.fileupload.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-sanitize.min.js"></script>
+    <script src="/zapstatic/frontend/bower_components/ngstorage/ngStorage.min.js"></script>
+    <script src="/zapstatic/blog/js/lookEditorController.js"></script>
+</body>
+</html>

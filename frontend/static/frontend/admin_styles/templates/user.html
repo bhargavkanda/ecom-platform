@@ -1,0 +1,19 @@
+<div ng-controller="UserCtrl">
+	<div style="text-align: right;margin-top: -50px;">
+        <input ng-model="search_product" style="width: 250px;height: 25px;" id="searchBox" placeholder="Search Users" class="ng-pristine ng-untouched ng-valid">
+    </div>
+	<div class="size4of12" ng-repeat="user in users">
+	    <div class="seller-info">
+	        <a href="/zapadmin/user/[[user.users.id]]" target="_blank">
+	            <img ng-src="[[user.users.profile_pic]]">
+	            <span class="name verified">[[user.users.zap_username]]</span>
+	            <span class="closet-size">
+	            [[user.users.num_of_products]] Products</span></a>
+	    </div>
+	</div>
+	<div class="static-footer" ng-show="total_pages>1">
+        <div align="center" id="paginationuser" >
+            <ul id="pagination-user" class="pagination-sm pagination"></ul>
+        </div>
+    </div>
+</div>

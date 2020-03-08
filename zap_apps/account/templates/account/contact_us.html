@@ -1,0 +1,63 @@
+{% extends "account/base.html" %}
+{% block extra_head %}
+<script>
+    zapyle.controller('ContactUsController', function($scope, $http){
+        $scope.Submit = function(){
+            $("#btn_submit").prop('disabled', true);
+            $http.post("/contact-us", {"email_phone":$scope.phone_email,"notes":$scope.notes}).success(function(rs){
+                $("#btn_submit").prop('disabled', false);
+                if(rs.status == "success"){
+                    $scope.phone_email = "";
+                    $scope.notes = "";
+                }else{
+                    alert(JSON.stringify(rs))
+                }
+            })
+        }
+    })
+</script>
+{% endblock %}
+{% block body %}
+	<main class="contact_us" ng-controller="ContactUsController">
+		<div class="page_content">
+			<div class="content inline">
+                <div class="size4of12" style="padding-right:40px;">
+                    <h4>We love talking to people.</h4>
+                    <form ng-submit="Submit()">
+                        <textarea placeholder="Write a Note" style="height:5rem; font-size:14px; padding:5px;" ng-model="notes" required></textarea>
+                        <input type="text" placeholder="Email or Phone Number" style="padding: 0 5px;width: calc(100% - 10px);" ng-model="phone_email" required>
+                        <button class="btn full_width" id="btn_submit">Submit</button>
+                    </form>
+                </div>
+                <div class="size8of12">
+                    <h4><br></h4>
+                    <div class="size4of12">
+                        <p class="uppercase bold" style="margin-top:0">Reach Us At</p>
+                        <p>
+                            Zapyle <br>
+                            CoWorks, RMZ Infinity <br>
+                            No.3, Opp. Gopalan Signature Mall <br>
+                            Bangalore 560016 <br>
+                            Karnataka, India.
+                        </p>
+                        <p class="uppercase bold">Connect with us</p>
+                        <ul class="inline social_links">
+                            <li><a class="icon-facebook black" href="https://www.facebook.com/zapyle/" target="_blank"></a></li>
+                            <li><a class="icon-twitter black" href="https://twitter.com/ZapyleSocial" target="_blank"></a></li>
+                            <li><a class="icon-snapchat black" href="https://www.snapchat.com/add/zapyle" target="_blank"></a></li>
+                            <li><a class="icon-instagram black" href="https://www.instagram.com/zapyle/" target="_blank"></a></li>
+                            <li><a class="icon-youtube black" href="https://www.youtube.com/channel/UCGTEq5Lm65t7tueQpybN9lA" target="_blank"></a></li>
+                            <li><a class="icon-pinterest black" href="https://in.pinterest.com/zapyle/" target="_blank"></a></li>
+                        </ul>
+                    </div>
+                    <div class="size4of12">
+                        <h6 class="uppercase" style="margin-top:0"><br></h6>
+                        <a class="block" target="_blank" href="https://www.google.co.in/maps/place/RMZ+Infinity/@12.9942608,77.6587273,17z/data=!3m1!4b1!4m5!3m4!1s0x3bae113618c9a9f7:0x43e9edd573db8110!8m2!3d12.9942608!4d77.660916">Get Directions</a>
+                        <a class="block black" href="tel:07337880282">07337880282</a>
+                        <a class="block black" href="mailto:hello@zapyle.com">hello@zapyle.com</a>
+                    </div>
+                </div>
+			</div>
+		</div>
+	</main>
+{% endblock %}

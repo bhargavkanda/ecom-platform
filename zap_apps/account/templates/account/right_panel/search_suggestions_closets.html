@@ -1,0 +1,25 @@
+<div class="closet_suggestions">
+	<div class="suggestion" ng-repeat="u in suggestions.users">
+		<a ng-href="/profile/[[u.user_id]]/[[u.zap_username]]">
+			<img ng-src="[[u.profile_pic]]">
+			<h6>[[u.full_name]]</h6>
+			<p class="closet_handle">[[u.zap_username]]</p>
+			<p><span class="products_count" ng-class="{'singular':u.closet_size==1}">[[u.closet_size]]</span><span class="admirers_count" ng-class="{'singular':u.admirers==1}">[[u.admirers]]</span></p>
+		</a>
+		<a ng-click="admire(u)" class="admire_btn" ng-class="{'admired':u.admired}" ng-if="USER_ID!=u.user_id"></a>
+	</div>
+</div>
+<div class="initial_state full_height">
+	<div class="content">
+		<h6 class="title">Search by name or username</h6>
+		<p class="description">
+			<span class="block uppercase very_small">Example</span>
+			<span class="block small">Kritika Khurana, Ashna Shroff</span>
+		</p>
+	</div>
+</div>
+<div class="empty_state full_height">
+	<div class="content">
+		<h6 class="title">We couldn't find closets for your search!</h6>
+	</div>
+</div>

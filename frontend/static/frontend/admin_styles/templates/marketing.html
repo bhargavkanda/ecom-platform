@@ -1,0 +1,3515 @@
+<hr ng-init="mk_type='push'">
+    <input id="347" type="radio" name="gender" value="male" ng-click="mk_type='sms'"> <label for="347"><b>SMS Notification</b></label><br>
+    <div ng-show="mk_type=='sms'">
+        <form ng-submit="send_sms(sms)">
+            <div>
+                <span class="size2of12 attribute"></span>
+                <span class="size8of12 attribute">
+                    <span>Text: </span>
+                    <span><textarea ng-model="sms.text" required></textarea></span>
+                </span>
+                <span class="size2of12 attribute"></span>
+                <span class="size8of12 attribute">
+                    <span>Send To: </span>
+                    <span>
+                      <select ng-init="sms.type='selectedUsers'" ng-model="sms.type">
+                        <option value="selectedUsers">Selected Users</option>
+                        <option value="AllUsers">All Users</option>  
+                      </select>
+                    </span>
+                </span>
+                <span class="size2of12 attribute" ng-init="sms.users=[]"></span>
+                <span class="size8of12 attribute" ng-if="sms.type=='selectedUsers'">
+                  <span>Users: </span>
+                            <span>
+                      <select ng-model="sms.users" multiple
+                        ng-options="i.id as i.name for i in zapusers" ng-required="sms.type=='selectedUsers'">
+                      </select>[[selectedUsers]]
+                    </span>
+                </span>
+                <span class="size2of12 attribute"></span>
+                <span class="size8of12 attribute">
+                    <span><input type="submit" value="send" id="send_button"> </span>
+                </span>
+            </div>
+        </form>
+    </div>
+    <hr>
+    <input id="348" type="radio" name="gender" checked value="female" ng-click="mk_type='push'">
+    <label for="348"><b>Push Notification</b></label> <br>
+    <div ng-show="mk_type=='push'">
+        <form ng-submit="send_push_data(push_data, false)">
+            <div>
+                <span class="size2of12 attribute"></span>
+                <span class="size8of12 attribute">
+                    <span>Action: </span>
+                    <span>
+                        <select ng-model="push_data.action_type" ng-change="setMarketingChosen(push_data.action_type)" ng-options="i.value as i.title for i in [{'value':'profile','title':'Profile'},
+                            {'value' : 'product','title':'Product'},
+                            {'value' : 'newsfeed','title':'Newsfeed'},
+                            {'value' : 'filtered','title':'Filtered Feed'},
+                            {'value' : 'upload','title':'Upload'},
+                            {'value' : 'own_profile','title':'OwnProfile'},
+                            {'value' : 'update_app','title':'Update App'},
+                            {'value' : 'deep_link', 'title' : 'Deep Link'}]" required>
+                        </select>
+                    </span>
+                </span>
+                <div ng-show="push_data.action_type == 'profile' || push_data.action_type == 'product' || push_data.action_type == 'filtered'">
+                <span class="size2of12 attribute"></span>
+                <span class="size8of12 attribute">
+                    <span>Action Data: </span>
+                    <span ng-show="push_data.action_type == 'profile'">
+                        <select chosen  class="chosen-profile"></select>
+                    </span>
+                    <span ng-show="push_data.action_type == 'product'">
+                        <select chosen  class="chosen-product"></select>
+                    </span>
+                    <span ng-show="push_data.action_type =='filtered'">
+                            <div id="shop" class="accordion_item">
+                                <h6>Shop</h6>
+                                <div class="accordion_item_inner">
+                                    <ul class="filter_options_list">
+                                        <li class="filter_option_item" ng-repeat="s in [{'value':'designer','name':'designer'}
+                                        ,{'value':'market', 'name':'market'}
+                                        ,{'value':'curated', 'name':'curated'}
+                                        ,{'value':'brand', 'name':'brand'}
+                                        ,{'value':'highstreet', 'name':'highstreet'}]">
+                                            <input class="shop_option filled-in" data-name="shop" data-ids="[[s.value]]" type="checkbox" id="shop_[[s.name]]"/>
+                                            <label for="shop_[[s.name]]">[[s.name]]</label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div id="collection" class="accordion_item closed">
+                                <h6 data-name="collection">Collection<a class="clear_btn is_hidden" href="">Clear</a></h6>
+                                <div class="accordion_item_inner">
+                                    <ul class="filter_options_list">
+                                        <li class="filter_option_item" ng-repeat="c in collection">
+                                            <input class="collection_option filled-in" data-name="collection" data-ids="[[c.name]]" type="radio" name="group1" id="collection_[[c.name]]"/>
+                                            <label for="collection_[[c.name]]">[[c.name]]</label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div id="category" class="accordion_item">
+                                <h6 data-name="product_category">Category<a class="clear_btn is_hidden" href="">Clear</a></h6>
+                                <div class="accordion_item_inner">
+                                    <ul class="filter_options_list content">
+                                        <li class="accordion_item open" ng-repeat="c in product_category">
+                                            <span class="filter_option_item parent">
+                                                <!-- <input class="cat_option filled-in" type="checkbox" id="pc_[[c.name]]" /> -->
+                                                <label for="pc_[[c.name]]"><b>[[c.name]]</b></label>
+                                                <!-- <h6 class="expand">\/</h6> -->
+                                            </span>
+                                            <div class="accordion_item_inner">
+                                                <ul class="filter_options_list">
+                                                    <li class="filter_option_item" ng-repeat="s in c.value">
+                                                        <input class="subcat_option filled-in" data-name="product_category" data-ids="[[s.id]]" type="checkbox" id="pc_[[s.name]]" />
+                                                        <label for="pc_[[s.name]]">[[s.name]]</label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div id="size" class="accordion_item closed">
+                                <h6 data-name="size">Size<a class="clear_btn is_hidden" href="">Clear</a></h6>
+                                <div class="accordion_item_inner">
+                                    <ul class="filter_options_list">
+                                        <li class="filter_option_item" ng-repeat="s in size">
+                                            <input class="size_option filled-in" data-name="size" data-ids="[[s.value]]" type="checkbox" id="size_[[s.name]]"/>
+                                            <label for="size_[[s.name]]">[[s.name]]</label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div id="price" class="accordion_item closed">
+                                <h6 data-name="price">Price</h6>
+                                <div class="accordion_item_inner">
+                                    <ul class="filter_options_list">
+                                        <li class="filter_option_item min_price">
+                                            <div class="input-field">
+                                                <select class="minprice" ng-model="startValue" ng-options="i as i.start_value for i in price.price" id="sprice">
+                                                    <option value="" disabled selected>Min. Price</option>
+                                                </select>
+                                            </div>
+                                        </li>
+                                        <li class="filter_option_item max_price">
+                                            <div class="input-field">
+                                                <select class="maxprice" ng-model="endValue" ng-options="i as i.end_value for i in price.price" id="eprice">
+                                                    <option value="" disabled selected>Max. Price</option>
+                                                </select>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div id="discount" class="accordion_item closed">
+                                <h6 data-name="price">Discount<a class="clear_btn is_hidden" href="">Clear</a></h6>
+                                <div class="accordion_item_inner">
+                                    <ul class="filter_options_list">
+                                        <li class="filter_option_item" ng-repeat="d in disc">
+                                            <input data-ids="[[d.id]]" class="disc_option filled-in" data-name="disc" type="checkbox" id="disc[[d.id]]" />
+                                            <label for="disc[[d.id]]">[[d.value]]</label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div id="brands" class="accordion_item closed">
+                                <h6 data-name="brand">Brand<a class="clear_btn is_hidden" href="">Clear</a></h6>
+                                <div class="accordion_item_inner">
+                                    <ul class="filter_options_list">
+                                        <li class="filter_option_item" ng-repeat="b in brand">
+                                            <input class="brand_option filled-in" data-name="brand" data-ids="[[b.id]]" type="checkbox" id="[[b.name]]" />
+                                            <label for="[[b.name]]">[[b.name]]</label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div id="condition" class="accordion_item closed">
+                                <h6 data-name="condition">Condition<a class="clear_btn is_hidden" href="">Clear</a></h6>
+                                <div class="accordion_item_inner">
+                                    <ul class="filter_options_list">
+                                        <li class="filter_option_item" ng-repeat="c in condition">
+                                            <input class="condition_option filled-in" data-name="condition" data-ids="[[c.id]]" type="checkbox" id="[[c.value]]" />
+                                            <label for="[[c.value]]">[[c.value]]</label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div id="age" class="accordion_item closed">
+                                <h6 data-name="age">Age<a class="clear_btn is_hidden" href="">Clear</a></h6>
+                                <div class="accordion_item_inner">
+                                    <ul class="filter_options_list">
+                                        <li class="filter_option_item" ng-repeat="a in age">
+                                            <input class="age_option filled-in" data-name="age" data-ids="[[a.id]]" type="checkbox" id="[[a.value]]" />
+                                            <label for="[[a.value]]">[[a.value]]</label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div id="style" class="accordion_item closed">
+                                <h6 data-name="style">Style<a class="clear_btn is_hidden" href="">Clear</a></h6>
+                                <div class="accordion_item_inner">
+                                    <ul class="filter_options_list">
+                                        <li class="filter_option_item" ng-repeat="s in style">
+                                            <input class="style_option filled-in" data-name="style" data-ids="[[s.id]]" type="checkbox" id="[[s.name]]" />
+                                            <label for="[[s.name]]">[[s.name]]</label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div id="color" class="accordion_item closed">
+                                <h6 data-name="color">Color<a class="clear_btn is_hidden" href="">Clear</a></h6>
+                                <div class="accordion_item_inner">
+                                    <ul class="filter_options_list">
+                                        <li class="filter_option_item" ng-repeat="c in color">
+                                            <input class="color_option filled-in" data-name="color" data-ids="[[c.id]]" type="checkbox" id="[[c.name]]" />
+                                            <label for="[[c.name]]">[[c.name]]</label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div id="ocassion" class="accordion_item closed">
+                                <h6 data-name="occasion">Ocassion<a class="clear_btn is_hidden" href="">Clear</a></h6>
+                                <div class="accordion_item_inner">
+                                    <ul class="filter_options_list">
+                                        <li class="filter_option_item" ng-repeat="o in occasion" ng-if="o.count">
+                                            <input type="checkbox" class="occasion_option filled-in" data-name="occasion" data-ids="[[o.id]]" id="[[o.name]]" />
+                                            <label for="[[o.name]]">[[o.name]]</label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div id="ocassion" class="accordion_item closed">
+                                <h6 data-name="occasion">Campaign</h6>
+                                <div class="accordion_item_inner">
+                                    <ul class="filter_options_list">
+                                    <form id="myForm">
+                                        <li class="filter_option_item" ng-repeat="o in campaign">
+                                            <input type="radio" class="campaign_option" name="campaign" data-ids="[[o.id]]" id="camp_[[o.id]]" />
+                                            <label for="camp_[[o.id]]">[[o.name]]</label>
+                                        </li>
+                                    </form>
+                                    </ul>
+                                </div>
+                            </div>
+                    </span>
+                </span>
+                </div>
+
+                <span class="size2of12 attribute"></span>
+                <span class="size8of12 attribute">
+                    <span>Image: </span>
+                    <span>
+                        <input type="file" id="img2" onchange="readURL(this);">
+                        <img id="blah" src="#" alt="your image" class="is_hidden"/>
+                    </span>
+                </span>
+
+                <span class="size2of12 attribute">
+                </span>
+                <span class="size8of12 attribute">
+                    <button type="button" ng-click="send_push_data(push_data, true)">GET BRANCH.IO URL FOR CLEVERTAP</button>
+                    <p>[[branch_url]]</p>
+                    <textarea ng-model="json_data" ng-if="json_data" style="max-width: 100%;"></textarea>
+                </span>
+
+
+                <span class="size2of12 attribute"></span>
+                <span class="size8of12 attribute">
+                  <span>Message: </span>
+                            <span><textarea ng-model="push_data.text" required></textarea></span>
+                </span>
+
+                <span class="size2of12 attribute"></span>
+                <span class="size8of12 attribute">
+                  <span>Title: </span>
+                            <span><textarea ng-model="push_data.title" required></textarea></span>
+                </span>
+
+                <span class="size2of12 attribute"></span>
+                <span class="size8of12 attribute">
+                    <span>Time ToSend: </span>
+                    <span><input id="datetimepicker" style="width: 80%;" /></span>
+                </span>
+                
+                <div ng-show="push_data.marketing_action=='profile' || push_data.marketing_action=='product'">
+                    <span class="size2of12 attribute"></span>
+                    <span class="size8of12 attribute">
+                      <span>Now Select [[push_data.marketing_action]]: </span>
+                                <span><select ng-model="push_data.target_id"
+                            ng-options="i.id as i.name for i in action_datas" required>
+                          </select></span>
+                    </span>
+                </div>
+                <span class="size2of12 attribute"></span>
+                <span class="size8of12 attribute">
+                  <span>Send To: </span>
+                            <span>
+                      <select ng-init="push_data.type='selectedUsers'" ng-model="push_data.type">
+                        <option value="selectedUsers">Selected Users</option>
+                        <option value="zapyleTeam">Zapyle Team</option>
+                        <option value="AllUsers">All Users</option>  
+                        <option value="iosUsers">IOS Users</option>  
+                        <option value="androidUsers">Android Users</option>  
+                      </select>
+                    </span>
+                </span>
+                <span class="size2of12 attribute"></span>
+                <span ng-init="push_data.users=[]" ng-if="push_data.type!='selectedUsers'"></span>
+                <span class="size8of12 attribute" ng-if="push_data.type=='selectedUsers'">
+                  <span>Users: </span>
+                            <span>
+                      <select ng-model="push_data.users" multiple style="height: 200px;"
+                        ng-options="i.id as i.name for i in zapusers" ng-required="push_data.type=='selectedUsers'">
+                      </select>[[selectedUsers]]
+                    </span>
+                </span>
+                <span class="size2of12 attribute"></span>
+                <span class="size8of12 attribute">
+                    <span>
+                        <input type="submit" value="Send Push Notification [[push_data.ctap == true ? 'by Clevertap' : 'by Zapyle']]" id="push_button">
+                        <input type="checkbox" name="clever" value="Clevertap" ng-model="push_data.ctap">Clevertap 
+                    </span>
+                </span>
+            </div>
+        </form>
+    </div>
+    <hr>
+    <input id="349" type="radio" name="gender" value="other" ng-click="mk_type='email'"> <label for="349"><b>Email Notification</b> </label>
+    <div ng-show="mk_type=='email'">
+
+        <form ng-submit="send_email(email)">
+            <div>
+                <span class="size2of12 attribute"></span>
+                <span class="size8of12 attribute">
+                    <span>From: </span>
+                        <span>
+                            <input type="email" ng-model="email.from" required>
+                        </span>
+                </span>
+                <span class="size2of12 attribute"></span>
+                <span class="size8of12 attribute">
+                  <span>Subject: </span>
+                            <span>
+                      <input type="text" ng-model="email.subject" required>
+                    </span>
+                </span>
+                <span class="size2of12 attribute"></span>
+                <span class="size8of12 attribute">
+                  <span>Template Name: </span>
+                            <span>
+                      <input type="text" ng-model="email.template">
+                    </span>
+                </span>
+                <div ng-hide="email.template">
+                    <span class="size2of12 attribute"></span>
+                    <span class="size8of12 attribute">
+                        <span>Message: </span>                       
+                        <span><textarea ng-model="email.message"></textarea></span>
+                    </span>
+                </div>
+                <!-- <span class="size2of12 attribute"></span>
+                <span class="size8of12 attribute">
+                    <span>Time ToSend: </span>
+                    <span><input id="datetimepicker" style="width: 80%;" /></span>
+                </span> -->
+                <span class="size2of12 attribute"></span>
+                <span class="size8of12 attribute">
+                  <span>Send To: </span>
+                            <span>
+                      <select ng-init="email.type='selectedUsers'" ng-model="email.type">
+                        <option value="selectedUsers">Selected Users</option>
+                        <option value="AllUsers">All Users</option>
+                        <option value="RawValue">Raw List of Users</option>
+                        <option value="RegisteredAndSubscriber">Registered and Suscribers</option>
+                        
+                      </select>
+                    </span>
+                </span>
+                <span class="size2of12 attribute"></span>
+                <span ng-init="email.users=[]" ng-if="email.type!='selectedUsers'"></span>
+                <span class="size8of12 attribute" ng-if="email.type=='selectedUsers'">
+                  <span>Users: </span>
+                            <span>
+                      <select ng-model="email.users" multiple
+                        ng-options="i.id as i.name for i in zapusers" ng-required="email.type=='selectedUsers'">
+                      </select>[[selectedUsers]]
+                    </span>
+                </span>
+                <span class="size2of12 attribute"></span>
+                <span ng-if="email.type=='RawValue'"></span>
+                <span class="size8of12 attribute" ng-if="email.type=='RawValue'">
+                  <span>Raw List of users: </span>
+                            <span><textarea ng-model="email.raw_users" ng-required="email.type=='RawValue'"></textarea></span>
+                </span>
+
+                <span class="size2of12 attribute"></span>
+                <span class="size8of12 attribute">
+                    <span><input type="submit" value="Send Email" id="email_button"> </span>
+                </span>
+            </div>
+        </form>
+    </div>
+
+    <script>
+                
+        $(document).ready(function () {
+
+            // $(".chosen-select1").chosen({ width:"95%" });
+            // $(".chosen-select1").chosen()
+            // $('.chosen-container').css({'margin-top': '-30px', 'margin-left': '100px'}) 
+            
+
+            $("#datetimepicker").kendoDateTimePicker({
+                format: "yyyy/MM/dd hh:mm tt",
+    // timeFormat: "HH:mm",
+    interval: 30
+            });
+
+            
+        });
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    var d = document.getElementById("blah");
+                    d.className = "";
+                    $('#blah')
+                        .attr('src', e.target.result)
+                        .width(50)
+                        .height(50);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+
+
+<!-- <div class="pri-overlay crop-image is_visible">
+    <div class="content">
+        <div class="header">Image Upload</div>
+        <div class="body">
+            <div class="container" ng-init="show_crop=false">
+                    <input type="file" id="img2" name="img2"/>
+                    <input type="submit" ng-click="marketing_image_upload()" name="submit" value="Upload" />
+            </div>
+        </div>
+    </div>
+</div>-->
+<style>
+    header {
+    position: relative;
+    height: 50px;
+}
+.header_inner {
+    background: #fff none repeat scroll 0 0;
+    padding: 14px 0;
+    position: absolute;
+    width: 100%;
+    z-index: 2;
+    transition: all 0.5s ease 0s;
+}
+.header_inner::after {
+    clear: both;
+    content: " ";
+    display: table;
+}
+header .logo {
+    float: left;
+    padding: 0 15px;
+}
+header.is_fixed .header_inner {
+    box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    z-index: 2;
+}
+.left.menu .menu_inner {
+    left: -300px;
+    max-width: 300px;
+    position: fixed;
+    top: 50px;
+    transition: all 0.5s ease 0s;
+    width: 20%;
+    background: #fff;
+    height: 100%;
+    z-index: 10;
+}
+.secondary.menu .search:before {
+    content: 'Search';
+}.secondary.menu .tote:before {
+    content: 'Tote';
+}.secondary.menu .login:before {
+    content: 'Login';
+}
+@media screen and (max-width: 45em) {
+    .left.menu .menu_inner {
+        left: -100%;
+        max-width: none;
+        text-align: center;
+        width: 80%;
+    }
+    .secondary.menu a {
+        display: inline-block;
+       font-family: 'ZapFont';
+       font-style: normal;
+       font-weight: normal;
+       line-height: 1;
+       -webkit-font-smoothing: antialiased;
+       -moz-osx-font-smoothing: grayscale;
+    }
+    .secondary.menu .search:before {
+        content:'\0046';
+    }.secondary.menu .tote:before {
+        content:'\0044';
+    }.secondary.menu .login:before {
+        content:'\0071';
+    }
+}
+.is_visible.menu .menu_inner {
+    left: 0 !important;
+}
+.glass {
+    background: #000 none repeat scroll 0 0;
+    display: none;
+    height: 100%;
+    left: 0;
+    opacity: 0.75;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: -1;
+}
+.right_panel .glass {
+    z-index: 1;
+}
+.confined.glass {
+    position: absolute;
+}
+.stick_to_left .glass, .is_visible .glass, .stick_to_right .glass {
+    display: block;
+}
+.menu li {
+    display: inline-block;
+    padding: 0 10px;
+}
+.left.menu li {
+    display: block;
+}
+.primary.menu {
+    float: left;
+}
+@media screen and (max-width: 30em) {
+    .primary.menu {
+        display: none;
+    }
+}
+.secondary.menu {
+    float: right;
+}
+.right_panel.is_visible {
+    width: 100%;
+}
+.right_panel_inner {
+    background: #fff none repeat scroll 0 0;
+    height: calc(100% - 50px);
+    max-width: 500px;
+    position: fixed;
+    right: -35%;
+    top: 50px;
+    transition: all 0.5s ease 0s;
+    width: 35%;
+    z-index: 10;
+}
+.is_visible .right_panel_inner {
+    right: 0;
+}
+.right_panel_inner .close_btn {
+    background: rgba(0, 0, 0, 0.2) none repeat scroll 0 0;
+    color: #fff;
+    cursor: pointer;
+    display: none;
+    height: auto !important;
+    left: -35px;
+    line-height: 30px;
+    position: absolute;
+}
+.is_visible .right_panel_inner .close_btn {
+    display: block;
+    right: unset;
+}
+@media screen and (max-width: 45em) {
+    .right_panel_inner {
+        height: 100%;
+        max-width: none;
+        right: -100%;
+        top: 0;
+        width: 100%;
+    }
+    .right_panel_inner .close_btn {
+        left: auto;
+        right: 0;
+        z-index: 3;
+    }
+}
+.right_panel_inner > div {
+    display: none;
+    height: 100%;
+}
+.parallax-container {
+    height: 100px;
+}
+ul {
+    margin: 0;
+}p {
+    margin: 10px 0;
+}.is_visible {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+/************************************* SEARCH ******************************************************************/
+.search_box input {
+    margin: 0 !important;
+}.search_box > a {
+    padding: 10px 5px;
+    position: absolute;
+    right: 0;
+}
+.suggestion {
+    padding: 10px;
+    font-size: 14px;
+}
+.suggestion::after {
+    clear: both;
+    content: " ";
+    display: table;
+}
+.filter_suggestions {
+    margin-bottom: 10px;
+}
+.filter_suggestions .suggestion {
+    border-bottom: 1px solid rgba(215, 215, 215, 0.5);
+}
+.suggestion .use_this::before {
+    content: "\0041";
+    display: inline-block;
+    font-family: ZapFont;
+    transform: rotate(235deg);
+}
+.suggestion .use_this {
+    color: rgb(215, 215, 215);
+    cursor: pointer;
+    padding: 0 5px;
+    position: absolute;
+    right: 0;
+}
+.search_suggestions #products, .search_suggestions #closets {
+    max-height: 100%;
+    overflow: auto;
+    position: absolute;
+    width: 100%;
+}
+.product_suggestions .suggestion, .closet_suggestions .suggestion {
+    background: #f9f9f9 none repeat scroll 0 0;
+    margin: 10px 0;
+    font-size: 12px;
+}
+.suggestion img {
+    float: left;
+    margin-right: 10px;
+    width: 25%;
+}
+.suggestion h6 {
+    margin: 0;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+.suggestion p {
+    margin: 5px 0;
+}
+.price.old {
+    color: #999;
+    padding: 0 10px;
+    text-decoration: line-through;
+}
+.closet_handle::before {
+    content: "@";
+}.closet_handle {
+    margin: 0;
+    font-size: 14px !important;
+    font-weight: normal;
+}
+.products_count::after {
+    content: " PRODUCTS";
+}.admirers_count::after {
+    content: " ADMIRERS";
+}.admiring_count::after {
+    content: " ADMIRING";
+}
+.admirers_count {
+    padding: 0 10px;
+}
+.admire_button {
+    background: #f37374 none repeat scroll 0 0;
+    color: #fff;
+    padding: 5px 10px;
+}
+
+/****************************************************** Login ********************************************************/
+#login_options {
+    padding: 70px 0;
+    text-align: center;
+}#login_options .message {
+    padding: 20px 30px;
+}#login_options .options {
+    margin: 50px 0;
+}#login_options a {
+    color: #fff;
+    display: block;
+    margin: 0px auto;
+    padding: 15px;
+    width: 80%;
+}#login_options .facebook > a {
+    background: rgb(57, 87, 157) none repeat scroll 0 0;
+}#login_options .instagram > a {
+    background: rgb(148, 85, 176) none repeat scroll 0 0;
+}#login_options .email > a {
+    background: #f37374 none repeat scroll 0 0;
+    display: inline-block;
+    margin: 0 2%;
+    width: 38%;
+}
+.input-field {
+    width: 90%;
+    margin: 0 auto;
+}.input-field.submit {
+    margin: 2rem auto;
+}[class*="_input"] {
+    display: block;
+    padding-bottom: 1rem !important;
+}.text_input {
+    display: block;
+    margin: 0 auto;
+    position: relative;
+}.date_input input {
+    cursor: pointer;
+}.radio_input {
+    padding: 3px 0;
+}.input-field.radio label {
+    cursor: pointer;
+    left: 0;
+    position: relative;
+    top: 0;
+}.input-field.checkbox label {
+    position: relative;
+    top: 0;
+    vertical-align: top;
+}
+.input-field label {
+    color: #a7a9ac;
+    font-size: 14px;
+    letter-spacing: 0.1rem;
+    margin: 0 auto;
+    text-transform: uppercase;
+}.text_input input {
+    height: 2.5rem;
+    padding: 0 !important;
+}.show_hide {
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 0.75rem;
+}.radio li {
+    cursor: pointer;
+    display: inline-block;
+    margin-right: 30px;
+}.radio.inline li {
+    margin-right: 10px;
+}
+.radio .box, .check_box {
+    border: 1px solid #d5d5d5;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 0;
+    height: 18px;
+    margin-right: 5px;
+    text-align: center;
+    vertical-align: bottom;
+    width: 18px;
+}.radio .box > span, .check_box > span {
+    background: #f37374 none repeat scroll 0 0;
+    display: none;
+    height: 12px;
+    margin-top: 2px;
+    vertical-align: top;
+    width: 12px;
+}.radio .is_selected .box > span, .check_box.is_selected > span {
+    display: inline-block;
+}
+.input_error {
+    color: #ff0000;
+    display: none;
+    font-size: 0.7rem;
+    letter-spacing: 0;
+    padding-left: 10px;
+    text-transform: capitalize;
+}.error input, .error textarea {
+    border-color: #ff0000 !important;
+    box-shadow: 0 1px 0 0 #ff0000 !important;
+}.error .input_error {
+    display: inline;
+}.input-field.error label {
+  color: #ff0000 !important;
+  font-size: 0.75rem;
+  -webkit-transform: translateY(-160%);
+          transform: translateY(-160%);
+  z-index: 0;
+}
+
+/************************************************** LAYOUT ************************************************************/
+.size0of12, .mobile_only .size0of12 {
+    width: 0;
+    margin: 0;
+    overflow: hidden;
+}
+.size12of12, .mobile_only .size12of12 {
+    width: 100%;
+}
+.size4of12, .mobile_only .size4of12 {
+    display: inline-block;
+    vertical-align: top;
+    width: 33%;
+}
+.size6of12, .mobile_only .size6of12 {
+    display: inline-block;
+    font-size: 1rem;
+    margin-right: 2% !important;
+    width: 49%;
+}.size6of12:nth-of-type(2n) {
+    margin-right: 0 !important;
+}
+.size8of12, .mobile_only .size8of12 {
+    display: inline-block;
+    vertical-align: top;
+    width: 66%;
+}
+@media screen and (max-width: 45em) {
+    .size4of12, .size6of12, .size8of12 {
+        padding: 10px;
+        width: 100%;
+    }
+}
+.center_size8of12 {
+    margin: 0 auto;
+    width: 66.6%;
+}.center_size6of12 {
+    margin: 0 auto;
+    width: 50%;
+}
+/************************************************** GENERAL ************************************************************/
+a, button {
+    cursor: pointer;
+}
+.show5inrow .product_item {
+    margin: 0 1% !important;
+    width: 18%;
+}.show5inrow .product_item:nth-of-type(5n) {
+    margin-right: 0 !important; 
+}
+.show2inrow .product_item {
+    margin: 0 2% !important;
+    width: 46%;
+}.show2inrow .product_item:nth-of-type(2n) {
+    margin-right: 0 !important; 
+}
+.bottom {
+    bottom: 0;
+    vertical-align: bottom;
+}
+.fixed {
+    position: fixed;
+}.absolute {
+    position: absolute;
+    z-index: 0;
+}.relative {
+    position: relative !important;
+}.relative::after {
+    clear: both;
+    content: " ";
+    display: table;
+}
+.is_hidden {
+    display: none !important;
+}.hidden_banks.is_hidden {
+    display: none !important;
+}
+.center_align {
+    margin: 0 auto;
+    text-align: center;
+}
+.block {
+    display: block !important;
+}
+.inline {
+    font-size: 0 !important;
+}.inline * {
+    font-size: initial;
+}
+.inline > * {
+    display: inline-block;
+    vertical-align: top;
+}.inline .inline {
+    margin-right: 10px;
+}.inline > label {
+    margin-right: 5px;
+}
+.inline > label + div {
+    float: right;
+}
+.full_width {
+    width: 100%;
+}.full_height {
+    height: 100%;
+}
+.input-field.inline {
+    margin-bottom: 5px;
+}
+.input-field.inline [class*="_input"] {
+    float: right;
+    border: 0;
+}.input-field.inline [class*="_input"] input {
+    border: 0;
+    height: 2rem;
+}
+.input-field.inline::after {
+    clear: both;
+    content: " ";
+    display: table;
+}
+.input-field.inline .text_input > input {
+    border-bottom: 1px solid #9e9e9e;
+}
+input {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: -moz-use-text-color -moz-use-text-color #e5e5e5;
+    border-image: none;
+    border-style: none none solid;
+    border-width: 0 0 1px;
+    padding: 10px;
+}
+ul.list li {
+    list-style-type: disc;
+}
+.btn.small {
+    height: auto;
+    letter-spacing: unset;
+    line-height: unset;
+    padding: 4px 8px;
+}
+.close.btn-flat {
+    background: #000 none repeat scroll 0 0;
+    border-radius: 0;
+    box-shadow: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+}.btn_link {
+    font-size: 14px;
+    text-decoration: underline;
+}.inverse_btn {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: 2px solid;
+    box-shadow: none;
+    color: #f37374;
+    font-weight: bold;
+    line-height: 40px;
+    padding: 10px 20px;
+}
+h2.title {
+    font-size: 24px;
+    margin: 10px 0 20px;
+}
+h3.title {
+    font-size: 2.25rem;
+    margin: 2rem 0 1rem;
+}
+h6.title {
+    font-weight: bold;
+    line-height: 20px;
+}
+[class*="_btn"] {
+    cursor: pointer;
+}
+.uppercase {
+    text-transform: uppercase;
+}.very_small {
+    font-size: 11px;
+}.small {
+    font-size: 12px;
+}.italic {
+    font-style: italic;
+}
+.mobile_only {
+    display: none;
+}.web_only {
+    display: block;
+}
+@media screen and (max-width: 45em) {
+    .mobile_only {
+        display: block;
+    }.web_only {
+        display: none;
+    }
+}
+.icon_top::before {
+    color: #f37374;
+    display: block !important;
+    font-size: 54px;
+    margin: 10px 0;
+}
+/************************************************ SCROLL BARS ***************************************************/
+.custom_scroll {
+    overflow: hidden;
+}
+.custom_scroll_inner {
+    padding-right: 15px;
+}
+.iScrollVerticalScrollbar {
+    bottom: 2px;
+    position: absolute;
+    right: 1px;
+    top: 2px;
+    width: 7px;
+    z-index: 9999;
+}
+.custom_scroll:hover > .iScrollVerticalScrollbar {
+    opacity: 1 !important;
+}
+/*.iScrollHorizontalScrollbar {
+    bottom: 2px;
+    position: absolute;
+    right: 1px;
+    top: 2px;
+    height: 7px;
+    z-index: 9999;
+}*/
+.iScrollIndicator {
+    background: rgba(0, 0, 0, 0.2) none repeat scroll 0 0;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-sizing: border-box;
+    position: absolute;
+    width: 100%;
+}
+/************************************************** LAYOUT ************************************************************/
+.page_content {
+    margin: 0 auto;
+    max-width: 1200px;
+    position: relative;
+}
+/************************************************** PROFILE ************************************************************/
+#my_profile {
+    height: calc(100% - 3rem);
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+#my_profile .edit_link {
+    left: 10px;
+    position: absolute;
+    right: auto;
+    top: 5px;
+    z-index: 1;
+}
+.avatar::before {
+    background: rgba(0, 0, 0, 0) url("popup3.jpg") no-repeat scroll center center / cover ;
+    content: " ";
+    filter: blur(15px) contrast(150%);
+    height: calc(100% + 40px);
+    left: -20px;
+    position: absolute;
+    top: -20px;
+    width: calc(100% + 40px);
+    z-index: -1;
+}
+.avatar {
+    border-bottom: 1px solid #d5d5d5;
+    color: #000;
+    overflow: hidden;
+    padding: 20px 0 15px;
+    position: relative;
+    text-align: center;
+}.avatar img {
+    border-radius: 100%;
+    height: 100px;
+    width: 100px;
+}#my_profile .closet_stats {
+    font-size: 12px;
+    padding: 10px 0 0;
+}#my_profile .description {
+    padding: 10px 30px;
+    line-height: 1.2rem;
+}
+.description .input-field {
+    margin-top: 10px !important;
+}
+.description .empty_state label {
+    letter-spacing: 0.2px;
+    text-transform: none;
+}
+.description button {
+    bottom: 10px;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    transition: all 0.5s ease 0s;
+    visibility: hidden;
+}
+.description textarea {
+    padding-bottom: 20px !important;
+}
+.data_tabs {
+    overflow: auto;
+}
+.data_tabs > div {
+    border-bottom: 1px solid #d5d5d5;
+}.data_tabs > div a {
+    display: block;
+    font-size: 14px;
+    height: 3.2rem;
+    line-height: 2rem;
+    padding: 10px 2rem;
+}
+.right_panel_inner .fixed.full_width {
+    max-width: 400px;
+    width: 25%;
+}
+.screen_header {
+    background: #58595b none repeat scroll 0 0;
+    color: #fff;
+    height: 3rem;
+    overflow: hidden;
+    padding: 0.8rem 0 !important;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 100%;
+}.screen_back {
+    padding: 0.8rem;
+    left: 0;
+    position: absolute;
+    top: 0;
+    cursor: pointer;
+}
+.screen_title {
+    text-transform: uppercase;
+}.screen_content {
+    height: calc(100% - 6rem);
+    margin: 3rem 0;
+    overflow: auto;
+    position: relative;
+}.screen_content.no_footer {
+    height: calc(100% - 3rem);
+}.screen_content.give_padding {
+    padding: 10px;
+}.screen_footer {
+    background: #fff;
+    bottom: 0;
+    height: 3rem;
+    position: absolute;
+    width: 100%;
+}
+.empty_state, .initial_state {
+    display: none;
+    text-align: center;
+    vertical-align: top;
+    width: 100%;
+}
+.empty_state .content, .initial_state .content {
+    display: block;
+    height: 70%;
+    padding: 50px 10px;
+    width: 100%;
+}
+.empty .empty_state, .initial .initial_state {
+    display: inline-block !important;
+}
+.right_panel_inner .empty > *, .right_panel_inner .initial > * {
+    display: none;
+}
+.empty .screen_content_inner, .initial .screen_content_inner {
+    display: none;
+}.empty + .screen_footer {
+    display: none;
+}
+#my_info [class*="_input"] {
+    padding: 0 !important;
+}
+#my_info .radio label, #my_info .dropdown label {
+    font-size: 0.75rem;
+    margin: 0.5rem 0;
+}.gender > label {
+    font-size: 0.85rem !important;
+}#my_info .select-wrapper {
+    margin-top: 2rem;
+}
+.screen_content .admirers_list, .screen_content .admiring_list {
+    padding: 15px 10px 10px;
+}
+.admirers_list .admirer_item, .admiring_list .admiring_item {
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 10px;
+    padding: 0 10px;
+}
+
+/**************************************** NOTIFICATIONS ****************************************/
+.notification a::after {
+    color: #a7a9ac;
+    content: "\0041";
+    font-family: "ZapFont";
+    position: absolute;
+    right: 20px;
+    top: calc(50% - 1rem);
+}.notification a {
+    border-bottom: 1px solid #e5e5e5;
+    color: #000;
+    padding: 20px 60px 20px 20px;
+    display: block;
+    position: relative;
+}.notification.unread a {
+    color: #f37374;
+}
+/************************************* MY WALLET ***************************************************/
+#my_wallet .screen_content {
+    text-align: center;
+}
+.available_cash {
+    font-size: 36px;
+}
+.wallet_details {
+    border-bottom: 1px solid #e5e5e5;
+    margin: 20px;
+    padding: 20px 0;
+}
+.all_caps {
+    text-transform: uppercase;
+}
+.invite h6 {
+    margin: 0 0 25px;
+}
+.invite {
+    border-bottom: 1px solid #e5e5e5;
+    margin: 20px;
+    padding: 10px 0 20px;
+}
+.referral_url {
+    margin: 20px;
+}
+.referral_url input {
+    border: 0 none !important;
+    height: 2rem !important;
+    margin: 0 !important;
+    width: 80% !important;
+}
+.referral_url button {
+    font-size: 14px;
+    height: 2rem;
+    line-height: 1rem;
+    padding: 0;
+    text-align: center;
+    width: 20%;
+}
+.referral_url .input-field {
+    background: #f5f5f5 none repeat scroll 0 0;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    padding: 5px 15px;
+    width: 95%;
+}
+.promt {
+    color: #a7a9ac;
+    font-size: 12px;
+    margin: 10px;
+}
+.share_url {
+    background: #f5f5f5 none repeat scroll 0 0;
+    height: 3rem;
+    left: 0;
+    padding: 0.5rem 0;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    transition: all 0.5s ease 0s;
+    width: 100%;
+}
+.show_share_options .share_url {
+    top: -3rem;
+}
+.share_url > a {
+    margin: 0 10px;
+}
+
+/************************************* MY ADDRESSES ***************************************************/
+.address_item {
+    border: 1px solid #e5e5e5;
+    margin: 1rem;
+    padding: 1rem;
+    position: relative;
+}.address_item * {
+    font-size: 14px;
+}.address_item .name {
+    font-weight: bold;
+}.address_item .phone:before {
+    content: ' - ';
+}
+/********************************************** BANK ACCOUNT *****************************************/
+.account_data {
+    border: 1px solid #e5e5e5;
+    margin: 1rem;
+    padding: 1rem;
+    position: relative;
+}.account_data div {
+    font-size: 14px;
+    margin-bottom: 10px;
+}.edit_link {
+    color: #000;
+    font-size: 12px;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+}#my_bank_account .empty_state {
+    text-align: center;
+}.info {
+    font-size: 12px;
+    padding: 30px 0;
+    text-align: center;
+    width: 70%;
+}.empty_state .message {
+    padding: 150px 0 50px;
+    text-align: center;
+    width: 60%;
+}
+/************************************************** MY ORDERS ************************************************/
+.order_item {
+    border-bottom: 1px solid #e5e5e5;
+    padding: 20px;
+    position: relative;
+}.order_item::after {
+    clear: both;
+    content: " ";
+    display: table;
+}.order_item > img {
+    float: left;
+    margin-right: 10px;
+    width: 30%;
+}.order_item .title {
+    margin: 0;
+    text-transform: uppercase;
+}.date > div {
+    font-size: 12px;
+}.status > div {
+    color: #f37374;
+    font-size: 14px;
+    font-weight: bold;
+}.see_details {
+    position: absolute;
+    right: 20px;
+    top: calc(50% - 1rem);
+}
+
+.step_item {
+    margin-left: 30px;
+    padding: 0 20px 20px 30px;
+    position: relative;
+}.step_item .description {
+    color: #a7a9ac;
+    font-size: 12px;
+}.step_item.current .order_status {
+    color: #f37374;
+    font-weight: bold;
+}
+.step_item > div > span {
+    display: none;
+}.step_item .yet_to_do_text {
+    display: block;
+}.step_item.done .yet_to_do_text, .step_item.current .yet_to_do_text {
+    display: none;
+}.step_item.current .current_text {
+    display: block;
+}.step_item.done .done_text {
+    display: block;
+}
+.step_item .indicator {
+    background: #a7a9ac none repeat scroll 0 0;
+    border-radius: 100%;
+    height: 20px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 20px;
+    z-index: 1;
+}.step_item .connector {
+    background: #a7a9ac none repeat scroll 0 0;
+    height: 100%;
+    left: 8px;
+    position: absolute;
+    top: 10px;
+    width: 4px;
+}.step_item.done .indicator {
+    background: #f37374 none repeat scroll 0 0;
+}.step_item.done .connector {
+    background: #f37374 none repeat scroll 0 0;
+}.step_item.current .indicator {
+    background: #f37374 none repeat scroll 0 0;
+}.step_item:last-child .connector {
+    display: none !important;
+}
+#order_details .product_details {
+    background: #f5f5f5 none repeat scroll 0 0;
+    padding: 10px 20px;
+}#order_details .product_details .title {
+    text-transform: uppercase;
+}.order_details {
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 20px;
+    padding: 10px 20px 20px;
+}.details_list {
+    font-size: 0;
+}.detail_item {
+    margin-bottom: 10px;
+}
+/************************************************** CART ********************************************************************/
+#cart .summary {
+    font-size: 16px;
+    padding: 10px;
+}
+#cart .summary > div {
+    display: inline-block;
+}
+#cart .summary > div:last-child {
+    float: right;
+}
+#cart .summary .total_price {
+    font-weight: bold;
+}
+#cart .product_item {
+    background: #f5f5f5 none repeat scroll 0 0;
+    margin: 0 0 10px;
+    overflow: hidden;
+    padding: 10px;
+    width: 100%;
+}
+#cart .product_item {
+    background: #f5f5f5 none repeat scroll 0 0;
+    margin-bottom: 10px;
+    overflow: hidden;
+    padding: 10px;
+}
+.inline .image > img {
+    width: 90%;
+}
+.product_item .title {
+    margin: 0 0 5px;
+}
+.product_item .brand {
+    font-size: 12px;
+    text-transform: uppercase;
+}
+.size, .quantity {
+    font-size: 12px;
+    line-height: 16px;
+    margin: 10px 20px 10px 0;
+}
+.size *, .quantity * {
+    font-size: 0.8rem !important;
+}
+#cart .price_wrapper::after {
+    color: #f37374;
+    content: "Sold Out";
+    display: none;
+    font-weight: bold;
+    padding-top: 5px;
+}
+#cart .product_item .remove_link {
+    color: #a7a9ac;
+    display: inline-block;
+    font-size: 12px;
+    margin-top: 10px;
+    text-decoration: underline;
+}
+#cart .product_item.sold_out {
+    background: rgba(243, 115, 116, 0.15) none repeat scroll 0 0;
+}
+#cart .sold_out .price_wrapper::after {
+    display: block;
+}
+/************************************************************ CHECKOUT *********************************************/
+.step h6 {
+    background: #f5f5f5 none repeat scroll 0 0;
+    cursor: pointer;
+    font-size: 16px !important;
+    margin: 0;
+    padding: 20px 10px;
+    position: relative;
+}
+.step > h6 > span {
+    display: none;
+    float: right;
+    margin-right: 30px;
+}
+.step.done h6 span {
+    display: block;
+}
+.step.current h6 {
+    font-weight: bold;
+}
+.step > * {
+    padding: 0 20px;
+}
+#checkout .screen_footer a {
+    display: none;
+}
+#order_review * {
+    color: #000;
+    font-size: 0.8rem;
+}
+#order_review .accordion_item_inner > div {
+    padding: 7px 20px;
+}
+#order_review .total {
+    font-weight: bold;
+    margin: 10px 0;
+}
+#order_review .total * {
+    font-size: 14px;
+}
+.zap_cash_used {
+    float: right;
+}
+.zap_cash_used::before {
+    content: "- ";
+}
+.use_zap_cash * {
+    vertical-align: middle;
+}
+.zap_cash .balance {
+    color: #a7a9ac;
+}
+#checkout.step_1 #order_review h6.title {
+    font-weight: bold;
+}
+#checkout.step_2 #delivery_address h6.title {
+    font-weight: bold;
+}
+#checkout.step_3 #payment_options h6.title {
+    font-weight: bold;
+}
+#checkout.step_1 .screen_content #order_review > * {
+    height: auto;
+}
+#checkout.step_2 .screen_content #delivery_address > * {
+    height: auto;
+}
+#checkout.step_3 .screen_content #payment_options > * {
+    height: auto;
+}
+#checkout.step_1 .screen_footer a:first-child {
+    display: block;
+}
+#checkout.step_2 .screen_footer a:nth-child(2) {
+    display: block;
+}
+#checkout.step_3 .screen_footer a:nth-child(3) {
+    display: block;
+}
+#checkout.step_3 .screen_footer.card_cta a:nth-child(3) {
+    display: none;
+}
+#checkout.step_3 .screen_footer.card_cta a#card {
+    display: block;
+}
+#checkout.step_3 .screen_footer.cod_cta a:nth-child(3) {
+    display: none;
+}
+#checkout.step_3 .screen_footer.cod_cta a#cod {
+    display: block;
+}
+#delivery_address .address_item * {
+    font-size: 12px;
+}
+.selectable .select {
+    border-left: 1px solid #e5e5e5;
+    cursor: pointer;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 80px;
+}
+.select .circle {
+    border: 1px solid #e5e5e5;
+    display: block;
+    font-size: 0 !important;
+    height: 20px;
+    margin: calc(50% - 20px) auto 0;
+    text-align: center;
+    width: 20px;
+}.address_item .select .circle {
+    margin: calc(100% - 20px) auto 0;
+}
+.circle > span {
+    background: #f37374 none repeat scroll 0 0;
+    border-radius: 50%;
+    display: none;
+    height: 10px;
+    margin-top: 4px;
+    width: 10px;
+}
+.selectable.selected .circle > span {
+    display: inline-block;
+}
+.select .text {
+    color: #a7a9ac;
+    display: none;
+    margin-top: 5px;
+    text-align: center;
+    text-transform: uppercase;
+}
+.select.show_text .text {
+    display: block;
+}
+.is_selected > .select .circle > span {
+    display: inline-block;
+}
+#payment_options .options_list {
+    border: 1px solid #e5e5e5;
+    margin: 20px;
+    padding: 0;
+}
+#payment_options .option_item * {
+    font-size: 14px;
+}
+.option_item {
+    background: #f5f5f5 none repeat scroll 0 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+.option_item > h6 {
+    background: #f5f5f5;
+}
+.accordion_item {
+    overflow: hidden;
+    position: relative;
+    transition: all 1s ease 0s;
+}
+.accordion_item .accordion_item_inner {
+    background: #fff;
+    height: 0;
+    overflow: hidden;
+    padding-bottom: 0;
+    padding-top: 0;
+    transition: all 0.5s ease 0s;
+}
+.accordion_item.open > .accordion_item_inner {
+    height: auto !important;
+}
+.accordion_item h6.title::after {
+    content:'\0064';
+    transform: rotate(90deg);
+    position: absolute;
+    right: 30px;
+    top: calc(50% - 0.5rem);
+    transition: all 1s ease 0s;
+    display: inline-block;
+   font-family: 'ZapFont';
+   font-style: normal;
+   font-weight: normal;
+   line-height: 1;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+}
+.accordion_item.open h6.title::after {
+    transform: rotate(270deg);
+}
+.accordion_item > h6.title {
+    cursor: pointer;
+    font-size: 1rem !important;
+    position: relative;
+}
+.selectable {
+    padding-right: 80px !important;
+    position: relative;
+}
+.option_item ul > li {
+    border-bottom: 1px solid #e5e5e5;
+    padding: 15px 20px;
+}
+.all_banks::after {
+    color: #e5e5e5;
+    content: "/";
+    line-height: 1rem;
+    position: absolute;
+    right: 35px;
+    top: calc(50% - 0.5rem);
+}
+.all_banks * {
+    border: 0 none !important;
+}
+.all_banks input {
+    margin: 0 !important;
+    padding: 5px 20px !important;
+    width: calc(100% - 40px) !important;
+}
+.all_banks input.has_value {
+    color: #f37374;
+}
+.all_banks .caret {
+    display: none;
+}
+.all_banks_list {
+    background: #fff none repeat scroll 0 0;
+    max-height: calc(100% - 60px);
+    overflow: auto;
+}
+
+
+/************************************************************ ONBOARDING *********************************************/
+.tag_item {
+    border: 1px solid #e5e5e5;
+    color: #777;
+    display: inline-block;
+    font-size: 0.8rem;
+    margin: 5px 2px;
+    padding: 5px 10px;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+.tag_item.selected {
+    background: #f37374 none repeat scroll 0 0;
+    border: 0 none;
+    color: #fff;
+}
+.size_item {
+    border: 1px solid;
+    display: inline-block;
+    font-size: 12px;
+    margin: 5px 5px 5px 0;
+    padding: 5px 25px 15px 10px;
+    cursor: pointer;
+}
+.size_item.selected {
+    background: #f37374 none repeat scroll 0 0;
+    border-color: #f37374;
+    color: #fff;
+}
+#my_brands .brands_list {
+    margin-top: 3rem;
+}
+.brand_item {
+    border-bottom: 1px solid #e5e5e5;
+    margin: 10px;
+    padding: 10px 15px 20px;
+    width: 90%;
+}
+.brand_item .follow::before {
+    content: "follow";
+}
+.brand_item .follow {
+    border: 1px solid #f37374;
+    border-radius: 20px;
+    color: #f37374;
+    float: right;
+    font-size: 0.8rem;
+    padding: 3px 15px;
+    text-transform: capitalize;
+}
+.brand_item .follow.selected::before {
+    content: "following";
+}
+.brand_item .follow.selected {
+    background: #f37374 none repeat scroll 0 0;
+    color: #fff;
+}
+.a_z_navigator {
+    color: #a7a9ac;
+    font-size: 12px;
+    position: absolute;
+    right: 15px;
+    text-align: center;
+    top: 3rem;
+    width: 28px;
+}
+#my_brands .search {
+    background: #fff none repeat scroll 0 0;
+    position: absolute;
+    width: 100%;
+    z-index: 2;
+}
+.letter_item {
+    cursor: pointer;
+    line-height: 22px;
+}
+/******************************************************** HOME PAGE *************************************************/
+.buy_shops > div {
+    padding: 20px 40px;
+}
+.buy_shops .curated, .buy_shops .market {
+    background: rgba(243, 115, 116, 0.15) none repeat scroll 0 0;
+    min-height: 215px;
+    padding: 60px 40px;
+}
+.buy_in_home {
+    margin: 20px 0;
+}
+
+/******************************************************** DISCOVER LAYOUTS *************************************************/
+
+/******************************************************** FEATURED CLOSET *************************************************/
+.featured_closet .seller_block {
+    display: inline-block;
+    padding-right: 5%;
+    padding-top: 20px;
+    text-align: center;
+    width: 20%;
+}
+.featured_closet .seller_details > * {
+    margin: 5px 0 !important;
+}
+.featured_closet .seller_details {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+}
+.featured_closet .products {
+    border-left: 1px solid #e5e5e5;
+    display: inline-block;
+    font-size: 0;
+    padding-left: 5%;
+    padding-top: 20px;
+    width: 80%;
+}
+.featured_closet .scroller {
+    height: auto !important;
+}
+.featured_closet {
+    font-size: 0;
+    position: relative;
+}
+.featured_closet > * {
+    font-size: initial;
+    vertical-align: top;
+}
+.view_closet {
+    display: block !important;
+    margin: 20px 0;
+}
+.product_item {
+    margin: 0 20px;
+    width: 270px;
+}.featured_closet .product_item {
+    margin: 0 19px;
+    width: 190px;
+}
+.seller_block img {
+    border-radius: 100%;
+    width: 90%;
+}
+.product_item img {
+    width: 100%;
+}
+.product_item:nth-of-type(4n), .product_item:last-of-type {
+    margin-right: 0;
+}
+.product_item:nth-of-type(4n+1) {
+    margin-left: 0;
+}
+.seller_block .admire_btn {
+    display: inline-block;
+    margin: 10px 0;
+}
+.user_details .admire_btn {
+    float: right;
+}
+.featured_closet .previous, .featured_closet .next {
+    display: none;
+}
+@media screen and (max-width: 30em) {
+    .featured_closet .seller_block {
+        font-size: 0;
+        margin-bottom: 20px;
+        padding: 10px;
+        width: 100%;
+    }
+    .seller_block img {
+        float: left;
+        margin-right: 10px;
+        width: 60px;
+        height: 60px;
+    }
+    .seller_block .seller_details {
+        display: inline-block;
+        font-size: initial;
+        text-align: left;
+        width: 80%;
+    }
+    .seller_block .admire_btn {
+        display: inline-block;
+        padding: 5px 0;
+        vertical-align: top;
+        width: 20%;
+    }
+    .featured_closet .products {
+        padding: 0;
+        width: 100%;
+    }
+    .featured_closet .product_item {
+        width: 270px;
+    }
+    .view_closet {
+        background: #f5f5f5;
+        border: 1px solid #e5e5e5;
+        display: inline-block !important;
+        height: 270px;
+        margin: 0 19px;
+        padding: 120px 0;
+        text-align: center;
+        width: 270px;
+    }
+    .featured_closet .previous, .featured_closet .next {
+        height: calc(65%);
+        display: block;
+    }
+    .featured_closet .previous::before, .featured_closet .next::before {
+        position: relative;
+        top: calc(40% - 1rem);
+    }
+}
+
+/******************************************************** PRODUCT GROUP *************************************************/
+.product_group .product_item {
+    margin: 0 20px;
+}
+.product_group .product_item:first-of-type {
+    margin-left: 0;
+}
+.product_group.viewport, .user_group.viewport {
+    position: relative;
+    margin: 0 auto;
+    overflow: hidden;
+}
+.wrapper {
+    margin: 0 auto;
+    overflow: hidden;
+}
+.user_group .wrapper, .product_group .wrapper, .featured_closet .wrapper {
+    padding: 0 40px;
+}.product_group .wrapper {
+    height: 400px;
+}.user_group .wrapper {
+    height: 200px;
+}
+.product_group .scroller, .user_group .scroller, .featured_closet .scroller {
+    position: relative;
+    z-index: 0;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    width: 1200px;
+    height: 240px;
+    -webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    -o-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-text-size-adjust: none;
+    -moz-text-size-adjust: none;
+    -ms-text-size-adjust: none;
+    -o-text-size-adjust: none;
+    text-size-adjust: none;
+}
+.product_group .slide {
+    width: 270px;
+}
+.previous::before {
+    content:'\0066';
+    font-family: ZapFont;
+}
+.next::before {
+    content:'\0064';
+    font-family: ZapFont;
+}
+.previous, .next {
+    cursor: pointer;
+    position: absolute;
+    z-index: 2;
+}
+.viewport .previous, .viewport .next {
+    background: rgba(255, 255, 255, 0.7) none repeat scroll 0 0;
+    bottom: 0;
+    text-align: center;
+    width: 25px;
+}
+.product_group .previous, .product_group .next {
+    height: calc(100% - 5rem);
+}
+.user_group .previous, .user_group .next {
+    height: calc(100% - 7rem);
+}
+.previous {
+    left: 0;
+}
+.next {
+    right: 0;
+}
+.product_group .previous::before, .product_group .next::before {
+    position: relative;
+    top: 35%;
+}
+.user_group .previous::before, .user_group .next::before {
+    position: relative;
+    top: calc(50% - 0.5rem);
+}
+/*************************************************************** USER GROUP ***************************************************************/
+.user_group .user_item {
+    border: 1px solid #e5e5e5;
+    margin: 20px 10px 20px 30px;
+    padding: 15px;
+    width: 380px;
+}.user_item:first-of-type {
+    margin-left: 0;
+}
+.user_item .picture {
+    padding-right: 15px;
+    width: 98px;
+}
+.user_item .user_details {
+    width: 250px;
+}
+.picture > img {
+    width: 100%;
+}
+.user_details * {
+    margin: 0;
+}
+.user_details > * {
+    margin-bottom: 10px;
+}
+.admire_btn::before {
+    content: "Admire";
+}.admire_btn.admired::before {
+    content: "Admiring";
+}
+.admire_btn {
+    border: 1px solid;
+    border-radius: 30px;
+    font-size: 14px;
+    padding: 5px 15px;
+    transition: all 0.5s ease 0s;
+}.admire_btn.admired {
+    background: #f47374 none repeat scroll 0 0;
+    border: 1px solid #f47374;
+    color: #fff;
+}
+.inline > .admire_btn {
+    float: right;
+}
+.counts p {
+    font-size: 12px;
+    text-transform: uppercase;
+}
+.counts h4 {
+    font-size: 20px;
+}
+.user_details .name {
+    font-size: 20px;
+}
+/************************************************************ GENERIC LAYOUT *****************************************************/
+.generic_layout {
+    margin: 40px;
+    overflow: hidden;
+    padding-left: 700px;
+    position: relative;
+}
+.generic_layout .text {
+    background: rgba(243, 115, 116, 0.15) none repeat scroll 0 0;
+    padding: 20px;
+}
+.generic_layout .banner {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    width: 700px;
+}
+.banner > img {
+    width: 100%;
+}
+.generic_layout h2.title {
+    font-size: 30px;
+}
+.generic_layout .title {
+    margin: 0 0 20px;
+}
+@media screen and (max-width: 45em) {
+    .generic_layout {
+        margin: 20px;
+        padding: 0;
+    }
+    .generic_layout .banner {
+        height: auto;
+        position: relative;
+        width: 100%;
+    }
+}
+/************************************************************ COLLECTIONS *****************************************************/
+.collection_item {
+    margin: 20px 30px 20px 0;
+    width: 380px;
+}
+.collection_item:nth-of-type(3n) {
+    margin-right: 0;
+}
+.collection_item img {
+    width: 100%;
+}
+@media screen and (max-width: 30em) {
+    .collection_item {
+        margin: 10px auto;
+    }
+    .collections_list {
+        text-align: center;
+    }
+}
+.slider.contain_inside, .slider.contain_inside .slides {
+    max-height: 100%;
+}
+.show_indicators .slider .indicators {
+    display: block;
+    z-index: 2;
+}.show_indicators_on_hover:hover .slider .indicators {
+    display: block;
+    z-index: 2;
+}.caption.full_width {
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+}
+/************************************************************ BUY PAGE ****************************************************************/
+.top_banner .search {
+    bottom: 150px;
+    left: 25%;
+    position: absolute;
+    width: 50%;
+}
+@media screen and (max-width: 45em) {
+    .top_banner .search {
+        left: 10%;
+        width: 80%;
+    }
+}
+.top_banner {
+    position: relative;
+}
+.search {
+    position: relative;
+}
+.search_suggestions {
+    background: #fff none repeat scroll 0 0;
+    border-top: 1px solid #e5e5e5;
+    display: none;
+    height: 400px;
+    position: absolute;
+    text-align: left;
+    width: 100%;
+}
+.search_box {
+    background: #fff none repeat scroll 0 0;
+    height: 3rem;
+    overflow: hidden;
+}
+.search_box > a {
+    border-radius: 0;
+    float: right;
+    height: 100%;
+    padding: 0;
+    position: relative;
+    width: calc(30% - 20px);
+}
+.search_box > input {
+    border: 1px solid #e5e5e5 !important;
+    float: left;
+    height: calc(100% - 2px) !important;
+    padding: 0 10px !important;
+    width: calc(70% - 2px) !important;
+}
+.right_panel .search_box > a {
+    padding: 10px;
+    position: absolute;
+    right: 0;
+    width: auto;
+}
+.right_panel .search_box > input {
+    border: 0 none !important;
+    padding-right: 80px !important;
+    width: calc(100% - 80px) !important;
+}
+.right_panel .search_box {
+    border-bottom: 1px solid #e5e5e5;
+    position: relative;
+}
+.parent + div .filter_options_list {
+    padding-left: 20px;
+}
+/*.filter_option_item {
+    
+}*/
+/***************************************************************** FILTERS *********************************************************************/
+.filters > div > h6 {
+    background: #f5f5f5 none repeat scroll 0 0;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 0;
+    padding: 15px 0;
+}
+.filters > .accordion_item {
+    border-bottom: 1px solid #e5e5e5;
+}
+.filters .accordion_item.open {
+    padding-bottom: 10px;
+}
+.filters > .accordion_item > * {
+    padding-left: 10px;
+}
+.filters label, .shop_from label {
+    color: #555;
+    font-size: 14px !important;
+}
+.filters .accordion_item .accordion_item_inner {
+    height: auto;
+}
+
+.filters .accordion_item .filter_option_item {
+    display: block;
+    transition: all 0.5s ease 0s;
+    overflow: hidden;
+    height: 0;
+    padding: 0;
+    opacity: 0;
+}.filters .accordion_item .filter_option_item * {
+    font-size: 0px !important;
+    transition: all 0.5s ease 0s;
+}
+
+.filters .accordion_item.closed .filter_options_list .filter_option_item {
+    height: 0 !important;
+    padding: 0;
+    opacity: 0;
+}.filters .accordion_item.closed .filter_options_list .filter_option_item * {
+    font-size: 0px !important;
+}
+.accordion_item.closed > .parent.selected + .accordion_item_inner .filter_option_item {
+    height: 0 !important;
+    opacity: 0 !important;
+    padding: 0 !important;
+}
+
+
+.filters .accordion_item.open .filter_option_item, .accordion_item.open > .parent.partly_selected + .accordion_item_inner .filter_option_item,
+.accordion_item.open > .parent.selected + .accordion_item_inner .filter_option_item {
+    height: 40px;
+    padding: 10px 0;
+    opacity: 1;
+}.filters .accordion_item.open .filter_option_item *, .accordion_item.open > .parent + .accordion_item_inner .filter_option_item * {
+    font-size: 14px !important;
+}.filters #color.accordion_item.open .filter_option_item  {
+    height: 70px;
+}
+
+.filters .accordion_item .filter_option_item.selected, .filters .accordion_item .filter_option_item.partly_selected,
+.filters .accordion_item.closed .filter_option_item.selected, .filters .accordion_item.closed .filter_option_item.partly_selected {
+    height: 40px !important;
+    padding: 10px 0 !important;
+    opacity: 1 !important;
+}.filters .accordion_item .filter_option_item.selected *, .filters .accordion_item .filter_option_item.partly_selected *,
+.filters .accordion_item.closed .filter_option_item.selected *, .filters .accordion_item.closed .filter_option_item.partly_selected * {
+    font-size: 14px !important;
+}.filters #color.accordion_item .filter_option_item.selected, .filters #color.accordion_item.closed .filter_option_item.selected {
+    height: 70px !important;
+}
+
+.filters > .accordion_item.closed .filter_option_item.selected:last-child {
+    height: 50px !important;
+}
+
+.filter_option_item.parent {
+    position: relative;
+}
+.partly_selected.parent label:before {
+    position: absolute !important;
+    height: 2px !important;
+    background: #f37374 !important;
+    left: 8px !important;
+    width: 8px !important;
+    transform: none !important;
+    top: 7px !important;
+}
+.filter_option_item.parent .expand {
+    cursor: pointer;
+    height: 100%;
+    line-height: 40px;
+    margin: 0;
+    padding: 0 20px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.filter_option_item.parent .expand::after {
+    content:'\0064';
+    transform: rotate(90deg);
+    transition: all 1s ease 0s;
+    display: inline-block;
+   font-family: 'ZapFont';
+   font-style: normal;
+   font-weight: normal;
+   line-height: 1;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+}
+.accordion_item.open > .parent .expand {
+    transform: rotate(180deg);
+}
+.filters .clear_btn {
+    color: #a7a9ac;
+    float: right;
+    font-size: 12px;
+    padding-right: 30px;
+    text-decoration: underline;
+}
+#price .filter_option_item {
+    float: left;
+    height: 80px;
+    overflow: visible;
+    position: relative;
+    width: 50%;
+}
+#price .input-field {
+    margin: 0 !important;
+}
+#price.open .accordion_item_inner {
+    overflow: visible;
+}
+#price.open {
+    overflow: visible;
+}
+.accordion_item_inner::after {
+    clear: both;
+    content: " ";
+    display: table;
+}
+#price .min_price::before {
+    content: "From";
+}
+#price .max_price::before {
+    content: "To";
+}
+#brands.accordion_item.closed .search {
+    height: 0;
+}
+#brands.accordion_item .search {
+    height: 0;
+    overflow: hidden;
+    transition: all 0.5s ease 0s;
+}
+#brands.accordion_item.open .search {
+    height: 40px;
+}
+.filters .filter_option_item label {
+    display: block;
+}
+.filters .a_z_navigator {
+    top: unset;
+}
+.filters .a_z_navigator li:nth-of-type(2n) {
+    display: none;
+}
+#brands ul.filter_options_list {
+   max-height: 300px;
+   overflow-y: auto;
+}
+#color .filter_option_item label::before {
+    background: #ff0000 none repeat scroll 0 0;
+    border: 0 none;
+    border-radius: 50%;
+    height: 30px;
+    left: 10px;
+    position: absolute;
+    top: 0;
+    width: 30px;
+}
+#color .filter_option_item label::after {
+    border-radius: 50%;
+    height: 20px;
+    left: 15px;
+    top: 5px;
+    transform: none;
+    width: 20px;
+}
+#color .filter_option_item label {
+    display: inline-block;
+    font-size: 12px !important;
+    height: auto;
+    padding-left: 0;
+    padding-top: 35px;
+    text-align: center;
+    width: 50px;
+}
+#color .filter_option_item {
+    display: block;
+    float: left;
+    margin-right: 15px;
+    vertical-align: top;
+}
+#color [type="checkbox"]:checked + label::before {
+    height: 24px;
+    left: 13px;
+    top: 3px;
+    transform: none;
+    width: 24px;
+}
+#color [type="checkbox"]:checked + label::after {
+    border: 1px solid #000;
+    border-radius: 50%;
+    content: " ";
+    display: block;
+    height: 30px;
+    left: 10px;
+    position: absolute;
+    top: 0;
+    transform: none;
+    width: 30px;
+}
+.filter_option_item #blue + label::before {
+    background: #2196F3 none repeat scroll 0 0 !important;
+}
+.filter_option_item #beige + label::before {
+    background: #EAE2CF none repeat scroll 0 0 !important;
+}
+.filter_option_item #cream + label::before {
+    background: #FEF9F0 none repeat scroll 0 0 !important;
+}
+.filter_option_item #green + label::before {
+    background: #4CAF50 none repeat scroll 0 0 !important;
+}
+.filter_option_item #orange + label::before {
+    background: #FF9800 none repeat scroll 0 0 !important;
+}
+.filter_option_item #purple + label::before {
+    background: #9C27B0 none repeat scroll 0 0 !important;
+}
+.filter_option_item #silver + label::before {
+    background: #DCDCDC none repeat scroll 0 0 !important;
+}
+.filter_option_item #tan + label::before {
+    background: #BFA76F none repeat scroll 0 0 !important;
+}
+.filter_option_item #yellow + label::before {
+    background: #FFEB3B none repeat scroll 0 0 !important;
+}
+.filter_option_item #black + label::before {
+    background: #000000 none repeat scroll 0 0 !important;
+}
+.filter_option_item #brown + label::before {
+    background: #795548 none repeat scroll 0 0 !important;
+}
+.filter_option_item #gold + label::before {
+    background: #F0D878 none repeat scroll 0 0 !important;
+}
+.filter_option_item #grey + label::before {
+    background: #9E9E9E none repeat scroll 0 0 !important;
+}
+.filter_option_item #navy + label::before {
+    background: #002147 none repeat scroll 0 0 !important;
+}
+.filter_option_item #pink + label::before {
+    background: #E91E63 none repeat scroll 0 0 !important;
+}
+.filter_option_item #red + label::before {
+    background: #F44336 none repeat scroll 0 0 !important;
+}
+.filter_option_item #stone + label::before {
+    background: #616067 none repeat scroll 0 0 !important;
+}
+.filter_option_item #white + label::before {
+    background: #FFFFFF none repeat scroll 0 0 !important;
+}
+.filter_option_item #maroon + label::before {
+    background: #5F0609 none repeat scroll 0 0 !important;
+}
+/********************************************************** FILTERS MOBILE **********************************************************/
+.mobile_filters .options_header {
+    background: #fff none repeat scroll 0 0;
+    text-align: center;
+}
+.mobile_filters {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    position: fixed;
+    top: -50px;
+    width: 100%;
+    z-index: 1;
+    transition: all 0.5s ease 0s;
+}
+@media screen and (max-width: 45em) {
+    .show_filters .mobile_filters {
+        top: 49px;
+        z-index: 2;
+    }
+}
+.options_header > div:first-child {
+    border-right: 1px solid #e5e5e5;
+}
+.options_header > div {
+    padding: 10px 0;
+}
+.mobile_filters .filters, .mobile_filters .shops {
+    display: none;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+.mobile_filters .filters .accordion_item.closed > .parent {
+    height: auto !important;
+    opacity: 1;
+    padding: 10px 0;
+}
+.mobile_filters .tabs {
+    height: 50px;
+}
+.mobile_filters .tabs .tab {
+    min-width: 100px;
+}
+.filter_screens {
+    background: #fff none repeat scroll 0 0;
+    height: calc(100% - 50px);
+    position: absolute;
+    width: 100%;
+}
+.mobile_filters .filters .accordion_item.closed > .parent * {
+    font-size: 14px !important;
+}
+.screen_header .close_btn {
+    line-height: 100%;
+    position: absolute;
+    right: 20px;
+    top: calc(50% - 0.5rem);
+}
+/********************************************************** FILTERS END **********************************************************/
+.side_bar {
+    display: block;
+    float: left;
+    height: 100%;
+    position: absolute;
+    width: 25%;
+}
+.side_bar_inner.top_fixed {
+    height: calc(100% - 60px);
+    position: fixed;
+    top: 60px;
+}
+.side_bar h3 {
+    border-bottom: 1px solid;
+    color: #f37374;
+    font-size: 16px;
+    margin: 0 0 10px;
+    padding-bottom: 10px;
+    text-transform: uppercase;
+}
+.side_bar_inner .custom_scroll_inner > div {
+    margin-bottom: 30px;
+}
+.sort_option_item {
+    cursor: pointer;
+    font-size: 0.85rem;
+    margin-right: 15px;
+}
+.sort_option_item.selected {
+    color: #f37374;
+}
+.products_area {
+    float: right;
+    width: 75%;
+}
+@media screen and (max-width: 45em) {
+    .side_bar {
+        display: none;
+    }
+    .products_area {
+        float: none;
+        width: 100%;
+    }
+    .products_area .sort {
+        padding: 10px;
+        position: relative;
+        top: -20px;
+    }
+    .products_area .sort::before {
+        content: "Sort By:";
+        float: left;
+        font-size: 12px;
+        font-weight: bold;
+        margin-right: 10px;
+    }
+}
+.page_content::after {
+    clear: both;
+    content: " ";
+    display: table;
+}
+.page_content:first-child {
+    margin-top: 30px;
+}
+.products_area .products {
+    font-size: 0;
+}
+.product_card {
+    display: inline-block;
+    margin: 10px;
+    width: 270px;
+}
+.product_card .product_display {
+    height: 270px;
+}
+.product_display img {
+    width: 100%;
+}
+.product_card .product_details {
+    font-size: initial;
+    position: relative;
+}
+.product_details .title {
+    color: #000;
+    font-size: 1.2rem;
+    margin: 10px 0 5px;
+}
+.price .new::before, .price .old::before {
+    content: "\0072";
+    font-family: ZapFont;
+    font-size: 75%;
+}
+.price .new {
+    font-size: 1.1rem;
+    margin-right: 10px;
+}
+.price .discount {
+    font-size: 0.85rem;
+}
+.love_btn {
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+/************************************************************* SELL PAGE ************************************************************/
+.my_closet {
+    padding-bottom: 90px;
+}.my_closet .view_all {
+    box-shadow: 0 -30px 50px 20px #fff;
+    margin: 0 0 40px;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    z-index: 50;
+}
+.my_closet .products {
+    position: relative;
+}
+.my_closet .previous::before {
+    left: 200px;
+    top: calc(200px - 0.5rem);
+}
+.my_closet .next::before {
+    right: 200px;
+    top: calc(200px - 0.5rem);
+}
+.my_closet .product_details {
+    margin: 0 auto;
+    position: relative;
+}
+.closet_cleanup {
+    margin: 40px auto;
+    max-width: 700px;
+    text-align: center;
+}
+.seller_tips {
+    text-align: center;
+}
+.seller_tips > div {
+    background: rgba(243, 115, 116, 0.15) none repeat scroll 0 0;
+    display: inline-block;
+    height: 250px;
+    margin: 0 20px;
+    overflow: hidden;
+    padding: 30px 40px;
+    position: relative;
+    text-align: left;
+    vertical-align: top;
+    width: 400px;
+}
+.seller_tips > div > ul {
+    height: 100%;
+    position: relative;
+    width: 100%;
+}
+.seller_tips > div > ul > li {
+    position: absolute;
+}
+form.cta_form > input {
+    border: 0 none;
+    float: left;
+    height: 100%;
+    padding: 0 10px;
+    width: 70%;
+}form.cta_form > .btn {
+    border-radius: 0;
+    float: right;
+    height: 100%;
+    padding: 0 20px;
+    position: relative;
+}
+form.cta_form  {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #e5e5e5;
+    height: 3rem;
+    overflow: hidden;
+}
+/****************************************************** Not logged in Layout ****************************************************/
+.fashion_calculator > h4 {
+    margin: 10px auto 40px;
+}.fashion_calculator input[type="text"] {
+    height: 3rem;
+}
+.fashion_calculator_result h1.title {
+    font-size: 32px;
+    margin: 10px 10px 30px;
+}.fashion_calculator_result > div {
+    transition: all 1s ease 0s;
+}.fashion_calculator_result .info {
+    width: 100%;
+}.fashion_calculator_result .btn-flat {
+    margin: 20px 0;
+    text-transform: none;
+}
+.feature_list {
+    margin: 0 auto;
+    max-width: 200px;
+    text-align: left;
+}
+.feature_item {
+    margin-bottom: 10px;
+}
+.send_entry {
+    margin: 0 auto;
+    max-width: 720px;
+    text-align: left;
+}
+.pictures {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.send_entry .pictures > * {
+   vertical-align: top;
+}
+.picture {
+    border: 1px solid #d5d5d5;
+    display: inline-block;
+    height: 150px;
+    position: relative;
+    width: 150px;
+}.plus {
+    color: #f47374;
+    font-size: 100px;
+    position: relative;
+}
+.testimonial::before {
+    content: "\"";
+    font-size: 36px;
+}
+.testimonial {
+    background: #666 none repeat scroll 0 0;
+    color: #fff;
+    margin: 30px 0;
+    padding-bottom: 20px;
+    padding-top: 30px;
+    text-align: center;
+}
+.testimonial .display_picture {
+    display: inline-block;
+    vertical-align: top;
+    width: 50px;
+}
+.testimonial .user_details {
+    display: inline-block;
+}
+.testimonial .user_details > * {
+    font-size: 16px;
+    margin: 0;
+}
+.sell_step {
+    padding-top: 50px;
+    text-align: center;
+}
+.sell_step a {
+    font-size: 12px;
+}
+h1.price .new {
+    font-size: 3.2rem;
+    line-height: 2rem;
+}
+.separator {
+    background: #000 none repeat scroll 0 0;
+    height: 1px;
+    margin: 40px auto 50px;
+    max-width: 300px;
+}
+.receommendations .title {
+    margin: 20px 0;
+}
+/********************************************************* RESPONSIVE ELEMENTS *************************************************/
+.scroll_top {
+    background: #000 none repeat scroll 0 0;
+    border-radius: 3px;
+    bottom: calc(50% - 25px);
+    color: #fff;
+    cursor: pointer;
+    height: 40px;
+    opacity: 0;
+    padding: 9px 0;
+    position: fixed;
+    right: 20px;
+    text-align: center;
+    transition: all 0.5s ease 0s;
+    visibility: hidden;
+    width: 40px;
+}
+@media screen and (max-width: 45em) {
+    .scroll_top {
+        bottom: 20px;
+    }
+}
+.scroll_top::before {
+    content: "d";
+    display: inline-block;
+    font-family: ZapFont;
+    transform: rotate(270deg);
+}
+.show_scroll_top .scroll_top {
+    opacity: 0.5;
+    visibility: visible;
+}
+/*************************************************************** PRODUCT PAGE **************************************************************/
+h1.product_title {
+    font-size: 24px;
+    margin-bottom: 10px;
+    margin-top: 0;
+}
+.price .old {
+    color: #a7a8ac;
+    margin-right: 10px;
+    text-decoration: line-through;
+}
+.product_details .discount {
+    background: #4a4a4a none repeat scroll 0 0;
+    border-radius: 3px;
+    color: #fff;
+    font-size: 11px;
+    padding: 3px 7px;
+    vertical-align: text-top;
+}
+.product_details .description {
+    font-size: 14px;
+    margin: 15px 0;
+}
+.thumbnails {
+    display: inline-block;
+    width: 80px;
+}
+.image_container {
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+    width: calc(100% - 80px);
+}
+.product_images {
+    font-size: 0;
+}
+.thumbnail > img {
+    width: 90%;
+}
+.thumbnail {
+    margin: 10px 0;
+    text-align: center;
+}
+.image_container > img {
+    width: 95%;
+}
+.product_attributes label {
+    font-size: 12px;
+    text-transform: uppercase;
+}
+.attribute_value {
+    font-size: 14px;
+    text-transform: uppercase;
+}
+.product_attributes .row > div {
+    border-top: 1px solid #e5e5e5;
+    margin-right: 5% !important;
+    width: 45%;
+}
+.product_attributes {
+    border-bottom: 1px solid #e5e5e5;
+    margin: 20px 0;
+}
+.product_attributes .row > div:last-child {
+    float: right;
+    margin-right: 0 !important;
+}
+.product_details .authenticity {
+    margin: 15px 0;
+}
+.authenticity * {
+    font-size: 14px;
+}
+.product_details .icon-authentic::before, .product_details .icon-shipping::before {
+    display: block;
+    font-size: 28px;
+}
+.authenticity > *:last-child {
+    float: right;
+    margin-right: 0 !important;
+}
+.product_attributes.more_details {
+    border: 0 none;
+}
+.product_attributes.more_details.open {
+    border-bottom: 1px solid #e5e5e5;
+}
+.engagement .loves {
+    color: #f47473;
+}
+.actions .love::after {
+    content: "Love";
+}
+.actions .comment::after {
+    content: "Comment";
+}
+.actions .share::after {
+    content: "Share";
+}
+.actions a:before {
+    display: inline-block;
+    font-family: "ZapFont";
+    font-style: normal;
+    font-weight: normal;
+    margin-right: 5px;
+    position: relative;
+    text-transform: none;
+    top: 1px;
+}
+.counts *::before {
+    margin-right: 2px;
+    position: relative;
+    top: 1px;
+}
+.actions a {
+    font-size: 13px;
+    padding: 0;
+    text-align: center;
+}
+.web_only .actions a {
+    background: #f5f5f5 none repeat scroll 0 0;
+    border: 1px solid #e5e5e5;
+    height: 2.4rem;
+    line-height: 2rem;
+    margin: 10px 0;
+    width: 90%;
+}
+.mobile_only.engage .actions a {
+    height: 1rem;
+    line-height: 0.5rem;
+    width: 100%;
+}
+.actions .love::before, .love_btn::before {
+    content: "\0079";
+    font-family: ZapFont;
+}.actions .love.loved::before, .love_btn.loved::before {
+    content: "\0074";
+    font-family: ZapFont;
+}
+.actions .comment::before {
+    content:'\0075';
+    font-family: ZapFont;
+}
+.actions .share::before {
+    content: "\0069";
+    font-family: ZapFont;
+}
+.actions .love.loved, .love_btn.loved {
+    color: #f47374;
+}
+@media screen and (max-width: 45em) {
+    .actions .love::after {
+        content: "";
+    }
+    .actions .comment::after {
+        content: "";
+    }
+    .actions .share::after {
+        content: "";
+    }
+}
+.counts * {
+    font-size: 12px;
+}
+.engagement * {
+    font-size: 14px;
+}
+.engagement .counts > * {
+    padding-right: 15px;
+}
+.engage.mobile_only {
+    background: #fff none repeat scroll 0 0;
+    z-index: 20;
+}
+.engagement_block {
+    display: none;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 1s ease 0s;
+}
+.engagement_block.expand {
+    max-height: 500px;
+}
+.engagement_block .relative > * {
+    display: none;
+    float: left;
+    width: 100%;
+}
+.show_comments .comments_block {
+    display: block;
+}
+.show_loves .loves_block {
+    display: block;
+}
+@media screen and (max-width: 45em) {
+    .engagement_block {
+        background: #fff none repeat scroll 0 0;
+        height: 100%;
+        max-height: unset !important;
+        left: 0;
+        overflow: auto;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 25;
+    }
+    .product_details {
+        padding-bottom: 70px;
+    }
+    .comments_block > ul, .loves_block > ul {
+        padding-top: 50px;
+    }
+    .comments_block > *, .loves_block > * {
+        padding: 0 10px;
+    }
+}
+.comments_list, .loves_list {
+    margin-top: 20px;
+}.loves_list {
+    border-top: 1px solid #e5e5e5;
+}
+.love_item {
+    border-bottom: 1px solid #e5e5e5;
+    padding-top: 10px;
+}
+.comment_item .display_picture, .compose_comment .display_picture {
+    padding: 10px 10px 10px 0;
+    width: 15%;
+}
+.comment_item .comment_details {
+    width: 85%;
+}
+.display_picture > img {
+    width: 100%;
+}
+.comment_item .user_name {
+    font-weight: bold;
+}
+.comment_item .closet_handle {
+    padding-left: 10px;
+}
+.authenticity > * {
+    width: 45%;
+}
+.authenticity a {
+    color: #a7a9ac;
+    display: block;
+    font-size: 11px;
+    padding-top: 15px;
+    text-decoration: underline;
+}
+.engagement .loves::after {
+    content: " love this";
+}
+.engagement .comments::after {
+    content: " Comments";
+}
+.engagement .shares::after {
+    content: " Shares";
+}
+.names * {
+    display: inline;
+}
+.names {
+    display: inline;
+}
+.names + .others::after {
+    content: " others";
+}
+.names::after {
+    content: " and ";
+}
+.names > li::before {
+    content: ", ";
+}
+.names > li:first-child::before {
+    content: "";
+}
+.more_details h6.title {
+    border-bottom: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
+    color: #a7a9ac;
+    font-size: 12px;
+    font-weight: normal;
+    margin: 0px 0 20px;
+    padding: 5px 0;
+    text-align: center;
+}
+.seller_details {
+    background: #f5f5f5 none repeat scroll 0 0;
+    margin: 40px 0;
+    padding: 20px 0;
+}
+.seller_details > * {
+    margin: 20px auto !important;
+    max-width: 720px;
+}
+.seller_details .user_details {
+    width: auto;
+}
+.seller_details .product_item {
+    margin: 0 9px;
+    width: 23%;
+}
+.seller_details .product_item:first-child {
+    margin-left: 0;
+}
+.seller_details .product_item:last-child {
+    margin-right: 0;
+}
+.seller_details .product_item * {
+    font-size: 14px;
+}
+.seller_details .name {
+    display: inline;
+    margin-right: 10px;
+}
+.compose_comment {
+    font-size: 0;
+    position: relative;
+}
+.compose_comment * {
+    font-size: initial;
+}
+.compose_comment.mentioning .mention_suggestions {
+    display: block;
+}
+.compose_comment .comment_text {
+    border: 1px solid #e5e5e5;
+    font-size: 14px;
+    min-height: 3rem;
+    padding: 5px 40px 10px 10px;
+    word-wrap: break-word;
+}
+.mention.valid {
+    color: #f47374;
+}
+.comment_text {
+    font-size: 14px;
+}
+.compose_comment .display_picture {
+    display: inline-block;
+}
+.post_comment {
+    display: inline-block;
+    padding: 10px 0;
+    position: relative;
+    vertical-align: top;
+    width: 85%;
+}
+.compose_comment * {
+    font-size: initial;
+}
+.compose_comment .post {
+    height: 20px;
+    position: absolute;
+    right: 10px;
+    top: calc(50% - 10px);
+    width: 20px;
+}
+.compose_comment .post .up::before {
+    border-left: 20px solid #555;
+    border-top: 10px solid transparent;
+    content: "";
+    height: 0;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 0;
+}
+.compose_comment .post .up::after {
+    border-left: 20px solid #fff;
+    border-top: 1px solid transparent;
+    content: "";
+    height: 0;
+    left: 0;
+    position: absolute;
+    top: 9px;
+    width: 0;
+}
+.compose_comment .post .down::before {
+    border-bottom: 10px solid transparent;
+    border-left: 20px solid #555;
+    bottom: 0;
+    content: "";
+    height: 0;
+    left: 0;
+    position: absolute;
+    width: 0;
+}
+.compose_comment .post .down::after {
+    border-bottom: 1px solid transparent;
+    border-left: 20px solid #fff;
+    bottom: 9px;
+    content: "";
+    height: 0;
+    left: 0;
+    position: absolute;
+    width: 0;
+}
+.mention_suggestions {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #e5e5e5;
+    display: none;
+    max-height: 200px;
+    overflow: hidden;
+    position: absolute;
+    width: 300px;
+}
+.suggestion_item {
+    border-bottom: 1px solid #e5e5e5;
+    padding: 5px;
+}
+.suggestion_item .name {
+    font-weight: bold;
+}
+.suggestion_item.inline > img {
+    border-radius: 50%;
+    width: 40px;
+}
+.suggestion_item > * {
+    font-size: 12px;
+    line-height: 30px;
+    margin: 0;
+    padding: 5px;
+}
+/************************************************************ SELLER BLOCKS *************************************************/
+.seller_block_min {
+    padding: 0 10px;
+}
+.seller_block_min img {
+    border-radius: 50%;
+    margin-right: 10px;
+    vertical-align: top;
+    width: 50px;
+}
+.seller_block_min .name {
+    line-height: 2rem;
+}
+.seller_block_min .admire_btn {
+    margin: 5px 0;
+}
+.user_block_min img {
+    border-radius: 50%;
+    margin-right: 10px;
+    width: 40px;
+}
+.user_block_min .name {
+    font-size: 1.2rem;
+    line-height: 2.2rem;
+    margin: 0;
+}
+.user_block_min .closet_handle {
+    line-height: 2.2rem;
+    margin-left: 5px;
+}
+/*********************************************************** PROFILE PAGE ****************************************************/
+.user_intro .picture {
+    padding: 15px;
+    width: 20%;
+}
+.user_block .user_details {
+    padding: 15px;
+    width: 80%;
+}
+.user_details .counts > div {
+    max-width: 100px;
+}
+.user_intro {
+    margin: 0 auto;
+    max-width: 900px;
+}
+.circle_image > img {
+    border-radius: 50%;
+}
+.view_switch {
+    float: right;
+}
+.options * {
+    padding: 5px 10px;
+}
+/******************************************************** OVERLAYS *************************************************************/
+.overlay {
+    display: none;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 4;
+}
+.overlay_container {
+    height: 100%;
+    margin: 0 auto;
+    position: relative;
+}
+.overlay .glass {
+    display: block;
+}
+.overlay .content {
+    background: rgba(0, 0, 0, 0.5) none repeat scroll 0 0;
+    bottom: 0;
+    color: #fff;
+    padding: 20px 200px;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+}
+.secondary.overlay .content {
+    background: rgba(255, 255, 255, 0.8) none repeat scroll 0 0;
+    color: #000;
+    padding: 20px 50px;
+}
+.overlay_container > img {
+    width: 100%;
+}
+.overlay.primary .overlay_container {
+    height: calc(100% - 100px);
+    margin: 50px auto;
+    max-width: 1200px;
+}
+.secondary.overlay .overlay_container {
+    height: calc(100% - 200px);
+    margin: 100px auto;
+    max-width: 600px;
+}
+.close_btn::before {
+    content: "Close";
+}
+.close_btn {
+    color: #fff;
+    cursor: pointer;
+    padding: 5px 10px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+/********************************************** Order Confirmation/Failure **************************************************/
+.invite_friends {
+    padding: 30px 0;
+}
+.invite_friends .btn {
+    margin: 0 0 20px;
+}
+.try_payment_again {
+    padding: 30px 0;
+}
+/********************************************************* Error Pages *********************************************/
+.error.icon::before {
+    color: #f37374;
+    content: "3";
+    display: block;
+    font-family: ZapFont;
+    font-size: 54px;
+    margin: 10px 0;
+}
+.explore {
+    padding: 30px 0;
+}
+.explore_links a {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 10px 0;
+    text-decoration: underline;
+}
+.picture .delete {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    z-index: 100;
+    background-color: #FFF;
+    padding: 5px 2px 2px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: .2;
+    text-align: center;
+    font-size: 22px;
+    line-height: 10px;
+    border-radius: 50%;
+}
+.picture {
+    position: relative;
+    display: inline-block;
+}
+.picture:hover .delete {
+    opacity: 1;
+}
+
+img[ bn-lazy-src ] {
+    background-image: url( "/zapstatic/frontend/images/512-512.png" ) ;
+}
+</style>
+<script>
+    function openAccordion(accordion) {
+    accordion.siblings('.accordion_item_inner').css('transition', 'all 0s ease 0s');
+    accordion.siblings('.accordion_item_inner').animate({
+        height: accordion.siblings('.accordion_item_inner').get(0).scrollHeight
+      }, 200, function() {
+            $(this).closest('.accordion_item').addClass('open');
+            $(this).css('transition', '');
+      });
+}
+function closeAccordion(accordion) {
+    accordion.closest('.accordion_item').removeClass('open');
+    accordion.siblings('.accordion_item_inner').animate({
+        height: 0
+      }, 0);
+}
+function closeSubFilters(filter) {
+    subFilters = filter.find('.accordion_item.open');
+    subFilters.each(function() {
+        $(this).addClass('closed');
+        $(this).removeClass('open');
+    });
+}
+function closeOtherFilters(filter) {
+    openFilters = filter.closest('.accordion_item').siblings('.accordion_item.open');
+    openFilters.each(function() {
+        $(this).addClass('closed');
+        $(this).removeClass('open');
+        closeSubFilters($(this));
+    });
+}
+function openThisFilter(filter) {
+    filter.closest('.accordion_item').removeClass('closed');
+    filter.closest('.accordion_item').addClass('open');
+}
+function closeThisFilter(filter) {
+    filter.closest('.accordion_item').addClass('closed');
+    filter.closest('.accordion_item').removeClass('open');
+    closeSubFilters(filter.closest('.accordion_item'));
+}
+$('body').on('click', '.filters .accordion_item .parent > h6', function() {
+        if (!$(this).closest('.accordion_item').hasClass('open')) {
+            openThisFilter($(this).closest('.parent'));
+            num = parseInt($(this).closest('.custom_scroll').attr('data-scrollgroup'));
+            $(this).closest('.parent').afterTime(500, function () {
+                customScroll[num].refresh();
+                customScroll[num].scrollToElement($(this).get(0), 500, 0, -10)
+            });
+        } else {
+            closeThisFilter($(this).closest('.parent'));
+        }
+    });
+    $('body').on('click', '.accordion_item > h6', function() {
+        if (!$(this).closest('.accordion').hasClass('filters')) {
+            if (!$(this).closest('.accordion_item').hasClass('open')) {
+                openAccordion($(this));
+            } else {
+                closeAccordion($(this));
+            }
+        }
+    });
+</script>

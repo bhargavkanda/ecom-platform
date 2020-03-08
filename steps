@@ -1,0 +1,23 @@
+take total dump
+drop db
+create db
+git checkout 213eb55
+makemigration
+migrate --fake
+git checkout 7ee40c9
+makemigration
+migrate
+comment approved product signal
+python modelmerge.py
+git checkout eade74b
+migration
+remove carts
+python cart_miration.py
+git checkout f149b17
+migration
+git checkout develop
+migration
+
+
+
+

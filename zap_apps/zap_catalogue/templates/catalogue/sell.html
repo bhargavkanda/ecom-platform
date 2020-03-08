@@ -1,0 +1,86 @@
+{% extends "account/base.html" %}
+{% block extra_head %}
+	<title>Sell Designer Luxury Fashion for Women Online India</title>
+    <meta name="description" content="Selling on Zapyle is easy and quick. Just click good pictures of your item and list. When you sell, we'll pick it up from your place and send it across to buyer after the authentication check.">
+    <script src="/zapstatic/catalogue/sell.js?v=new"></script>
+{% endblock %}
+{% block body %} 
+	
+	<main ng-controller="SellController">
+		<div class="top_banner sell_banner">
+            <div class="parallax-container">
+                <div class="parallax">
+                	<img src="/zapstatic/website/banners/sell_banner.jpg" class="web_only">
+	            	<div class="caption center-align">
+                   		<h3>Earn quick bucks by editing your closet.</h3>
+                   		<!-- <h5 class="light grey-text text-lighten-3">We believe you should own only those things you love.</h5> -->
+               		</div>
+               		<div class="glass absolute"></div>
+               </div>
+       		</div>
+       	</div>
+		<div class="page_content">
+	       	{%if request.user.is_authenticated %}
+			<div class="my_closet">
+				<h3 class="center_align">My Closet</h3>
+				<div ng-if="profile.length">
+					<div class="products">
+						<div class="content product-view" ng-init="displaylimit=8"></div>
+						<div class="product_item big" ng-repeat="p in profile | limitTo:displaylimit" ng-class="'designer_product':user_type == 'designer'">
+							<div class="product_item_inner">
+								<div class="product_display">
+									<a ng-href="/product/[[p.id]]/[[p.title | spaceless]]" class="image_holder"><img ng-src="[[p.images[0].image || p.images[0] ]]"></a>
+								</div>
+								<div class="product_details">
+									<div class="user_type">[[user.user_type == 'store_front' || user.user_type == 'designer' ? 'BRAND NEW' : 'PRE OWNED' ]]</div>
+									<a href="#"><h3 class="title">[[ p.title ]]</h3></a>
+									<div class="price">
+										<span class="new">[[p.listing_price | number ]]</span>
+										<span class="old" ng-if="p.original_price>p.listing_price">[[p.original_price | number ]]</span>
+										<span class="discount" ng-if="p.original_price>p.listing_price">[[p.discount]]</span>
+									</div>
+									<div class="relative">
+									   <a ng-click="love(p)" ng-class="{'loved':p.liked}" class="love_btn"></a>
+								   </div>
+								</div>
+							</div>
+						 </div>
+					</div>
+					<div class="view_all" ng-class="{'is_hidden':profile.length<9 || displaylimit>9}"><a ng-click="displaylimit=profile.length" class="btn">View All</a></div>
+				</div>
+				<div ng-if="!profile.length">
+					<div class="center_align empty_closet">
+						<img src="/zapstatic/website/sell/empty_closet.png">
+					</div>
+   					{% include "catalogue/fashion_calculator.html" %}
+				</div>
+			</div>
+			{%else%}
+			{% include "catalogue/fashion_calculator.html" %}
+			<div class="testimonial">
+				<p>Selling on Zapyle is so easy and fun. I sold four items on Zapyle in less than a month and earned Rs. 45,000!</p>
+				<div class="user">
+					<div class="user_details">
+						<h6 class="name">Shivangini</h6>
+						
+					</div>
+				</div>
+			</div>
+			{%endif%}
+			<div class="closet_cleanup">
+				<h3 class="center_align">Luxury Closet Cleanup</h3>
+				<p>
+					<span>Luxury fashion spells a luxe treatment, always.</span> <br><br>
+					<span>Zapyle's Luxury Closet Cleanup is an exclusive service where we help you sell all the luxury items just lying in your closet. We sort, we style &amp; <i><b>you earn</b></i>.</span><br><br>
+					<span class="small_font">Just enter your number below and we'll get in touch to get you started.</span>
+				</p>
+				<form class="cta_form center_size8of12" ng-hide="callRequested">
+					<input type="text" name="phone" ng-model="phone" id="phone_input" placeholder="Phone number">
+					<a href="" ng-click="callMe()"" class="btn">Call me</a>
+				</form>
+				<div class="success-msg" ng-show="callRequested"><span>Thank you for reaching out. We shall get back to you soon.</span>
+				</div>
+			</div>
+		</div>
+	</main>
+{% endblock %}

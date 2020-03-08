@@ -1,0 +1,103 @@
+<script>
+    PageStartTime = Date.now()
+    mixpanel.track("User Event", {
+        'Event Name': 'Changed page',
+        'to': window.location.href,
+        'from': CurrentPage
+    });
+    CurrentPage = window.location.href
+</script>
+<div class="discover" dynamic-heigh>
+    <div class="fold-wrapper">
+        <div class="first-fold">
+            <div class="glass"></div>
+            <div class="content-wrapper">
+                <div class="content">
+                    <div class="left">
+                        <div class="copy">
+                            <div id='1'>
+                                <div class="headline">Discover your unique style from a whole range of closets at Zapyle.</div>
+                                <div class="tagline">Need some help? <a href="#/discover#style-guide">Here's a style guide!</a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <div class="video">
+                            <div class="glass"></div>
+                            <img src="/zapmedia/images/bg/video-bg.png">
+                            <button class="play-button icon-play"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="zap-video" class="pri-overlay" discover-video>
+        <div class="glass"></div>
+        <div class="content">
+            <div class="close"></div>
+            <div class="video-frame"></div>
+        </div>
+    </div>
+    <div id="style-guide" class="main-content">
+        <div class="content">
+            <div class="style">
+                <div class="description size6of12">
+                    <h5>Trendy</h5>
+                    <p>There's no such thing as a 'style guide' when we speak of the trendy aesthetic; if you're a trend hog, then you're probably up to date with what's making it to the runways, what's trending online (hello normcore!), on Instagram - even what Kim K wore to lunch at Nobu!</p>
+                </div>
+                <div class="bloggers size6of12">
+                    <span><a href="#/blogger/priyanka"><img src="/zapmedia/images/discover/Priyanka.jpg"><span class="name">Priyanka Vinod</span></a>
+                    </span>
+                    <span><a href="#/blogger/shivi"><img src="/zapmedia/images/discover/Shivi.jpg"><span class="name">Shivi - Curious Components</span></a>
+                    </span>
+                    <span><a  href="#/blogger/nikita"><img src="/zapmedia/images/discover/Nikita mehra.jpg"><span class="name">Nikita Mehra</span></a>
+                    </span>
+                </div>
+            </div>
+            <div class="style">
+                <div class="description size6of12">
+                    <h5>Boho</h5>
+                    <p>Flowing maxis, fringe, music festivals, and flowers in your hair - all the touchstones of a freespirited boho dresser. Aside from Coachella, channeling the hippie-chic vibe is perfect for occasions ranging from barbeque parties to a holiday wardrobe. Whether you're a whims-and-fancy dresser or all out boho, this one's quite a fun aesthetic to play with.</p>
+                </div>
+                <div class="bloggers size6of12">
+                    <span><a  href="#/blogger/kritika"><img src="/zapmedia/images/discover/Kritika.jpg"><span class="name">Kritika Khurana</span></a>
+                    </span>
+                    <span><a  href="#/blogger/himanshi"><img src="/zapmedia/images/discover/Himanshi.jpg"><span class="name">Himanshi Goel</span></a>
+                    </span>
+                    <span><a  href="#/blogger/pragya"><img src="/zapmedia/images/discover/Pragya.jpg"><span class="name">Pragya Chopra</span></a>
+                    </span>
+                </div>
+            </div>
+            <div class="style">
+                <div class="description size6of12">
+                    <h5>Classic</h5>
+                    <p>The classic school of fashion is one of timeless and tasteful style, slightly more conservative and mature than others, but far from boring. At first glance, if you see your wardrobe dominated by neutrals - blacks, beiges, whites, grays, navy blue; and your favourite pieces are all clean, straight silhouettes, you most probably belong in the classic style brigade.</p>
+                </div>
+                <div class="bloggers size6of12">
+                    <span><a href="#/blogger/anushka"><img src="/zapmedia/images/discover/Anushka.jpg"><span class="name">Anushka Hajela</span></a>
+                    </span>
+                    <span><a  href="#/blogger/aarzoo"><img src="/zapmedia/images/discover/Aarzoo.jpg"><span class="name">Aarzoo</span></a>
+                    </span>
+                    <span><a  href="#/blogger/mahi"><img src="/zapmedia/images/discover/Mahi Shell.jpg"><span class="name">Mahi shell</span></a>
+                    </span>
+                </div>
+            </div>
+            <div class="style">
+                <div class="description size6of12">
+                    <h5>Chic</h5>
+                    <p>A chic sense of style is somewhere between classy and trendy. It generally consists of timeless style staples like shirts and dresses in basic colours, tan totes and black pumps, but will also have a good blend of the hottest trends, whether a graphic printed cape or a number jersey tee.</p>
+                </div>
+                <div class="bloggers size6of12">
+                    <span><a href="#/blogger/margi"><img src="/zapmedia/images/discover/Margi.jpg"><span class="name">Margi</span></a>
+                    </span>
+                    <span><a  href="#/blogger/swati"><img src="/zapmedia/images/discover/Swati Sharma.jpg"><span class="name">Swati Sharma</span></a>
+                    </span>
+                    <span><a  href="#/blogger/ridhima"><img src="/zapmedia/images/discover/Ridhima Madan.jpg"><span class="name">Ridhima Madan</span></a>
+                    </span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

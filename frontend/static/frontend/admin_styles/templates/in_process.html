@@ -1,0 +1,38 @@
+<div class="CSSTableGenerator" style="width:100%">
+<table>
+        <tr><th>Orders</th><th>Returns</th><th>Verification</th><th>pickup_partner</th><th>delivery_partner</th><th>confirmed_at</th><th>Buyer</th>
+        <th>Seller</th><th>zap_inhouse</th><th>Pickup</th><th>Trigger Delivery</th></tr>
+        <tr ng-repeat="i_b_data in in_process_data">
+            <td>
+                <li ng-repeat="o in i_b_data.orders">[[o.order_number]]
+                    <button ng-show="i_b_data.pick_delivered" ng-click="reject_order(o.id,i_b_data,$index,$parent.$index)">Reject</button></li>
+            </td>
+            <td>
+                <li ng-repeat="r in i_b_data.returns">[[r.order_number]]</li>
+            </td>
+            <td>
+                <span ng-show="(i_b_data.triggered_pickup && i_b_data.verified) || i_b_data.zap_inhouse">Verified</span>
+                <span ng-hide="i_b_data.verified || i_b_data.zap_inhouse || !i_b_data.triggered_pickup || !i_b_data.pick_delivered">
+                    <button ng-click="verify_logistics(i_b_data)">Verify</button></span>
+            </td>
+            <td>[[i_b_data.pickup_partner]]</td>
+            <td>[[i_b_data.product_delivery_partner]]</td>
+            <td>[[i_b_data.confirmed_at | date:'MM/dd/yyyy @ h:mma']]</td>
+            <td>[[i_b_data.consignee]]</td>
+            <td>[[i_b_data.consignor]]</td>
+            <td>[[i_b_data.zap_inhouse]]</td>
+            <td>
+                <span ng-show="i_b_data.triggered_pickup || i_b_data.zap_inhouse">[[i_b_data.pick_status]]</span>
+                <span ng-show="!i_b_data.triggered_pickup && i_b_data.pickup_partner && !i_b_data.zap_inhouse">
+                    <button ng-click="reject_order('trigger',i_b_data,'trigger','trigger')">Triger Pickup</button>
+                </span>
+            </td>
+            <td>
+                <span ng-show="i_b_data.trigger_delivery">[[i_b_data.del_status]]</span>
+                <span ng-show="(i_b_data.verified || i_b_data.zap_inhouse) && !i_b_data.trigger_delivery">
+                    <button ng-click="reject_order('trigger_delivery',i_b_data,'trigger','trigger')">Triger Delivery</button>
+                </span>
+            </td>
+        </tr>
+    </table>
+</div>

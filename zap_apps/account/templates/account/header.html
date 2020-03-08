@@ -1,0 +1,446 @@
+<div ng-controller="HeaderController">
+	{% load extra_tags %}
+	<header {% if image_header %}class="image_header"{% endif %}>
+		<div class="top_strip web_only">
+			<div class="right inline values">
+				<div><a href="#footer" class="pink">Download App</a></div>
+				<div><a href="/sell" class="pink">Sell on Zapyle</a></div>
+				<div class="inline_block">Free shipping</div>
+				<div class="inline_block">No Hassle Returns</div>
+				<div class="inline_block">Zero Customs</div>
+			</div>
+			<div class="left">
+				<span>Call 733 788 0282</span>
+			</div>
+		</div>
+		<div class="header_inner">
+			<div class="clear_block">
+				<div class="left_menu_options mobile_only">
+                    <a class="show_menu icon-menu trigger left" data-activates="#mobile_menu"></a>
+					<a href="#rp_search" data-activates=".right_panel #search" class="rp_trigger icon-search_2 left" ng-click="setFocus()" style="position:relative; top: -4px;"></a>
+				</div>
+				<div class="logo absolute">
+                    <a href="/">ZAPYLE</a>
+                </div>
+				<div class="secondary menu">
+					<ul>
+						<!--<li class="web_only"><a href="/sell" class="pink">Start Selling</a></li>-->
+						<li>
+							{%if request.user.is_authenticated %}
+								<a href="#rp_my_profile" ng-click="my_profile()" data-activates="#my_profile" class="login_label rp_trigger" style="background-image: url({{request.user.profile.profile_pic}})">{% if request.user.unread_notif_count%}<span class="badge new circle"></span>{%endif%}</a>
+								<a href="/my_loves" class="icon-heart_empty web_only" ng-if="!isMobile"></a>
+							{%else%}
+								<a href="#rp_login_options" data-activates="#login_options" ng-click="initLoginPupose()" class="login_label login rp_trigger icon-profile before_block"></a>
+								<a class="rp_trigger icon-heart_empty web_only" ng-if="!isMobile" data-activates="#login_options"></a>
+							{%endif%}
+							<a href="#rp_cart" ng-click="cart()" data-activates="#cart" class="icon-tote rp_trigger">
+								<span id="toteBadge" class="badge new circle">
+									{% if request.user.cart.item.count %}{{request.user.cart.item.count}} {% else %} 0 {% endif %}
+								</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<div class="search web_only">
+                    <div id="search">
+                        <div class="search_box small">
+                            <input type="text" id="search_box" placeholder="Search Zapyle" ng-model="search_key">
+                            <a ng-click="searchSuggestion(search_key)" class="icon-search_2"></a>
+                        </div>
+                        <div class="search_suggestions" ng-class="{'is_visible':search_key}">
+                            <div class="glass is_transparent" style="position: fixed !important;z-index:-1;opacity:0;"></div>
+                            <div id="products" ng-class="{'empty' : !suggestions.products.length && !pInit && tab=='product','initial':pInit && tab=='product'}">
+                                <div class="filter_suggestions">
+                                    <ul>
+                                        <li class="suggestion block" ng-repeat="s in suggestions.filters"><span class="string"><a ng-click="searchFilter(s.filter)">[[s.filter.string]]</a></span><span class="use_this" ng-click="useSuggestion(s.filter)"></span></li>
+                                    </ul>
+                                </div>
+                                <div class="product_suggestions">
+                                    <div class="product_item small suggestion" ng-repeat="p in suggestions.products">
+                                        <a ng-href="/product/[[p.product_id]]/[[p.product_name | spaceless]]" class="product_item_inner">
+                                            <div class="product_display">
+                                                <div class="image_holder"><img ng-src="[[p.product_image_url]]"></div>
+                                            </div>
+                                            <div class="product_details">
+                                                <h6>[[p.product_name]]</h6>
+                                                <p>[[p.description_excerpt]]</p>
+                                                <p class="price">
+                                                    <span class="new">[[p.product_listing_price]]</span>
+                                                    <span class="old" ng-if="p.product_original_price > p.product_listing_price">[[p.product_original_price]]</span>
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<div class="menus" id="mobile_menu">
+				<div class="glass mobile_only"></div>
+				<div class="primary menu inline_block">
+					<div class="inline">
+						<div id="international_menu_parent" class="hide_on_leave pointer menu_item" ng-class="{'hover_trigger' : !isMobile}" data-activates="#international_menu"  ng-mouseover="hover='curated'"><a class="block" href="/shop/brand">International Luxury</a></div>
+						<div id="designer_menu_parent" class="hide_on_leave pointer menu_item" ng-class="{'hover_trigger' : !isMobile}" data-activates="#designer_menu"  ng-mouseover="hover='curated'"><a class="block" href="/shop/designer">Indian Designer</a></div>
+						<!--<div id="premium_menu_parent" class="hide_on_leave pointer new menu_item" ng-class="{'hover_trigger' : !isMobile}" data-activates="#premium_menu"  ng-mouseover="hover='curated'">-->
+						<div class="menu_item new">
+							<a class="block" href="/collection/high-street-fashion/">High Street Fashion</a>
+						</div>
+						<!--</div>-->
+						<div id="preloved_menu_parent" class="hide_on_leave pointer menu_item" ng-class="{'hover_trigger' : !isMobile}" data-activates="#preloved_menu"  ng-mouseover="hover='curated'"><a class="block" href="/shop/pre-loved">Pre Owned Fashion</a></div>
+						<div class="new menu_item is_hidden"><a class="block" href="/collection/wedding">Personal Stylist</a></div>
+						<!--<div class="new menu_item"><a class="block" href="/subscribe">Zap Subscribe</a></div>-->
+						<!--<li id="trending_menu_parent" ng-class="isMobile ? 'trigger' : 'hover_trigger'" class="hide_on_leave pointer web_only trigger" data-activates="#trending_menu"><a class="block">Trending</a></li>-->
+						<!--<li><a class="block" href="/collection/wedding">Wedding Collection</a></li>-->
+						<div class="menu_item"><a class="block pink" href="/events">Offers for you</a></div>
+						<!--<li id="preloved_menu_parent"><a class="block" href="/collection/count-down">Countdown Sale</a></li>-->
+						<!--<li id="market_menu_parent" class="hide_on_leave pointer" ng-class="{'hover_trigger' : !isMobile}" data-activates="#market_menu" ng-mouseover="hover='market'"><a class="block" href="/shop/market">Market</a></li>-->
+					</div>
+				</div>
+				<div class="menu mobile_only">
+					<div class="menu_item">
+						<a href="https://bnc.lt/download-zapyle-app">Download App</a>
+					</div>
+					<div class="menu_item">
+						<a href="/sell">Sell on Zapyle</a>
+					</div>
+					<div class="menu_item">
+						<a href="/authenticity">100% Authentic</a>
+					</div>
+					<div class="menu_item">
+						<a href="/about-us#story">Our Story</a>
+					</div>
+					<div class="menu_item">
+						<a href="/about-us#vision">Vision</a>
+					</div>
+					<div class="menu_item">
+						<a href="/about-us#team">The Team</a>
+					</div>
+				</div>
+			</div>
+			<div class="sub_menus">
+				<div id="preloved_menu" data-activates="#preloved_menu" class="hover_trigger inline hide_on_leave">
+					<div class="inline">
+						<div class="inline inline_block size6of12_nomargin">
+							<div class="header block">
+								<h1><a href="/shop/curated" class="block left" style="font-size:24px !important;">Curated</a><a class="pink underline uppercase" href="/shop/curated" style="margin-left: 15px; font-size: 12px !important;">Shop Now</a></h1>
+								<p class="intro" style="margin: 0 0 8px 0;">Pre-owned fashion hand-picked from India's most stylish closets</p>
+							</div>
+							<div class="categories inline no_padding">
+								<h6 class="uppercase block">Shop by Category</h6>
+								<ul class="categories_list menu_options_list">
+									<li><a href="/shop/curated/category/indian-wear/">Indian Wear</a></li>
+									<li><a href="/shop/curated/category/tops/">Tops</a></li>
+									<li><a href="/shop/curated/category/bottoms/">Bottoms</a></li>
+									<li><a href="/shop/curated/category/dresses/">Dresses</a></li>
+									<li><a href="/shop/curated/category/tops-and-bottoms/">Tops and Bottoms</a></li>
+									<li><a href="/shop/curated/category/handbags/">Handbags</a></li>
+									<li><a href="/shop/curated/category/accessories/">Accessories</a></li>
+									<li><a href="/shop/curated/category/foot-wear/">Footwear</a></li>
+								</ul>
+								<a class="block pink underline" href="/shop/curated/category/">View All</a>
+							</div>
+							<div class="brands">
+								<h6 class="uppercase block">Shop by Brand</h6>
+								<div class="inline">
+									<ul class="menu_options_list">
+									{% for p in h.curatedbrands|slice:":8"%}
+										<li class="menu_option_item"><a ng-href="/shop/curated/brand/{{p.slug}}/">{{p.title}}</a></li>
+									{% endfor %}
+									</ul>
+									<a class="block pink underline" href="/shop/curated/brand/">View All</a>
+								</div>
+							</div>
+						</div>
+						<div class="inline inline_block size6of12_nomargin">
+							<div class="header block">
+								<h1><a href="/shop/market" class="block left" style="font-size:24px !important;">Marketplace</a><a class="pink underline uppercase" href="/shop/market" style="margin-left: 20px; font-size: 16px ! important;">Shop Now</a></h1>
+								<p class="intro" style="margin: 0 0 8px 0;">Marketplace for fashionistas to buy and sell preowned fashion</p>
+							</div>
+							<div class="categories inline web_only no_padding">
+								<h6 class="uppercase block">Shop by Category</h6>
+								<ul class="categories_list menu_options_list">
+									<li><a href="/shop/market/category/indian-wear/">Indian Wear</a></li>
+									<li><a href="/shop/market/category/tops/">Tops</a></li>
+									<li><a href="/shop/market/category/bottoms/">Bottoms</a></li>
+									<li><a href="/shop/market/category/dresses/">Dresses</a></li>
+									<li><a href="/shop/market/category/tops-and-bottoms/">Tops and Bottoms</a></li>
+									<li><a href="/shop/market/category/handbags/">Handbags</a></li>
+									<li><a href="/shop/market/category/accessories/">Accessories</a></li>
+									<li><a href="/shop/market/category/foot-wear/">Footwear</a></li>
+								</ul>
+								<a class="block pink underline" href="/shop/market/category/">View All</a>
+							</div>
+							<div class="brands">
+								<h6 class="uppercase block">Shop by Brand</h6>
+								<div class="inline">
+									<ul class="menu_options_list">
+									{% for p in h.marketbrands|slice:":8" %}
+										<li class="menu_option_item"><a ng-href="/shop/market/brand/{{p.slug}}/">{{p.title}}</a></li>
+									{% endfor %}
+									</ul>
+									<a class="block pink underline" href="/shop/market/brand/">View All</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			
+			
+			<!-- ********************************* LEFT MENU.HTML START ********************************************** -->
+			<div class="left menu web_only" id="left_menu_web">
+				<div class="glass over"></div>
+				<div class="menu_inner">
+					<ul class="web_only">
+						<li><a href="/authenticity" class="uppercase bold">Authenticity</a></li>
+						<li><a href="/about-us#story">Our Story</a></li>
+						<li><a href="/about-us#vision">Vision</a></li>
+						<li><a href="/about-us#team">The Team</a></li>
+					</ul>
+				</div>
+			</div>
+			<!-- ********************************* LEFT MENU.HTML END ********************************************** -->
+		</div>
+        <!--<div class="left menu mobile_only" id="left_menu_mobile">-->
+            <!--<div class="menu_inner">-->
+                <!--<div class="primary menu mobile_only">-->
+                    <!--<div class="shop_tabs inline">-->
+                        <!--<a class="uppercase size6of12_nomargin inline_block current trigger center_align" data-activates="#brand_new_list"><span>Brand New</span></a>-->
+                        <!--<a class="uppercase size6of12_nomargin inline_block trigger center_align" data-activates="#preloved_list"><span>Pre Owned</span></a>-->
+                        <!--<div class="close_btn left white_fg" style="padding: 15px;"></div>-->
+                    <!--</div>-->
+                    <!--<ul class="shop_sections">-->
+                        <!--<div class="inner">-->
+                            <!--<li class="is_visible show_only_one" id="brand_new_list">-->
+                                <!--<div class="brands">-->
+                                    <!--<ul class="menu_options_list">-->
+                                        <!--<li><a href="/shop/brand-new"><span style="color: #f37374 !important;">Shop All Brand New</span></a></li>-->
+                                        <!--<li><a><span class="uppercase underline left_align">Top Designers</span></a>-->
+                                        <!--</li>-->
+                                        <!--{% for p in h.designerbrands%}-->
+                                            <!--<li class="menu_option_item"><a ng-href="/shop/brand-new/brand/{{p.slug}}/">{{p.title}}</a><span class="icon-right_arrow"></span></li>-->
+                                        <!--{% endfor %}-->
+                                    <!--</ul>-->
+                                <!--</div>-->
+                            <!--</li>-->
+                            <!--<li id="preloved_list" class="show_only_one">-->
+                                <!--<div class="categories">-->
+                                    <!--<ul class="categories_list menu_options_list">-->
+                                        <!--<li>-->
+                                            <!--<a href="/shop/curated" class="inline">-->
+                                                <!--<span style="color: #f37374 !important;">Shop All Pre Owned</span>-->
+                                            <!--</a>-->
+                                        <!--</li>-->
+                                        <!--<li class="underline uppercase left_align"><a>Top Selling Categories</a></li>-->
+                                        <!--<li class="menu_option_item"><a href="/shop/pre-loved/category/indian-wear/">Indian Wear</a><span class="icon-right_arrow"></span></li>-->
+                                        <!--<li class="menu_option_item"><a href="/shop/pre-loved/category/tops/">Tops</a><span class="icon-right_arrow"></span></li>-->
+                                        <!--<li class="menu_option_item"><a href="/shop/pre-loved/category/dresses/">Dresses</a><span class="icon-right_arrow"></span></li>-->
+                                        <!--<li class="menu_option_item"><a href="/shop/pre-loved/category/handbags/">Handbags</a><span class="icon-right_arrow"></span></li>-->
+                                        <!--<li class="menu_option_item"><a href="/shop/pre-loved/category/accessories/">Accessories</a><span class="icon-right_arrow"></span></li>-->
+                                        <!--<li class="menu_option_item"><a href="/shop/pre-loved/category/foot-wear/">Footwear</a><span class="icon-right_arrow"></span></li>-->
+                                    <!--</ul>-->
+                                <!--</div>-->
+                                <!--<div class="brands">-->
+                                    <!--<ul class="menu_options_list">-->
+                                        <!--<li class="underline uppercase left_align"><a>Top Selling Brands</a></li>-->
+                                        <!--{% for p in h.curatedbrands%}-->
+                                        <!--<li class="menu_option_item"><a ng-href="/shop/pre-loved/brand/{{p.slug}}/">{{p.title}}</a><span class="icon-right_arrow"></span></li>-->
+                                        <!--{% endfor %}-->
+                                    <!--</ul>-->
+                                <!--</div>-->
+                            <!--</li>-->
+                        <!--</div>-->
+                    <!--</ul>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+	</header>
+	<div class="right_panel">
+		<div class="glass"></div>
+		<div class="right_panel_inner">
+			<div class="close_btn"></div>
+			<!-- ********************************* SEARCH.HTML START ********************************************** -->
+			<!-- <div class="custom_scroll"> -->
+			<div id="search">
+				{% include "account/right_panel/search.html" %}
+			</div>
+			<!-- ********************************* SEARCH.HTML END ********************************************** -->
+
+
+			<!-- ********************************* CHECKOUT.HTML START ********************************************** -->
+			<div id="cart">
+				{% include "account/right_panel/cart.html" %}
+			</div>
+			<div id="checkout" class="step_1">
+				{% include "account/right_panel/checkout.html" %}
+			</div>
+			<!-- </div> -->
+			<div id="juspay_options">
+				{% include "account/right_panel/payment_options.html" %}
+			</div>
+			<div id="card_details">
+				{% include "account/right_panel/card_details.html" %}
+			</div>
+			<!-- ********************************* CHECKOUT.HTML END ********************************************** -->
+
+
+			<!-- ********************************* LOGIN.HTML START ********************************************** -->
+			<div id="login_options">
+				{% include "account/right_panel/login_options.html" %}
+			</div>
+			<div id="signup_form">
+				{% include "account/right_panel/signup_form.html" %}
+			</div>
+			<div id="signin_form">
+				{% include "account/right_panel/signin_form.html" %}
+			</div>
+			<div id="otp">
+				{% include "account/right_panel/reset_password.html" %}
+			</div>
+			<div id="my_profile">
+				{% include "account/right_panel/my_profile.html" %}
+			</div>
+			<div id="my_admirers">
+				{% include "account/right_panel/my_admirers.html" %}
+			</div>
+			<div id="my_admiring">
+				{% include "account/right_panel/my_admiring.html" %}
+			</div>
+			<div id="my_account">
+				{% include "account/right_panel/my_account.html" %}
+			</div>
+			<div id="my_notifications">
+				{% include "account/right_panel/my_notifications.html" %}
+			</div>
+			<div id="my_wallet">
+				{% include "account/right_panel/my_wallet.html" %}
+			</div>
+			<div id="my_info">
+				{% include "account/right_panel/my_info.html" %}
+			</div>
+			<div id="my_preferences">
+				{% include "account/right_panel/my_preferences.html" %}
+			</div>
+			<div id="my_addresses">
+				{% include "account/right_panel/my_addresses.html" %}
+			</div>
+
+			<div id="add_address">
+				{% include "account/right_panel/add_address.html" %}
+			</div>
+			<div id="my_bank_account">
+				{% include "account/right_panel/my_bank_account.html" %}
+			</div>
+			<div id="add_bank_account">
+				{% include "account/right_panel/add_bank_account.html" %}
+			</div>
+			<div id="my_orders">
+				{% include "account/right_panel/my_orders.html" %}
+			</div>
+			<div id="order_details">
+				{% include "account/right_panel/order_details.html" %}
+			</div>
+			<div id="my_sales">
+				{% include "account/right_panel/my_sales.html" %}
+			</div>
+			<div id="my_interests">
+				{% include "account/right_panel/my_interests.html" %}
+			</div>
+			<div id="my_sizes">
+				{% include "account/right_panel/my_sizes.html" %}
+			</div>
+			<div id="my_brands">
+				{% include "account/right_panel/my_brands.html" %}
+			</div>
+			
+
+
+
+
+
+			
+			<!-- <div id="test_brands" ng-include="'/zapstatic/frontend/views/shafi/my_brands.html'">
+				
+			</div> -->
+			
+
+			<!-- ********************************* LOGIN.HTML END ********************************************** -->
+		</div>
+	</div>
+	<!--<div id="bio_ep">-->
+		<!--<div id="fashion_is_unfair" class="secondary overlay" ng-class="{'is_visible':ZL != 'True' && !offer_500}">-->
+				<!--<div class="glass cant_close"></div>-->
+				<!--<div class="overlay_container">-->
+					<!--<img src="/zapstatic/website/home/web_overlay3.jpg">-->
+					<!--<div class="content relative">-->
+						<!--<div class="lead_form" ng-class="{'is_visible':!wlSuccess && wlError==''}">-->
+							<!--<p class="description small_font">Sign up for exclusive access to exciting launch offers, flash sales & more!</p>-->
+							<!--<form class="cta_form">-->
+								<!--<input type="text" name="email" ng-model="emailId" placeholder="Enter Email Address">-->
+								<!--<a ng-click="get500()" class="btn">Subscribe</span></a>-->
+							<!--</form>-->
+							<!--<span class="pink error_msg" ng-class="{'is_hidden':wlErrorEmail!='invalid email'}">Please enter a valid email ID.</span>-->
+							<!--<p class="small left_align no_margin grey">We hate spam as much as you do, and you can unsubscribe anytime.</p>-->
+							<!--<a class="close_btn relative pink no_icon block"><span style="border-bottom:1px solid;">I don't want discounts</span></span></a>-->
+						<!--</div>-->
+						<!--<div class="thank_you" ng-class="{'is_visible':wlSuccess}">-->
+							<!--<p class="description">Thank you for signing up! We'll keep you updated on all the exciting events at Zapyle.</p>-->
+							<!--<a href="/" ng-click="hideWLOverlay()">Let's go Shopping!</a>-->
+						<!--</div>-->
+						<!--<div class="error_1" ng-class="{'is_visible':wlError=='zapuser'}">-->
+							<!--<p class="description">Hey Zapyler! Looks like you've already signed up with us. You'll get updates on all the exciting events at Zapyle to your registered email address.</p>-->
+							<!--<a class="close">Okay</a>-->
+						<!--</div>-->
+						<!--<div class="error_2" ng-class="{'is_visible':wlError=='credited already'}">-->
+							<!--<p class="description">Hey there! Looks like you've already subscribed for the updates. We'll keep you posted on the new happenings at Zapyle!</p>-->
+							<!--<a href="/" ng-click="hideWLOverlay()">Let's go Shopping!</a>-->
+						<!--</div>-->
+					<!--</div>-->
+				<!--</div>-->
+		<!--</div>-->
+	<!--</div>-->
+	<div class="overlay" id="emi_plans" style="z-index:6;">
+		<div class="glass"></div>
+		<div class="content" style="background: #fff;color: #000;">
+			<h4 class="emi_plans_header">
+				<span style="padding: 10px 0;display: inline-block;">EMI Plans</span>
+				<a class="close_btn" style="color: #000;font-size: 14px;"></a>
+				<div class="inline">
+					<span style="padding: 5px 40px;">Banks</span>
+					<select class="emi_banks" ng-model="emiBank" ng-change="get_tenure_from_modal(emiBank)">
+						<option ng-selected="$index == 0"
+								ng-repeat="(bank,value) in emi_banks track by bank"
+								value="[[bank]]">
+								[[bank]]
+						</option>
+					</select>
+				</div>
+			</h4>
+			<ul>
+				<li class="inline emi_plan bold">
+					<span class="size3of12 mobile_also">Tenure</span>
+					<span class="size3of12 mobile_also">Interest Rate</span>
+					<span class="size3of12 mobile_also">Monthly Payment</span>
+					<span class="size3of12 mobile_also">Total Amount</span>
+				</li>
+				<li ng-repeat="(key,vals) in bank_tenures_modal" class="inline emi_plan">
+					<span class="size3of12 mobile_also">[[key]]</span>
+					<span ng-repeat="val in vals" class="size3of12 mobile_also">[[val]]</span>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+<style>
+	#fashion_is_unfair input {
+	min-width: 130px;
+	width: calc(100% - 160px);
+}
+	.sendpulse-backdrop-info.show-prompt {
+		display: none !important;
+	}
+</style>

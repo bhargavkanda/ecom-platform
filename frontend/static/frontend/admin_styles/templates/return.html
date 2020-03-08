@@ -1,0 +1,51 @@
+<div class="CSSTableGenerator" style="width:100%">
+<table>
+    <tr>
+        <th>index</th>
+        <th>OrderID</th>
+        <th>Date</th>
+        <th>Product</th>
+        <th>FinalPrice</th>
+        <!-- <th>Seller</th>
+        <th>Buyer</th>
+        <th>PymentMode</th>-->
+        <th>Procurement</th>
+        <!--<th>Verification</th>
+        <th>Shipping/Return</th>
+        <th>ReturnByBuyer</th>
+        <th>PaymentMode</th>
+        <th>Payout</th> -->
+
+    </tr>
+    <tr ng-repeat="return in returnDatas">
+        <td>[[$index+1]]</td>
+        <td>[[return.product.order_number]]</td>
+        <td></td>
+        <td>
+            <a ng-href="/product/[[return.product.id]]/[[return.product.title]]" target="blank">
+                <img class="product-image" height="125px" width="125px" ng-src="[[return.product.image1]]">
+                <div>[[return.product.title]]--[[return.product.size]]</div>
+            </a>
+        </td>
+        <td>
+            [[return.product.final_price]]
+        </td>
+        <td>
+            [[return.return_status]]
+
+            <input type="button" value="Approve Return" ng-click="approve_return(return, 'approve')" ng-if="!return.approved">
+            
+            <input type="button" value="Trigger Return" ng-click="return_logistics(return, 'trigger_logistic')" ng-if="return.return_status=='confirmed' && !return.triggered_logistics" id="btn_trigger_return[[return.id]]">
+            
+            <input type="button" value="Trigger [[return.logistic_partner.pickup_partner]] Pickup" ng-click="return_logistics(return, 'pickup')" ng-if="return.return_status=='pickup_in_process' && return.pickup_return_logistics==0" id="btn_pickup_return[[return.id]]">
+            
+            <input type="button" value="Approve Product" ng-click="return_logistics(return, 'approve')" ng-if="return.return_status=='verification'" id="btn_approve_return[[return.id]]">
+            
+            <input type="button" value="Trigger [[return.logistic_partner.delivery_partner]] Delivery" ng-click="return_logistics(return, 'delivery')" ng-if="return.return_status=='product_approved'" id="btn_delivery_return[[return.id]]">
+
+
+
+        </td>
+    </tr>
+</table>
+</div>

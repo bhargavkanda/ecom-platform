@@ -1,0 +1,107 @@
+<div class="screen_header">
+	<div class="screen_title">Tote</div>
+</div>
+<div class="screen_content" ng-class="{'empty':(!carts || carts.items.length == 0) && !cartLoader}" style="height:calc(100% - 9rem);">
+	<div class="empty_state full_height">
+		<div class="content">
+			<h6 class="title">Your Tote is empty</h6>
+			<p class="description">And that's not good.</p>
+		</div>
+		<a href="/buy" class="btn waves-effect waves-light">Start Shopping</a>
+	</div>
+	<div class="screen_content_inner" ng-class="{'is_hidden':carts.items.length == 0}" ng-show="!cartLoader">
+		<div class="summary">
+			<div><span class="num_of_items">[[carts.items.length]]</span> Item<span ng-hide="carts.items.length==1">s</span></div>
+			<div class="price">
+				Total: <span class="total_price new">[[(carts.total_listing_price - carts.offer_discount) | number]]</span>
+			</div>
+		</div>
+		<ul class="products_list">
+			<li class="product_item inline" ng-repeat="i in carts.items" ng-class={'sold_out':i.quantity_available==0}>
+				<div class="size4of12 mobile_also">
+					<a ng-href="/product/[[i.product_id || i.product]]/[[i.title | spaceless]]">
+						<img ng-src="[[i.product_image.replace('100x100','500x500')]]">
+					</a>
+				</div>
+				<div class="size8of12 mobile_also">
+					<h6 class="title" style="padding-right:20px;">
+						<a class="black" ng-href="/product/[[i.product_id || i.product]]/[[i.title | spaceless]]">[[i.title]]</a>
+					</h6>
+					<div class="brand">[[i.product_brand]]</div>
+					<div class="inline">
+						<div class="size">
+							<label>SIZE</label>
+							<div>[[i.product_size.replace('_','-')]]</div>
+						</div>
+						<div class="quantity">
+							<label>QUANTITY</label>
+							<div>[[i.product_quantity]]</div>
+						</div>
+					</div>
+					<div class="price price_wrapper">
+						<span class="new">[[i.listing_price | number]]</span>
+						<span class="old" ng-if="i.original_price>i.listing_price">[[i.original_price | number]]</span>
+					</div>
+					<div class="applied_offer" ng-if="i.offer_benefit" ng-class="i.offer_invalid ? 'invalid' : ''">
+						<div class="code" ng-if="i.offer_code">[[i.offer_code]]</div>
+						<div class="message">
+							<span class="very_small uppercase green success">Applied</span>
+							<span class="very_small uppercase red-text error">Offer Expired</span>
+						</div>
+						<div class="benefit pink">You save Rs. [[i.offer_benefit | number]]</div>
+						<a ng-if="availableOffers">Edit</a>
+					</div>
+					<a ng-click="removeCartItem(i)" class="remove_link icon-cross"></a>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<div id="loading" ng-class="{'is_visible':cartLoader}"></div>
+</div>
+<div class="screen_footer" style="height:6rem;">
+	<a class="center_align btn-flat full_width pink" ng-click="addCoupon()" ng-show="carts.items.length && !cartLoader">Add Coupon</a>
+	<a ng-click="checkout()" class="waves-effect waves-pink btn full_width center_align" ng-show="carts.items.length && !cartLoader">Checkout</a>
+	 <!-- href="#rp_checkout"   -->
+</div>
+<div class="overlay absolute" id="sold_out_cart">
+   <div class="glass under absolute"></div>
+   <div class="content small">
+       <div class="close_btn right"></div>
+       <div class="header">Items Sold Out</div>
+       <div class="body">
+       		<label class="uppercase">Please Note</label>
+           	<p class="singular sold_out_message"><span class="num">[[itemsToRemove.length]]</span> in your tote <span class="pink">sold out</span></p>
+       </div>
+       <div class="footer">
+           <a class="btn waves-effect waves-light full_width grey" ng-click="removeSoldoutItem()">Remove Sold out items</a>
+       </div>
+   </div>
+</div>
+<div class="overlay absolute" id="confirm_remove_item">
+   <div class="glass under absolute"></div>
+   <div class="content small">
+       <div class="close_btn right"></div>
+       <div class="header">Are you Sure?</div>
+       <div class="body">
+           	<p class="medium">You want to remove <span class="pink">[[itemToRemove.title]]</span> from your tote?</p>
+       </div>
+       <div class="footer inline">
+           <a class="btn waves-effect waves-light grey size6of12_nomargin"" ng-click="closeRemoveSoldoutPopup()">Cancel</a>
+			<a class="btn waves-effect waves-light size6of12_nomargin"" ng-click="removeSoldout()">Remove</a>
+       </div>
+   </div>
+</div>
+<div class="overlay absolute" id="add_coupon">
+   <div class="glass under absolute"></div>
+   <div class="content small">
+       <div class="close_btn right"></div>
+       <div class="header">Add Coupon</div>
+       <div class="body">
+		   <input type="text" name="couponcode" class="center_align" ng-model="couponcode">
+		   <p class="grey small_font">NOTE: The Coupon you apply might replace other coupons that are already applied.</p>
+		</div>
+       <div class="footer inline">
+			<a class="btn waves-effect waves-light full_width" ng-click="applyCoupon(couponcode)">Apply</a>
+       </div>
+   </div>
+</div>

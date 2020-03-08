@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Bangalore Fashion Bloggers Meetup | Zapyle</title>  
+    <link rel="stylesheet" href="/zapstatic/frontend/blog/css/meetup_style.css">
+    <link rel="stylesheet" href="/zapstatic/frontend/styles/fonts.css">
+</head>
+
+<body>
+    <header>
+    <img src="/zapstatic/frontend/blog/meetup_images/logo.png"></header>
+    <div class="content">
+        {% if success == false %}
+        <h1>Zap Bloggers Meet Up!</h1>
+        <p>Want to be a Zapyle style ambassador? Participate in Bangalore's first ever bloggers meet up and intereact with famous fashion bloggers from around the city. Post your fun DIY's on our YouTube channel and reach all our audience on Social media.</p>
+        <p><i>So sign up for a day of Fashion, Fun, Wine and Dine!</i></p>
+        <form action="" method="POST"> 
+        <span>
+            <input type="text" placeholder="Name" name="name" value="{{name}}">
+            <span>{{form.name.0}}</span>
+        </span>
+        <span>
+            <input type="text" placeholder="Phone No." name="phone" value="{{phone}}">
+            <span>{{form.phone.0}}</span>
+        </span>
+        <span>
+            <input type="text" placeholder="Email" name="email" value="{{email}}">
+            <span>{{form.email.0}}</span>
+        </span>
+        <span>
+            <input type="text" placeholder="City" name="city" value="{{city}}">
+            <span>{{form.city.0}}</span>
+        </span>
+            <input type="submit" value="ATTENDING">
+        </form>
+        {% endif %}
+        {% if success %}
+            <h2>Thank you Zapyler!</h2>
+            <p> We will send you an email with the dates for the bloggers meet up.</p>
+            <p>Meanwhile go through our website to<br> Discover, Sell and Buy Fashion!</p>
+            <a href="https://www.zapyle.com/#/feeds"><input type="submit" value="Go to Zapyle" style="max-width: 300px;"></input></a>
+        {% endif %}
+        
+    </div>
+</body>
+</html>

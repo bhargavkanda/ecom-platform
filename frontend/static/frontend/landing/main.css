@@ -1,0 +1,378 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 2. v2.0 | 20110126
+  License: none (public domain)
+*/
+@font-face {
+  font-family: 'brandon';
+  src: url('fonts/brandon/BrandonGrotesque-Regular.eot');
+  src: url('fonts/brandon/BrandonGrotesque-Regular.woff') format('woff'),
+       url('fonts/brandon/BrandonGrotesque-Regular.ttf') format('truetype'),
+       url('fonts/brandon/BrandonGrotesque-Regular.svg#BrandonGrotesque-Regular') format('svg'),
+       url('fonts/brandon/BrandonGrotesque-Regular.eot?#iefix') format('embedded-opentype');
+  font-weight: normal;
+  font-style: normal;
+}@font-face {
+  font-family: 'brandon';
+  src: url('BrandonGrotesque-Black.eot');
+  src: url('BrandonGrotesque-Black.woff') format('woff'),
+       url('BrandonGrotesque-Black.ttf') format('truetype'),
+       url('BrandonGrotesque-Black.svg#BrandonGrotesque-Black') format('svg'),
+       url('BrandonGrotesque-Black.eot?#iefix') format('embedded-opentype');
+  font-weight: bold;
+  font-style: normal;
+}@font-face {
+  font-family: 'bodoni';
+  src: url('fonts/bodoni/Bodoni.eot');
+  src: url('fonts/bodoni/Bodoni.woff') format('woff'),
+       url('fonts/bodoni/Bodoni.ttf') format('truetype'),
+       url('fonts/bodoni/Bodoni.svg#Bodoni') format('svg'),
+       url('fonts/bodoni/Bodoni.eot?#iefix') format('embedded-opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+body {
+  font-family: 'brandon';
+}
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+  font-family: 'brandon';
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/*
+  ========================================
+  Grid
+  ========================================
+*/
+
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.container {
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+}
+
+.group:before,
+.group:after {
+  content: "";
+  display: table;
+}
+.group:after {
+  clear: both;
+}
+.group {
+  clear: both;
+  *zoom: 1;
+}
+
+body {
+  background: url('bg.png') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-color: #F4F8FF;
+}
+
+.logo {
+  padding: 30px;
+}
+
+.items {
+  float: left;
+  padding: 20px;
+  width: 30%;
+  display: none;
+}
+
+.hero {
+    margin: 0 auto;
+    max-width: 600px;
+    padding: 10px;
+}.hero h1 {
+  font-family: bodoni;
+}
+
+
+.message {
+  clear: both;
+  padding: 20px;
+  font: 16px brandon;
+  line-height: 30px;
+  margin-top: 1 0px;
+}
+
+.applinks {
+  padding: 20px;
+}
+
+.ctas {
+  font: 16px brandon;
+  color: #fff;
+  margin: 6px;
+  padding: 12px 20px 10px 20px;
+  background-color: #2D3741;
+  border: none;
+  border-radius: 4px;
+}
+
+.ctas:hover {
+  font: 16px brandon;
+  color: #fff;
+  margin: 6px;
+  padding: 12px 20px 10px 20px;
+  background-color: #416994;
+  border: none;
+  border-radius: 4px;
+}
+
+.callrequest {
+  font: 14px brandon;
+  color: #2D3741;
+  margin: 40px;
+  text-decoration: underline;
+}
+
+.smsrequest {
+  margin: 10px 0px;
+  padding: 0px;
+
+}
+
+.inputwrapper {
+  display:inline-block;
+  background-color: #fff;
+  opacity: .5;
+  border: solid;
+  border-width: 1px;
+  border-color: #2D3741;
+  border-radius: 4px;
+}
+
+.textbox {
+  display:inline-block;
+  width: 200px;
+  height: 40px;
+  background-color:transparent;
+  border:0;
+  padding: 10px;
+  font: 18px brandon;
+  color: #2D3741;
+}
+
+button {
+    background: #2d3741 none repeat scroll 0 0;
+    border: medium none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    font-family: brandon;
+    font-size: 1em;
+    margin: 5px 0;
+    max-width: 280px;
+    padding: 10px;
+    width: 100%;
+}
+
+.links {
+  display: inline-block;
+  font: 14px brandon;
+  color: #2D3741;
+  margin: 40px 20px;
+  text-decoration: none;
+  opacity: 0.5;
+}
+
+h1 {
+  font: 30px serif;
+  color: #2D3741;
+}
+
+
+h2 {
+  font: 30px brandon;
+  color: #2D3741;
+  line-height: 30px;
+  margin-top: 6px;
+}
+
+h3 {
+  font: 16px brandon;
+  color: #2D3741;
+}
+
+h4 {
+  font: 18px brandon;
+  color: #2D3741;
+}
+
+a {
+  text-decoration: none;
+}
+
+p {
+  line-height: 20px;
+}
+
+@media only screen and (max-width: 47em) {
+  h1 {
+    font-size: 22px;
+  }
+  .hero {
+    
+    margin: 0 auto;
+    max-width: 400px;
+    padding: 10px;
+  }
+}
+
+@media only screen and (max-width: 47em) {
+  h1 {
+    font-size: 22px;
+  }
+  .hero {
+    
+    margin: 0 auto;
+    max-width: 400px;
+    padding: 10px;
+  }
+}.pri-overlay {
+    display: none;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}.glass {
+    background: #000 none repeat scroll 0 0;
+    height: 100%;
+    opacity: 0.8;
+    position: fixed;
+    width: 100%;
+    z-index: -1;
+}.pri-overlay .content {
+    background: #fff none repeat scroll 0 0;
+    color: #000;
+    margin: 0 auto;
+    max-width: 640px;
+    padding: 40px 20px;
+    position: relative;
+    top: 30px;
+    line-height: 36px;
+}
+.pri-overlay.request-call .content {
+  max-width: 400px;
+}
+@media only screen and (max-width: 47em) { 
+    .pri-overlay .content {
+        top: 50px;
+    }
+    input {
+        min-width: auto;
+        max-width: 210px;
+        width: calc(100% - 100px);
+    }
+}.pri-overlay input {
+    border: 1px solid #2d3741;
+    border-radius: 4px;
+    font: 1em brandon;
+    margin: 5px 0;
+    max-width: 280px;
+    opacity: 0.5;
+    padding: 10px;
+    width: 100%;
+}.close {
+    background: rgba(0, 0, 0, 0) url("../images/close.png") no-repeat scroll center top / cover ;
+    cursor: pointer;
+    height: 24px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 24px;
+}.download {
+    margin-top: 60px;
+}.download img {
+    max-height: 40px !important;
+}.download a {
+    text-decoration: none;
+}.success-msg {
+    display: none;
+    color: #01ceb3;
+}.success-msg .download {
+    margin-top: 20px;
+}.is_visible {
+    display: block !important;
+}
+.is_hidden {
+    display: none !important;
+}.form span > span, .error-msg {
+    color: #ff0000;
+    display: none;
+    font-size: 1em;
+    left: 0;
+    margin: 10px 0;
+    height: 10px;
+    text-align: center;
+    top: 100%;
+    width: 100%;
+}
+@media only screen and (max-width: 47em) {
+    .error-msg {
+        margin: 0;
+    }
+}button {
+    margin: 5px 0;
+    max-width: 280px;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+}.pri-overlay.request-call h3 {
+    margin-bottom: 20px;
+}

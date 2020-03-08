@@ -1,0 +1,44 @@
+<div class="filter_suggestions">
+	<ul>
+		<li class="suggestion" ng-repeat="s in suggestions.filters">
+			<span class="string">
+				<a ng-click="searchFilter(s.filter)">[[s.filter.string]]</a>
+			</span>
+			<span class="use_this" ng-click="useSuggestion(s.filter)"></span>
+		</li>
+	</ul>
+</div>
+<div class="product_suggestions">
+	<div class="suggestion product_item small" ng-repeat="p in suggestions.products">
+	<a ng-href="/product/[[p.product_id]]/[[p.product_name | spaceless]]" class="product_item_inner black">
+		<div class="product-display"><div class="image_holder">
+			<img ng-src="[[p.product_image_url]]">
+		</div></div>
+		<div class="product_details">
+			<h6 class="title">[[p.product_name]]</h6>
+			<p class="description no_margin">[[p.description_excerpt]]</p>
+			<p><span class="price">[[p.product_listing_price]]</span><span class="price old" ng-if="p.original_price>p.listing_price">[[p.product_original_price]]</span></p>
+		</div>
+	</a>
+	</div>
+</div>
+<div class="initial_state full_height">
+	<div class="content">
+		<h6 class="title">Search by category, style,<br>colour, brand, occassion</h6>
+		<p class="description">
+			<span class="block uppercase very_small">Example</span>
+			<span class="block small">Prada Handbags, Jimmy Choo Shoes</span>
+		</p>
+	</div>
+</div>
+<div class="empty_state full_height">
+	<div class="content">
+		<h6 class="title">We couldn't find products for your search!</h6>
+		<p class="description">
+			Suggestions:
+			<span class="block">Make sure that all words are spelled correctly.</span>
+			<span class="block">Try different keywords.</span>
+			<span class="block">Try more general keywords.</span>
+		</p>
+	</div>
+</div>

@@ -1,0 +1,163 @@
+<div>
+	<form ng-submit="search_order_ID(order_ID)">
+		<b>Order ID:</b><br><br>
+		<span><input type="text" ng-model="order_ID" required placeholder="Enter Order ID"></span>
+		<span><input type="submit" value="Submit"></span>
+	</form>
+</div>
+<br><br>
+<div class="CSSTableGenerator" style="width:100%">
+	<table>
+		<tr>
+		    <th>INDEX</th>
+			<th>ORDER ID</th>
+			<th>ORDER NUMBER</th>
+			<th>PRODUCT DETAILS</th>
+			<th>PRODUCT IMAGE</th>
+			<th>PRICE</th>
+			<th>DATE AND TIME OF ORDER</th>
+			<th>CANCEL</th>
+			<th>SELLER'S DETAILS</th>
+			<th>SELLER'S ADDRESS</th>
+			<th>BUYER'S DETAILS</th>
+			<th>BUYER'S ADDRESS</th>
+			<th>PAYMENT MODE</th> 
+			<th>PROCUREMENT</th>
+			<th>VERIFICATION</th>
+			<th>RETURN TO SELLER</th>
+			<th>SHIPPING TO BUYER</th>
+			<th>RETURN BY BUYER</th>
+			<th>PAYOUT MODE</th>
+			<th>PAYOUT PROCESS STATUS</th>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>
+				<table>
+					<tr>
+						<td><i>Shipment Against Rejection</i></td>
+			            <td><i>Refund Against Rejection</i></td>
+			            <td><i>Refund Status</i></td>
+
+					</tr>
+				</table>
+			</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<tr ng-repeat="order in orders">
+		    <td>[[$index+1]]</td>
+
+			<td>[[order.id]]</td>
+
+			<td>[[order.order_number]]</td>
+
+            <td>
+            	<div>Product ID: [[order.product.id]]</div>
+            	<div>Product Title: [[orer.product.title]]</div>
+            </td>
+
+            <td><img class="product-image" height="125px" width="125px" src="order.product.image"></td>
+
+            <td>
+            	<div>Listing Price: [[order.product.listing_price]]</div>
+            	<div>Total Price: [[order.product.total_price]]</div>
+            	<div>Final Price: [[order.product.final_price]]</div>
+            </td>
+
+            <td>
+            	Date: [[order.placed_at | date:'MM/dd/yyyy']]
+            	Time: [[order.placed_at | h:mm a]]
+            </td>
+
+            <td ng-hide="order.cancel.cancelled==true">
+                <button ng-show="order.cancel.cancelled==false" ng-click="cancel_order()">Cancel</button>
+            </td>
+        
+            <td>
+            	<div>Name: [[order.seller.name]]</div>
+            	<div>Email ID: [[order.seller.email]]</div>
+            	<div>Phone Number: [[order.seller.phone]]</div>
+            </td>
+        
+            <td ng-if="order.pickup_address.confirmed==false">
+            	<div>Address: [[order.pickup_address.address]]</div>
+            	<div><input type="button" value="Confirm" ng-click="confirm_with_seller()"></div>
+            	<div><button ng-click="change_seller_details()">Edit</button></div>
+            </td>
+        
+            <td>
+            	<div>Name: [[order.buyer.name]]</div>
+            	<div>Email ID: [[order.buyer.email]]</div>
+            	<div>Phone number: [[order.buyer.phone]]</div>
+            </td>
+        
+            <td ng-if="order.delivery_address.confirmed==false">
+            	<div>Address: [[order.delivery_address.address]]</div>
+            	<div><button ng-click="confirm_with_buyer() ">Confirm</button></div>
+            	<div><button ng-click="change_buyer details() ">Edit</button></div>
+            </td>
+        
+            <td>[[order.payment_mode]]</td>
+            
+            <td ng-if()>
+            	<div><button ng-click="trigger_shipment_zapyle()">Trigger</button></div>
+            </td>
+
+            <td>
+            	<div><button ng-click="approve_seller_product()">Approve</button></div>
+            	<br>
+            	<div><button ng-click="reject_seller_product()">Reject</button></div>
+            	<div></div>
+            </td>
+
+            <td>
+            	<table>
+            		<tr>
+            			<td><button ng-click="trigger_shipment_seller()">Trigger</button></td>
+            			<td><button ng-click="refund()">Refund</button></td>
+            			<td></td>
+            		</tr>
+            	</table>
+            </td>
+
+            <td ng-if="order.buyer_shipment.triggered==false">
+            	<button ng-click="trigger_shipment_buyer()">Trigger</button>
+            </td>
+
+            <td>
+            	<button ng-click="approve_return()">Approve</button>
+            </td>
+
+            <td>
+            	<div><button ng-click="transfer()">Transfer</button></div>
+            	<br>
+            	<div><button ng-click="zapcash()">Zapcash</button></div>
+            </td>
+
+            <td>
+            	
+            </td>
+		</tr>
+	</table>
+</div>
+	<script src="C:\Users\Hme\Documents\ZAPCode\order_controller.js">
+</script>
+ <!--"
+  -->

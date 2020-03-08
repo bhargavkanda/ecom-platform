@@ -1,0 +1,37 @@
+<div class="screen_header">
+	<div class="screen_title">My Orders</div>
+	<a href="#rp_my_account" class="screen_back" data-activates="#my_account">Back</a>
+</div>
+<div class="screen_content no_footer" ng-class="{'empty':!myorders.length}">
+	<ul class="orders_list">
+		<li class="order_item" ng-repeat="o in myorders | orderBy:'id'">
+			<a ng-href="/product/[[o.id]]/[[o.title | spaceless]]">
+				<div class="product_item tiny left">
+					<div class="product_display">
+						<div class="image_holder">
+							<img ng-src="[[o.image.replace('100x100','500x500')]]">
+						</div>
+					</div>
+				</div>
+			</a>
+			<h6 class="title">[[o.title]]</h6>
+			<div class="price"><span class="new">[[o.listing_price]]</span><span class="old" ng-if="o.original_price>o.listing_price">[[o.original_price]]</span></div>
+			<div class="date">
+				<label>Placed on</label>
+				<div>[[o.placed_at | date:'medium']]</div>
+			</div>
+			<div class="status inline">
+				<label>Status</label>
+				<div>[[o.status]]</div>
+			</div>
+			<a href="#rp_order_details" class="see_details icon-right_arrow black" data-activates="#order_details" ng-click="order_details(o.order_id,'order_page')"></a>
+		</li>
+	</ul>
+	<div class="empty_state full_height">
+		<div class="content">
+			<h6 class="title">You haven't placed any order yet.</h6>
+			<p class="description">Shop your heart out!</p>
+		</div>
+		<a href="/buy" class="btn waves-effect waves-light">Start Shopping!</a>
+	</div>
+</div>

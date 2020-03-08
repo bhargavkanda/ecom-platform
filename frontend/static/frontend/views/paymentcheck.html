@@ -1,0 +1,89 @@
+<div class="main-content">
+    <div class="content">
+
+
+        <script type="text/javascript">
+            CitrusPay.Merchant.Config = {
+                // Merchant details
+                Merchant: {
+                    accessKey: 'GS3K0UGZOG8WQ6KQIG61', //Replace with your access key
+                    vanityUrl: 'za61q0w33q' //Replace with your vanity URL
+                }
+            };
+        </script>
+        <script type="text/javascript">
+            fetchPaymentOptions();
+
+            function handleCitrusPaymentOptions(citrusPaymentOptions) {
+                if (citrusPaymentOptions.netBanking != null)
+                    for (i = 0; i < citrusPaymentOptions.netBanking.length; i++) {
+                        var obj = document.getElementById("citrusAvailableOptions");
+                        var option = document.createElement("option");
+                        option.text = citrusPaymentOptions.netBanking[i].bankName;
+                        option.value = citrusPaymentOptions.netBanking[i].issuerCode;
+                        obj.add(option);
+                    }
+            }
+        </script>
+        <script type="text/javascript">
+            //Net Banking
+            $('#citrusNetbankingButton').on("click", function() {
+                makePayment("netbanking")
+            });
+            //Card Payment
+            $("#citrusCardPayButton").on("click", function() {
+                makePayment("card")
+            });
+        </script>
+
+        <script type="text/javascript">
+            function citrusServerErrorMsg(errorResponse) {
+                alert(errorResponse);
+                console.log(errorResponse);
+            }
+
+            function citrusClientErrMsg(errorResponse) {
+                alert(errorResponse);
+                console.log(errorResponse);
+            }
+        </script>
+        <form>
+            <input type="hidden" id="citrusFirstName" value="" />
+            <input type="hidden" id="citrusLastName" value="" />
+            <input type="text" id="citrusEmail" value="" />
+            <input type="hidden" id="citrusStreet1" value="" />
+            <input type="hidden" id="citrusStreet2" value="" />
+            <input type="hidden" id="citrusCity" value="" />
+            <input type="hidden" id="citrusState" value="" />
+            <input type="hidden" id="citrusCountry" value="" />
+            <input type="hidden" id="citrusZip" value="" />
+            <input type="text" id="citrusMobile" value="" />
+        </form>
+        </br>
+        <form>
+            <input type="text" readonly id="citrusAmount" value="10" />
+            <input type="text" readonly id="citrusMerchantTxnId" value="<%= txnID %>" />
+            <input type="hidden" readonly id="citrusSignature" value="<%= securitySignature %>" />
+            <input type="hidden" readonly id="citrusReturnUrl" value="<%= returnURL %>" />
+            <input type="hidden" readonly id="citrusNotifyUrl" value="<%= notifyUrl %>" />
+
+        </form>
+
+        <select id="citrusCardType">
+        <option selected="selected" value="credit">Credit</option>
+        <option value="debit">Debit</option>
+    </select>
+        <select id="citrusScheme">
+        <option selected="selected" value="VISA">VISA</option>
+        <option value="mastercard">MASTER</option>
+    </select>
+        <input type="text" id="citrusNumber" value="" />
+        <input type="text" id="citrusCardHolder" value="" />
+        <input type="text" id="citrusExpiry" value="" />
+        <input type="text" id="citrusCvv" value="" />
+        <input type="button" value="Pay Now" id="citrusCardPayButton" />
+        <select id="citrusAvailableOptions">
+    </select>
+        <input type="button" value="Pay by netbanking" id="citrusNetbankingButton" />
+    </div>
+</div>

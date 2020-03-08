@@ -1,0 +1,46 @@
+{% extends "account/base.html" %}
+{% block extra_head %}
+	{% if not filter_data %}
+		<title>Buy Designer and Luxury Fashion Online India for Women</title>
+		<meta name="description" content="Shop for Discounted Luxury and Designer Handbags, Lehengas, Sarees, Footwear, Accessories & more Online India. Free Shipping, Easy Returns & Cash on Delivery.">
+ 	{% else %}
+		<title>{{filter_data.page_title}}</title>
+		<meta name="description" content="{{filter_data.meta_description}}">
+    {% endif %}
+    <script src="/zapstatic/catalogue/buy.js"></script>
+    <!-- <script src="/zapstatic/catalogue/designer.js"></script> -->
+{% endblock %}
+{% block body %}
+	<main>
+		<div class="page_content">
+            <div id="page" class="listings inline">
+                <div id="loading"></div>
+                {% if brand_groups %}
+                {% for brand_group in brand_groups %}
+                <div class="size3of12">
+                    <h1 id="alpha_{{brand_group.starts_with}}">{{brand_group.starts_with}}</h1>
+                    {% for brand in brand_group.brands %}
+                    <a href="{{base_url}}/brand/{{brand.url}}" class="listing_item">
+                        <h1>{{brand.name}}</h1>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                {% if category_groups %}
+                {% for category_group in category_groups %}
+                <div class="size3of12">
+                    <a href="{{base_url}}/category/{{category_group.url}}"><h6 class="black">{{category_group.name}}</h6></a>
+                    {% for subcategory in category_group.subcategorys %}
+                    <a href="{{base_url}}/sub-category/{{subcategory.url}}" class="listing_item">
+                        <h1>{{subcategory.name}}</h1>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+		</div>
+	</main>
+{% endblock %}

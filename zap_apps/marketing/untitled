@@ -1,0 +1,270 @@
+class ZapPayout(TimeModel):
+    seller = models.ForeignKey('zapuser.ZapUser', related_name='zap_payout')
+    order = models.ForeignKey('order.Order', related_name='zap_order')
+    payout_status = models.BooleanField(default=False)
+    total_value = models.FloatField(null=True, blank=True) #seller reference
+    net_value = models.FloatField(null=True, blank=True) #order.final 
+    seller_cut = models.FloatField(null=True, blank=True)
+    zapyle_cut = models.FloatField(null=True, blank=True)
+
+    def __unicode__(self):
+        return unicode(self.order) + " " + unicode(self.seller_cut) + " " + unicode(self.payout_status) 
+
+
+
+{u'dccAmount': [u''], u'cardHolderName': [u'swarna'], u'expiryMonth': [u''], u'currency': [u''], u'dccCurrency': [u''], 
+u'isCOD': [u'false'], u'expiryYear': [u''], u'pgTxnNo': [u'4428456071961471'], u'encryptedCardNumber': [u''], u'addressCountry': [u'NA'], 
+u'TxMsg': [u'Transaction Successful'], u'authIdCode': [u'999999'], u'addressCity': [u'NA'], u'txn3DSecure': [u''], u'impsMobileNumber': [u''], 
+u'email': [u'swarna@zapyle.com'], u'addressState': [u'NA'], u'mcpAmount': [u''], u'exchangeRate': [u''], u'txnType': [u'SALE'], u'addressStreet1': [u'NA'], 
+u'eci': [u''], u'cardType': [u'MCRD'], u'maskedCardNumber': [u'510510XXXXXX5100'], u'mcpCurrency': [u''], u'marketplaceTxId': [u'11498'], u'cardCode': [u''], 
+u'txnDateTime': [u'2016-05-26 19:07:07'], u'transactionId': [u'782490'], u'offerExchangeRate': [u''], u'dccOfferId': [u''], u'requestedAmount': [u''], 
+u'firstName': [u'kaushikdr'], u'lastName': [u'K.'], u'TxStatus': [u'SUCCESS'], u'mobileNo': [u'9163260458'], u'paymentMode': [u'DEBIT_CARD'], u'TxGateway': [u'HDFC PG (Citrus Plus)'],
+ u'TxId': [u'146426983474977'], u'requestedCurrency': [u''], u'amount': [u'1041.00'], u'addressStreet2': [u'NA'], u'impsMmid': [u''], u'TxRefNo': [u'CTX1605261337079856336'], 
+ u'signature': [u'4ffdfd32204a7fac428bc07a3621774a61a8effa'], u'issuerRefNo': [u'614730099589'], u'pgRespCode': [u'0'], u'addressZip': [u'NA']}
+
+product_ids += str(order.product.id) + ", "
+products_desc = products_desc + " " + str(order.quantity) + " " +  " " + order.ordered_product.size \
+    + " " + order.ordered_product.brand + " " + order.ordered_product.product_category + ","
+products_desc = products_desc.replace(products_desc[-1:], '.')
+
+restart test_server testcelery testcelerycam testtornado-8003 testtornado-8010
+
+restart zapcelery1 zapcelery2 zapcelery3 zapcelerycam  zapyle_server_prod tornado-8005 tornado-8006 tornado-8007 bulk_push_resp
+
+from django.utils import timezone
+from zap_apps.marketing.models import *
+from zap_apps.marketing.tasks import *
+from zap_apps.zapuser.models import *
+user = ZapUser.objects.filter(zap_username__in=['Skkrish'])
+# act = Action.objects.all()[0]
+notif = Notifs.objects.all()[0]
+msg = notif.text
+sent_time = timezone.now()
+extra = {'action':'newsfeed','marketing':True,'notif_id':str(notif.id),'sent_time':str(sent_time)}
+
+users = [i.id for i in ZAPGCMDevice.objects.filter(logged_device__name="ios", user__zapuser__in=user)]
+users = ZAPGCMDevice.objects.filter(id__in=users).values_list('user__zapuser__zap_username', flat=True).exclude(user__zapuser__zap_username=None).distinct()
+
+
+{"data":{"action":"newsfeed","marketing":"True","message":"You gotta have style. It helps you get up in the morning.","notif_id":"5735644cb0e52609d1d66220","random_num":"41","sent_time":"2016-05-17 09:47:22.128615+00:00"},"registration_ids":["APA91bFpzDzq9vZQx6tN6En2qHlsCC4V21Isu6x2rkN-fDSEin5kqMbr2bZzET45USKRAZcJpoznCVTLaZ1OvaSutWTvmE3UZl0WIIzjBffYiQcFbzIAsIJogokz6B3wn3y5bRkU5XON","APA91bHdZQ7QKyXtQ08nzX7-J523tb7Rlzft17nT2EkNuSP_eiav0XV-qCkPiKrr5tmxeJbqZXWy49CPilYOkB_uOATp-l7DZBrZli_IGGb6lqBNblqdGKOf3o2s7GICsvgygZLKFmrJ","APA91bEOJQxH6rTId_BtRNwYjsPz6-d_CYQdqeHm-oe80JBU7GJ2wWDPWgvc_Iq1HKN0Ui-uBPD92-GQUnk0iN5tjlgzXaM2EZbi_OMcsDQ4Cfb5KMHTz23hSUBSphIc3M_awuqXfjz3"]}
+
+
+@task
+def gcm_task(users, msg, extra=None):
+    if extra:
+        extra['random_num'] = str(random.choice(range(100)))
+    else:
+        extra = {'random_num': str(random.choice(range(100)))}
+    users = ZAPGCMDevice.objects.filter(id__in=users)
+    if len(users) > 1:
+
+        extra.update({"message":msg})
+        reg_id_list = users.values_list('registration_id', flat=True)
+
+        users.send_message(msg, extra=extra)
+        # ab = users.values_list('registration_id', flat=True)
+        # print 'GCM '+str(len(users))
+    else:
+        for i in users:
+            i.send_message(msg, extra=extra)
+            # print 'GCM loop 1'
+
+def send_to_queue(data, registration_id):
+    i
+
+
+
+
+
+
+    https://www.zapyle.com/zapmedia/uploads/product_images/original/38f26f4c-7fb.1000x1000.jpg
+
+
+
+
+for i in pro:
+    ws['A' + str(ini)] = i.id                                                                                                   
+    ws['B' + str(ini)] = i.title
+    if i.user.user_type.name == 'zap_exclusive':
+        ws['C' + str(ini)] = i.user.zap_username
+    else:
+        ws['C' + str(ini)] = 'MarketPlace'
+    ws['D' + str(ini)] = str(i.upload_time.date())
+    if i.ordered_product.all():
+        ws['E' + str(ini)] = str(i.ordered_product.all()[0].placed_at.date())
+    ws['F' + str(ini)] = i.listing_price
+    if i.user.user_type.name == 'zap_exclusive' and i.zapexclusiveuserdata_set.all():
+        ws['G'+str(ini)] = i.zapexclusiveuserdata_set.all()[0].account_holder or 'NA'
+    else:
+        ws['G'+str(ini)] = i.user.zap_username or 'NA'
+    ini += 1
+
+
+
+
+{"cash_pickups_count": 0.0, "cod_count": 0, "success": true, "package_count": 1, "upload_wbn": "UPL10180626849269617126", "replacement_count": 0, "cod_amount": 0.0, "prepaid_count": 1, "pickups_count": 0, "packages": [{"status": "Success", "waybill": "554410010463", "refnum": "26", "client": "ZAPYLE - DFS", "remarks": "", "sort_code": "X9", "cod_amount": 0.0, "payment": "Pre-paid"}], "cash_pickups": 0.0}
+
+
+@task
+def gcm_task(users, msg, extra=None):
+    from zap_apps.zap_notification.bulk_push_notif import send_to_queue
+    if extra:
+        extra['random_num'] = str(random.choice(range(100)))
+    else:
+        extra = {'random_num': str(random.choice(range(100)))}
+    users = ZAPGCMDevice.objects.filter(id__in=users)
+    if len(users) > 1:
+
+        # extra.update({"message":msg})
+        # reg_id_list = users.values_list('registration_id', flat=True)
+
+        # send_to_queue(extra, reg_id_list)
+
+        users.send_message(msg, extra=extra)
+        # ab = users.values_list('registration_id', flat=True)
+        # print 'GCM '+str(len(users))
+    else:
+        for i in users:
+            i.send_message(msg, extra=extra)
+
+            # print 'GCM loop 1'
+
+@task
+def gcm_multi_task(users, msg, extra=None):
+    from zap_apps.zap_notification.bulk_push_notif import send_to_queue
+    if extra:
+        extra['random_num'] = str(random.choice(range(100)))
+    else:
+        extra = {'random_num': str(random.choice(range(100)))}
+    users = ZAPGCMDevice.objects.filter(id__in=users)
+    if len(users) > 1:
+
+        extra.update({"message":msg})
+        reg_id_list = users.values_list('registration_id', flat=True)
+
+        send_to_queue(extra, reg_id_list)
+
+        # users.send_message(msg, extra=extra)
+        # ab = users.values_list('registration_id', flat=True)
+        # print 'GCM '+str(len(users))
+    else:
+        for i in users:
+            i.send_message(msg, extra=extra)
+
+
+
+
+import pika
+import json
+import pdb
+
+
+def send_to_queue(data, reg_id_list):
+    
+    # pdb.set_trace()
+    credentials = pika.PlainCredentials(
+            'zapyle', 'zapy!e1234')
+    connection = pika.BlockingConnection(pika.ConnectionParameters(
+      credentials=credentials,
+      host='50.18.211.30',
+      socket_timeout=300,
+    ))
+    print 'connected'
+    channel = connection.channel()
+    try:
+      channel.queue_declare(queue='push_queue', durable=True)
+    except:
+      channel = connection.channel()
+
+    data_req = {'data':data, 'reg_id_list':list(reg_id_list)}
+    channel.basic_publish(exchange='',
+                          routing_key='push_queue',
+                          body=json.dumps(data_req),
+                  properties=pika.BasicProperties(
+                delivery_mode=2,  # make message persistent
+                ))
+    print " [x] Sent"
+    connection.close()
+    return 'Completed'
+
+for packages in packing_slip['packages']:
+
+    logistics_data = delhivery_logistics_finder.get(packages['wbn'])
+
+    from_name = logistics_data.consignor.name
+    from_add = logistics_data.consignor.address
+    from_city = logistics_data.consignor.city
+    from_state = logistics_data.consignor.state.name
+    from_pincode = logistics_data.consignor.pincode
+    from_phone = logistics_data.consignor.phone
+
+    to_name = 'Zapyle'
+    to_add = 'The Millenia, Tower B, 4th floor, Ulsoor'
+    to_city = 'Bangalore'
+    to_state = 'Karnataka'
+    to_pincode = '560008'
+    to_phone = '07337880282'
+
+    order_number = ""
+    for single_order in logistics_data.orders.all():
+        order_number += single_order.order_number + ", "
+    order_number = order_number[:-2]
+    coc_code = 'X9'
+
+    oid_barc = packages['oid_barcode']
+    wbn_barc = packages['barcode']
+    oid_barcode = decode_base64(oid_barc)
+    wbn_barcode = decode_base64(wbn_barc)
+    oid_filename = settings.HOME_FOLDER + "/operations/" + \
+        after_two_days + "/DL_pickup_oid_bar_" + \
+        packages['wbn'] + ".png"
+    wbn_filename = settings.HOME_FOLDER + "/operations/" + \
+        after_two_days + "/DL_pickup_wbn_bar_" + \
+        packages['wbn'] + ".png"
+    delhivery_logo_full = packages['delhivery_logo']
+    delhivery_logo_raw = delhivery_logo_full.split(":")[1]
+    delhivery_logo = "https://track.delhivery.com" + delhivery_logo_raw
+    with open(oid_filename, 'wb') as f:
+        f.write(oid_barcode)
+    f.close()
+    with open(wbn_filename, 'wb') as f:
+        f.write(wbn_barcode)
+    f.close()
+
+    # ########pdb.set_trace()
+    if logistics_data.consignor.user.user_type.name == "store_front":
+        userTypeDecider = 0
+    else:
+        userTypeDecider = 1
+
+        # {home_folder}}+"/operations/"{{after_two_days}}+"/"+{{delhivery_service}}+"_oid_bar_"+{{waybill}}+".png"
+    waybill_barcode = settings.CURRENT_DOMAIN+"/logmedia/"+after_two_days+"/DL_pickup_wbn_bar_"+packages['wbn']+".png"
+    order_barcode = settings.CURRENT_DOMAIN+"/logmedia/"+after_two_days+"/DL_pickup_oid_bar_"+packages['wbn']+".png"
+
+    packing_slip_template_data = {'delhivery_logo': delhivery_logo, 'waybill_barcode':waybill_barcode,'order_barcode':order_barcode, 'order_number': order_number, 'coc_code': coc_code, 'from_name': from_name, 'from_add': from_add, 'from_city': from_city, 'from_state': from_state,
+                                  'from_pincode': from_pincode, 'from_phone': from_phone, 'to_name': to_name, 'to_add': to_add, 'to_city': to_city, 'to_state': to_state, 'to_pincode': to_pincode, 'to_phone': to_phone, 'package_product': packages['prd'], 'package_price': str(packages['rs']), 'userTypeDecider': userTypeDecider, 'cod_decider':0}
+    packing_slip_html_body = render_to_string(
+        "delhivery_packing_slip.html", packing_slip_template_data)
+
+
+    Html_file = open(settings.HOME_FOLDER + "/operations/" +
+                     after_two_days + "/DL_pickup_" + packages['wbn'] + '.html', "w")
+    Html_file.write(packing_slip_html_body)
+    Html_file.close()
+
+    html_url = settings.HOME_FOLDER + "/operations/" + \
+        after_two_days + "/DL_pickup_" + packages['wbn'] + ".html"
+    pdf_url = settings.HOME_FOLDER + "/operations/" + \
+        after_two_days + "/packing_slip_seller_" + \
+        packages['wbn'] + ".pdf"
+    config = pdfkit.configuration(
+        wkhtmltopdf=settings.WKHTMLTOPDF_PATH)
+    pdfkit.from_string(packing_slip_html_body, pdf_url, configuration=config)
+
+
+
+
+
+
+
+

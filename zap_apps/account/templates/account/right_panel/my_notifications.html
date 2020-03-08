@@ -1,0 +1,18 @@
+<div class="screen_header">
+	<div class="screen_title">Notifications</div>
+	<a class="screen_back" data-activates="#my_profile" href="#rp_my_profile" ng-click="my_profile()">Back</a>
+</div>
+<div class="screen_content no_footer" ng-class="{'empty':!mynotif || mynotif.length == 0}">
+	<div class="empty_state full_height">
+		<div class="content">
+			<h6 class="title">You haven't received any notification</h6>
+			<p class="description">Add items to your love list, Admire users, Start conversations. Discover what's on Zapyle!</p>
+		</div>
+		<a href="/sell" class="btn waves-effect waves-light" data-activates="#add_address">Discover</a>
+	</div>
+	<ul class="notifications">
+		<li class="notification" ng-repeat="notif in mynotif">
+			<a ng-href="[[notif.action=='approve'||notif.action=='comment' ? '/product/'+notif.product.id+'/'+notif.product.name : '/profile/'+notif.notified_by.id+'/'+notif.notified_by.name]]" ng-click="readNotification(notif)">[[notif.message]]</a> 
+		</li>
+	</ul>
+</div>

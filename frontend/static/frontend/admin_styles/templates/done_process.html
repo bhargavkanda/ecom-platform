@@ -1,0 +1,19 @@
+<div class="CSSTableGenerator" style="width:100%">
+    <table border="1">
+        <tr><th>Logistics</th><th>Type</th><th>Status</th><th>Buyer</th><th>Seller</th><th>Time</th><th>Actions</th><th>Payout</th></tr>
+        <tr ng-repeat="d in done_process_data">
+            <td ng-if="d.rowspan==2 && d.log==done_process_data[$index+1]['log']" rowspan="2">[[d.log]]</td>
+            <td ng-if="d.rowspan==1">[[d.log]]</td>
+            <td>[[d.pickup ? 'Pickup':'Delivery']]</td>
+            <td>[[d.status]]</td>
+            <td>[[d.consignee]]</td>
+            <td>[[d.consignor]]</td>
+            <td>[[d.time]]</td>
+            <td><button ng-show="!d.pickup">Return</button></td>
+            <td ng-hide="d.pickup">
+                <button ng-show="d.initiate_payout && !d.paid_out" ng-click="payout(d)">Pay</button>
+                <p ng-show="d.paid_out">Paid</p>
+            </td><td ng-show="d.pickup"></td>
+        </tr>
+    </table>
+</div>

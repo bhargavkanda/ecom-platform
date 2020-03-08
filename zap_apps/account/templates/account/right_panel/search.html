@@ -1,0 +1,20 @@
+<div class="screen_header mobile_only relative">
+	<div class="screen_title">Search</div>
+</div>
+<div class="search_box">
+	<input type="text" placeholder="Search for a Brand, Occasion, Style" ng-model="search_key" id="search_box">
+	<a ng-click="searchSuggestion(search_key)">Search</a>
+	<!-- href="/buy?search=[[search_key]]" -->
+</div>
+<div class="search_suggestions is_visible">
+	<!--<ul class="tabs">-->
+		<!--<li class="tab"><a ng-click="search_suggestions('product')" id="search_tab" class="active" href="#products">Products</a></li>-->
+		<!--<li class="tab"><a ng-click="search_suggestions('closet')" href="#closets">Closets</a></li>-->
+	<!--</ul>-->
+	<div id="products" ng-class="{'empty' : !suggestions.products.length && !suggestions.filters.length && pInit,'initial':!pInit}">
+		{% include "account/right_panel/search_suggestions_products.html" %}
+	</div>
+	<!--<div id="closets" ng-class="{'empty' : suggestions.users.length == 0,'initial':!uInit}">-->
+		<!--{% include "account/right_panel/search_suggestions_closets.html" %}-->
+	<!--</div>-->
+</div>

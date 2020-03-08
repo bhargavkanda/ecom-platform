@@ -1,0 +1,104 @@
+{
+	"error_messages" : {
+		"email" : {
+			"blank": "Email ID cannot be blank.",
+			"null" : "Email ID cannot be null.",
+			"required" : "Email ID is required.",
+			"invalid" : "Invalid Email ID.",
+			"unique" : "Email ID already exists.",
+			"max_length": "Email ID cannot exceed 30 characters.",
+			"min_length": "Invalid Email ID."
+		},
+		"phone_number" : {
+			"blank": "Phone number cannot be blank.",
+			"null" : "Phone number cannot be null.",
+			"required" : "Phone number is required.",
+			"invalid" : "Invalid Phone number.",
+			"unique" : "Phone number already exists.",
+			"max_length": "Invalid Phone number",
+			"min_length": "Invalid Phone number"
+		},
+		"phone" : {
+			"blank": "Phone number cannot be blank.",
+			"null" : "Phone number cannot be null.",
+			"required" : "Phone number is required.",
+			"invalid" : "Invalid Phone number.",
+			"unique" : "Phone number already exists.",
+			"max_length": "Invalid Phone number",
+			"min_length": "Invalid Phone number"
+		},
+		"first_name" : {
+			"blank": "First name cannot be blank.",
+			"null" : "First name cannot be null.",
+			"required" : "First name is required.",
+			"invalid" : "Invalid First name.",
+			"max_length": "First name cannot exceed 30 characters.",
+			"min_length": "First name cannot be blank."
+		},
+		"zap_username" : {
+			"blank": "Username cannot be blank.",
+			"null" : "Username cannot be null.",
+			"required" : "Username is required.",
+			"invalid" : "Invalid Username.",
+			"unique" : "Username already exists.",
+			"max_length": "Username cannot exceed 30 characters.",
+			"min_length": "Username should contain at least 4 characters."
+		},
+		"name" : {
+			"blank": "Name cannot be blank.",
+			"null" : "Name cannot be null.",
+			"required" : "Name is required.",
+			"invalid" : "Invalid name.",
+			"unique" : "Name already exists.",
+			"max_length": "Name cannot exceed 30 characters.",
+			"min_length": "Name cannot be blank."
+		},
+		"password" : {
+			"blank": "Password cannot be blank.",
+			"null" : "Password cannot be null.",
+			"required" : "Password is required.",
+			"invalid" : "Invalid Password.",
+			"match" : "Passwords do not match.",
+			"incorrect" : "Incorrect password.",
+			"min_length": "Password should contain at least 6 characters.",
+			"max_length": "Password cannot exceed 30 characters."
+		},
+		"confirm_password" : {
+			"blank": "Password cannot be blank.",
+			"null" : "Password cannot be null.",
+			"required" : "Password is required.",
+			"match" : "Passwords do not match.",
+			"incorrect" : "Incorrect password.",
+			"min_length": "Password should contain at least 6 characters.",
+			"max_length": "Password cannot exceed 30 characters."
+		},
+		"pincode" : {
+			"blank": "Pincode cannot be blank.",
+			"null" : "Pincode cannot be null.",
+			"required" : "Pincode is required.",
+			"invalid" : "Invalid Pincode.",
+			"does_not_exist" : "Sorry! We do not deliver to this pincode as of now.",
+			"min_length": "Invalid Pincode.",
+			"max_length": "Invalid Pincode."
+		},
+		"coupon" : {
+			"blank": "Coupon code cannot be blank.",
+			"null" : "Coupon code cannot be null.",
+			"required" : "Coupon code is required.",
+			"invalid" : "Invalid Coupon code.",
+			"expired" : "Sorry, the coupon expired.",
+			"min_purchase" : "The coupon can be applied on a minimum purchase of ",
+			"max_length": "Invalid Coupon code.",
+			"min_length": "Invalid Coupon code."
+		},
+		"zapcash" : {
+			"blank": "Zapcash amount cannot be blank.",
+			"null" : "Zapcash amount cannot be null.",
+			"required" : "Please enter an amount.",
+			"invalid" : "Invalid amount. Please enter only numeric values.",
+			"no_balance" : "Sorry, you don't have enough Zapcash.",
+			"max_length": "Invalid amount.",
+			"min_length": "Invalid amount."
+		}
+	}
+}

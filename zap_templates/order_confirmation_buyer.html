@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>A Simple Responsive HTML Email</title>
+        <style type="text/css">
+        body {margin: 0; padding: 0; min-width: 100%!important;}
+        .content {width: 100%; max-width: 600px;}
+        @media only screen and (max-width: 480px){
+	        .templateColumnContainer{
+	            display:block !important;
+	            width:100% !important;
+	        }.vertical-spacer-container {
+	        	height: 0 !important;
+	        }.text-on-girl{
+	        	padding-top: 340px !important;
+	        }.content {
+	        	padding: 0 5px !important;
+	        }
+	    }
+        </style>
+    </head>
+    <body yahoo="" bgcolor="#f6f8f1" style="font-family:Trebuchet MS, Lucida Sans, Tahoma, Helvetica, Arial;">
+        <table width="100%" bgcolor="#f2f2f2" border="0" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;min-width:350px;">
+            <tr class="logo" bgcolor="#000000">
+                <td>
+                    <table class="content" align="center" cellpadding="7" cellspacing="0" border="0">
+                        <tr>
+                            <td style="text-align:center;">
+                                <img alt="ZAPYLE" src="http://zapmob.cloudapp.net/media/email/welcome/logo.png" style="font-size:40px; color:#fff;">
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class="green-bar">
+                <td height="10" bgcolor="#52FDB9"></td>
+            </tr>
+           
+            
+
+            <tr class="product-details">
+            	<td>
+	            	<table class="content" style="padding:0 40px 20px;">
+	            		<tbody>
+	            			<tr class="intro">
+				            	<td style="padding-bottom:20px">
+				            		<p>Hi <span class="name">{{buyer_name}}</span></p>
+				            		<p>TIME TO GET EXCITED! <br> Your order has been confirmed and will be on its way soon.</p>
+				            	</td>
+				            </tr>
+	            			<tr>
+	            				<td>
+	            					<p style="margin:0 5px; font-size:12px;">Following are the items in your order:</p>
+					            	<table class="header" style="width: 100%;font-size:14px;">
+						            	<tbody>
+						            		<tr>
+						            			<td>
+						            				<table style="border-top: 1px solid rgb(0, 0, 0); border-bottom: 1px solid rgb(0, 0, 0); padding: 10px 0px; width: 100%;">
+						            					<tbody><tr>
+						            						<td width="20%" class="image"></td>
+									            			<td width="45%" class="title">Product Title</td>
+									            			<td width="15%" align="right" class="quantity" style="text-align: right;">Quantity</td>
+									            			<td width="15%" align="right" class="price" style="text-align: right;">Price</td>
+						            					</tr>
+						            				</tbody></table>
+						            			</td>
+						            			
+						            		</tr>
+						            	</tbody>
+					            	</table>
+					            	<table class="products" style="font-size:14px;">
+						            	<tbody>
+						            	    {% for i in items %}
+						            		<tr class="product">
+						            			<td width="20%" class="image"><img width="90%" style="width:90%;" src="{{i.productImage}}"></td>
+						            			<td width="45%" class="title">{{i.product_title}}</td>
+						            			<td width="15%" align="right" class="quantity" style="text-align: right;">{{i.product_qty}}</td>
+						            			<td width="15%" align="right" class="price" style="text-align: right;">{{i.unit_price}}</td>
+						            		</tr>
+						            		{% endfor %}
+						            	</tbody>
+					            	</table>
+					            	<table class="price-corrections" style="width: 100%; padding: 20px 0 10px;font-size:14px;">
+					            		<tbody>
+						            		<tr class="shipping-charges">
+						            			<td width="50%" class="empty-space"></td>
+						            			<td width="35%" class="text">Shipping Charges</td>
+						            			<td width="15%" align="right" class="price" style="text-align: right;">{{shipping_charge}}</td>
+						            		</tr>
+						            		<!-- <tr class="discount">
+						            			<td width="50%" class="empty-space"></td>
+						            			<td width="35%" class="text">Discount</td>
+						            			<td width="15%" align="right" class="price" style="text-align: right;">{{coupon_money}}</td>
+						            		</tr> -->
+					            		
+					            		</tbody>
+					            	</table>
+					            	{% if couponDecider == 1 %}
+					            	<table class="price-corrections" style="width: 100%; padding: 20px 0 10px;font-size:14px;">
+					            		<tbody>
+						            		<tr class="shipping-charges">
+						            			<td width="50%" class="empty-space"></td>
+						            			<td width="35%" class="text">Coupon Discount</td>
+						            			<td width="15%" align="right" class="price" style="text-align: right;">{{coupon}}</td>
+						            		</tr>
+						            		<!-- <tr class="discount">
+						            			<td width="50%" class="empty-space"></td>
+						            			<td width="35%" class="text">Discount</td>
+						            			<td width="15%" align="right" class="price" style="text-align: right;">{{coupon_money}}</td>
+						            		</tr> -->
+					            		
+					            		</tbody>
+					            	</table>
+					            	{% endif %}
+					            	{% if zapwalletDecider == 1 %}
+					            	<table class="price-corrections" style="width: 100%; padding: 20px 0 10px;font-size:14px;">
+					            		<tbody>
+						            		<tr class="shipping-charges">
+						            			<td width="50%" class="empty-space"></td>
+						            			<td width="35%" class="text">ZapCash Used</td>
+						            			<td width="15%" align="right" class="price" style="text-align: right;">{{zapwallet_used}}</td>
+						            		</tr>
+						            		<!-- <tr class="discount">
+						            			<td width="50%" class="empty-space"></td>
+						            			<td width="35%" class="text">Discount</td>
+						            			<td width="15%" align="right" class="price" style="text-align: right;">{{coupon_money}}</td>
+						            		</tr> -->
+					            		
+					            		</tbody>
+					            	</table>
+					            	{% endif %}
+					            	
+									<table style="border-top: 1px solid rgb(0, 0, 0); border-bottom: 1px solid rgb(0, 0, 0); width: 100%; padding:10px 0;"><tbody><tr class="total-price">
+					            			<td width="40%" class="empty-space"></td>
+					            			<td width="45%" class="text">Total amount paid</td>
+					            			<td width="15%" align="right" class="price" style="text-align: right;">Rs. {{final_price}}</td>
+					            		</tr></tbody></table>
+	            				</td>
+	            			</tr>
+	            			<tr>
+				            	<td>
+				            		<p>We'll keep you posted about the whereabouts of your new purchase on its way to your closet.</p>
+				            	</td>
+				            </tr>
+
+				            <tr class="salutation">
+				            	<td>
+				            		Love,<br>
+									The Zapyle Team
+				            	</td>
+				            </tr>
+	            		</tbody>
+	            	</table>
+				</td>
+            </tr>
+
+            
+        </table>
+    </body>
+</html>

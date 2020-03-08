@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Zapyle Blog Editor</title>
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="/zapstatic/blog/dist/css/medium-editor.css">
+    <link rel="stylesheet" href="/zapstatic/blog/dist/css/medium-editor-insert-plugin.css">
+    <link rel="stylesheet" href="/zapstatic/blog/dist/css/themes/flat.css">
+    <link rel="stylesheet" type="text/css" href="/zapstatic/account/css/materialize.css">
+    <link rel="stylesheet" type="text/css" href="/zapstatic/account/fonts/font.css">
+    <link rel="stylesheet" href="/zapstatic/blog/css/blog-style.css">
+    <link rel="stylesheet" href="/zapstatic/blog/css/editor-style.css">
+    <script type="text/javascript" src="/zapstatic/blog/js/jquery/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="/zapstatic/blog/js/jquery/jquery-migrate-1.2.1.min.js"></script>
+    <script type="text/javascript" src="/zapstatic/blog/js/jquery-ui.min.js"></script>
+    <!--<link rel="stylesheet" href="https://rawgithub.com/fengyuanchen/cropper/master/dist/cropper.min.css">-->
+    <!--<script type="text/javascript" src="https://rawgithub.com/fengyuanchen/cropper/master/dist/cropper.js"></script>-->
+</head>
+<body ng-app="BlogEditor" ng-controller="editorController" ng-cloak>
+    <header>
+        <div class="left inline">
+            <a class="icon-left_arrow" href="/blog" style="font-size: 18px;padding: 5px 15px 0 5px;"></a>
+            <span class="logo">
+                <img src="/zapstatic/website/images/logo_black.png" style="height: 25px;display: block;">
+            </span>
+            <div class="inline_block relative" style="vertical-align: text-top;padding-left: 15px;">
+                <a class="button" onclick="$('.create_options').toggleClass('is_visible')">New</a>
+                <div class="create_options">
+                    <a href="/blog/create" class="block">Blog Post</a>
+                    <a href="/look/create" class="block">Look</a>
+                </div>
+            </div>
+        </div>
+        <div class="actions right">
+            <a class="button white trigger" data-activates="#side-bar, #side-bar .related_data" ng-click="save_post()">Tags</a>
+            <a class="button white" ng-click="save_post()" ng-if="post.status!='PB'">Save</a>
+            <a class="button white modal-trigger" data-target="save-published" ng-if="post.status=='PB'">Save</a>
+            <a class="trigger button" data-activates="#side-bar, #publish" ng-click="save_post(); get_previewimages()">Publish</a>
+        </div>
+    </header>
+    <div id="side-bar" class="side-bar">
+        <div class="side-bar-inner">
+            <a class="close_trigger left icon-cross"></a>
+            <div id="publish">
+                <div class="header">
+                    <div>Meta Data</div>
+                </div>
+                <div class="content">
+                    <div class="input-field" id="post-category">
+                        <select>
+                          <option value="" disabled selected>Choose Post Category</option>
+                          <option value="[[cat.id]]" ng-repeat="cat in MetaData.categories" ng-selected="cat.id==post.category.id" on-finish-render="materializeSelect" ng-if="cat.slug!='look-book'">[[cat.name]]</option>
+                        </select>
+                    </div>
+                    <div class="input-field" id="post-author">
+                        <select class="icons">
+                            <option value="" disabled selected>Choose Post Author</option>
+                            <option ng-repeat="author in MetaData.authors" ng-selected="author.id==post.author" value="[[author.id]]" data-icon="[[author.profile_pic]]" class="left circle" on-finish-render="materializeSelect">[[author.name]]</option>
+                        </select>
+                    </div>
+                    <div class="post-preview">
+                        <div id="preview-image-select" ng-init="activeIndex=0" ng-if="image_data">
+                            <div class="grey small_font">Choose Preview Image</div>
+                            <span id="preview_[[image.id]]" data-img_id="[[image.id]]" ng-repeat="image in image_data" ng-click="set_previewimage($event)" data-url="[[image.url]]"><img src="[[image.url]]"></span>
+                        </div>
+                        <p class="bold">Preview</p>
+                        <div class="post-card show">
+                            <div id="post-picture">
+                                <img class="post-cover" src="[[previewimage]]">
+                            </div>
+                            <div class="post-category">
+                                [[post.category.name]]
+                            </div>
+                            <div class="post-title">
+                                [[post.title]]
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="actions">
+                    <a class="button white">Preview</a>
+                    <a class="button white" ng-click="save_post()" ng-if="post.status!='PB'">Save</a>
+                    <a class="button white modal-trigger" data-target="save-published" ng-if="post.status=='PB'">Save</a>
+                    <a class="button" ng-click="save_post(true)" ng-if="post.status!='PB'">Publish</a>
+                    <a class="button" ng-click="unpublish_post()" ng-if="post.status=='PB'">Unpublish</a>
+                </div>
+            </div>
+            <div class="related_data">
+                <div class="header">
+                    <div>Tags</div>
+                </div>
+                <div class="content">
+                    <div class="products">
+                        <h6>Add Products</h6>
+                        <span id="product-ids" class="input-field">
+                            <input type="text" name="title" placeholder="Enter Product ID(s)" style="width: calc(100% - 100px);">
+                            <a class="btn" style="font-size: 12px;padding: 5px 20px;height: calc(2rem + 10px);line-height: 2rem;" ng-click="fetch_products()">Fetch</a>
+                        </span>
+                        <div id="products">
+                            <div class="product-item small" ng-repeat="p in post.products" data-id="[[p.id]]" ng-class="{'sold_out':!p.available, 'designer_product':p.user_type == 'designer'}">
+                                <div class="remove_btn icon-cross" ng-click="remove_item($event, p)"></div>
+                                <div class="product_item_inner">
+                                    <div class="product_display">
+                                        <a ng-href="/product/[[p.id]]/[[p.title]]">
+                                            <div class="image_holder">
+                                                <img ng-src="[[p.image]]" alt="[[ p.title ]]">
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="product_details">
+                                        <h3 class="title">[[ p.title ]]</h3></a>
+                                        <div class="price">
+                                            <span class="new">[[p.listing_price]]</span>
+                                            <span class="old" ng-show="p.original_price>p.listing_price">[[p.original_price]]</span>
+                                            <span class="discount" ng-class="{'show_percent':!p.discount.indexOf('off')}" ng-show="p.original_price>p.listing_price || !p.available">[[p.discount]]%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tags">
+                        <h6>Add Tags</h6>
+                        <!--<span id="product-tags" class="input-field">-->
+                            <!--<input type="text" name="title" placeholder="Enter Tags" style="width: calc(100% - 100px);">-->
+                            <!--<a class="btn" style="font-size: 12px;padding: 5px 20px;height: calc(2rem + 10px);line-height: 2rem;" ng-click="fetch_products()">Fetch</a>-->
+                        <!--</span>-->
+                        <div>
+                            <div>
+                                <label>Color</label>
+                                <div class="input-field" id="color">
+                                    <select>
+                                      <option value="" disabled selected>Choose Post Category</option>
+                                      <option value="[[c.id]]" ng-repeat="c in ProdParams.colors" ng-selected="c.id==post.tags.colors.id" on-finish-render="materializeSelect">[[c.name]]</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label>Category</label>
+                            </div>
+                            <div>
+                                <label>Sub Category</label>
+                            </div>
+                            <div>
+                                <label>Occasion</label>
+                            </div>
+                            <div>
+                                <label>Style</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <div class="main-content">
+        <div class="post-title">
+            <span id="post-title" class="input-field">
+                <input type="text" name="title" placeholder="Post Title" value="[[post.title]]">
+            </span>
+        </div>
+        <div id="container">
+            <div class="block">
+                <div class="editable" id="post-body"></div>
+            </div>
+        </div>
+    </div>
+    <div id="confirm-publish" class="modal">
+        <div class="modal-content">
+            <h4>Sure?</h4>
+            <p>Are you sure you want to publish?</p>
+        </div>
+        <div class="modal-footer">
+            <a class="modal-action modal-close waves-effect waves-green btn-flat" ng-click="publish_post()">Yes</a>
+            <a class="modal-action modal-close waves-effect waves-green btn-flat">Wait! No</a>
+        </div>
+    </div>
+    <div id="save-published" class="modal">
+        <div class="modal-content">
+            <h4>This Post is live</h4>
+            <p>This Post is live and any changes saved will reflect immediately. Are you sure you want to proceed?</p>
+        </div>
+        <div class="modal-footer">
+            <a class="modal-action modal-close waves-effect waves-green btn-flat" ng-click="save_post()">Yes</a>
+            <a class="modal-action modal-close waves-effect waves-green btn-flat" ng-click="unpublish_post(); save_post()">No, unpublish this post and save</a>
+        </div>
+    </div>
+    <div id="cover_image_delete" class="modal">
+        <div class="modal-content">
+            <h4>This is the cover pic</h4>
+            <p>The image you are trying to delete is the cover pic for the post. Please change the cover picture before
+                deleting this image.</p>
+        </div>
+        <div class="modal-footer">
+            <a class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+            <a class="modal-action modal-close waves-effect waves-green btn-flat trigger"
+               data-activates="#side-bar, #publish" ng-click="save_post(); get_previewimages()">Okay</a>
+        </div>
+    </div>
+    <div class="glass save"></div>
+    <script src="/zapstatic/blog/js/thirdparty/handlebars.runtime.min.js"></script>
+    <script src="/zapstatic/blog/js/thirdparty/jquery.fileupload.min.js"></script>
+    <script src="/zapstatic/blog/js/thirdparty/jquery.iframe-transport.js"></script>
+    <script src="/zapstatic/blog/js/thirdparty/jquery.ui.widget.js"></script>
+    <script src="/zapstatic/blog/js/thirdparty/jquery-sortable.js"></script>
+    <script src="/zapstatic/blog/js/thirdparty/jquery.cycle2.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-sanitize.min.js"></script>
+    <script src="/zapstatic/frontend/bower_components/ngstorage/ngStorage.min.js"></script>
+    <script type="text/javascript" src="/zapstatic/blog/js/editorController.js"></script>
+    <script src="/zapstatic/blog/dist/js/medium-editor.js"></script>
+    <script src="/zapstatic/blog/dist/js/medium-editor-insert-plugin.min.js"></script>
+    <script type="text/javascript" src="/zapstatic/blog/js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+</body>
+</html>

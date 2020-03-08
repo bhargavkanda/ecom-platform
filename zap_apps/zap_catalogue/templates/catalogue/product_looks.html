@@ -1,0 +1,82 @@
+<div class="close_btn black white_bg"></div>
+<script>
+    $('body').on('click', '.look_layout .product_item *', function(event) {
+        if (!$(this).is('a')) {
+            if(!$(this).closest('.product_item').hasClass('sold_out')) {
+                $(this).closest('.product_item').toggleClass('selected');
+            }
+        } else {
+            event.stopPropagation();
+        }
+    });
+</script>
+<div class="product_looks" ng-class="{'single':!looks.all_looks}" style="background: #f5f5f5;color: #000;">
+    <div class="inline look_layout">
+        <div class="size7of12 look">
+            <div class="cover_pic">
+                <img src="[[looks.look_data.cover_pic]]" alt="[[looks.look_data.title]]">
+            </div>
+            <div class="look_data">
+                <div ng-class="{'left' : !isMobile}">
+                    <span class="look_title">[[looks.look_data.title]]</span>
+                    <span class="stylist">[[looks.look_data.author_name]]</span>
+                </div>
+                <div ng-class="{'right' : !isMobile}">
+                    <a ng-click="love_or_unlove_blog(looks.look_data, $event)" ng-class="{'loved':looks.look_data.loved_by_user}" class="love_btn"></a>
+                </div>
+            </div>
+            <div class="looks" ng-if="looks.all_looks && isMobile">
+                <span ng-repeat="look in looks.all_looks" class="look_item tiny" ng-click="get_look(look, $event)">
+                    <img src="[[look.pic]]">
+                </span>
+                <span class="highlighter"></span>
+            </div>
+        </div>
+        <div class="products size5of12 left_align">
+            <div class="products_inner">
+                <div class="product_item" ng-repeat="p in looks.look_data.products"
+                     ng-class="{'sold_out':!p.available, 'selected':p.available}" data-id="[[p.id]]" ng-click="add_or_remove(p, $event)">
+                    <div class="inline">
+                        <div class="size4of12 mobile_also">
+                            <a ng-href="/product/[[p.id]]/[[p.title | spaceless]]">
+                                <img ng-src="[[p.image.replace('100x100','500x500')]]">
+                            </a>
+                        </div>
+                        <div class="size8of12 mobile_also" style="padding-left: 15px;">
+                            <h6 class="title" style="margin:0;">
+                                <a class="black brand" ng-href="/product/[[p.id]]/[[p.title | spaceless]]">[[p.brand_name]]</a>
+                            </h6>
+                            <a class="black" ng-href="/product/[[p.id]]/[[p.title | spaceless]]"
+                               style="font-size: 14px;margin: 2px 0 6px;display: block;">[[p.title]]</a>
+                            <div class="sizes" ng-if="p.available">
+                                <div class="input-field" id="post-category" style="margin: 0 !important;">
+                                    <select>
+                                      <option value="" disabled selected>Select Size</option>
+                                      <option value="[[size.id]]" ng-repeat="size in p.sizes" on-finish-render="materializeSelect">[[size.category_type == 'FW' ? 'EU ' + size.eu_size : size.size]]</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="price price_wrapper" style="margin-top: -10px;">
+                                <span class="new">[[p.listing_price | number]]</span>
+                                <span class="old" ng-if="p.original_price>p.listing_price">[[p.original_price | number]]</span>
+                                <span class="discount" ng-if="p.original_price>p.listing_price">[[p.discount]]% OFF</span>
+                            </div>
+                            <a ng-click="love(p, $event)" ng-class="{'loved':p.loved_by_user}" class="love_btn"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="buy_cta">
+                <a class="cart_btn btn waves-effect waves-light full_width " ng-click="addToCart_bulk()">Add to tote</a>
+                <!--<a class="confirm_btn btn waves-effect waves-light full_width is_hidden" ng-click="confirmCart()">Confirm</a>-->
+                <a data-activates="#cart" class="goto_btn btn waves-effect waves-light full_width is_hidden" ng-click="gotoToCart()">Go to tote</a>
+            </div>
+        </div>
+    </div>
+    <div class="looks" ng-if="looks.all_looks && !isMobile">
+        <span ng-repeat="look in looks.all_looks" class="look_item tiny" ng-click="get_look(look, $event)">
+            <img src="[[look.pic]]">
+        </span>
+        <span class="highlighter"></span>
+    </div>
+</div>

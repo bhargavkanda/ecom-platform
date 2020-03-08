@@ -1,0 +1,11 @@
+UPLOAD_LIST_NEW_MSG = "Hey fashionista! Thanks for your upload - it looks gorg! We are currently reviewing it for listing, so just wait up, we'll get right back."
+LIST_APPROVED_MSG = 'We have some great news. Your listing has been approved! We bet you are going to find your soul buyer very soon, so keep your pretty fingers crossed.'
+ACCOUNT_NUM_CHANGED_MSG = 'Success! Your account number has been updated so you can now shop till you drop. Just put it on the card! ;).'
+ORDER_CONFIRM_BUYER = "Get excited! Your Zapyle order's been confirmed and will reach you very soon. We bet it's total #ShoppingGoals."
+ORDER_SHIPPED_BUYER = "Heads up: Your Zapyle order has been packed and shipped from your seller's address. Make some space in your wardrobe!"
+ORDER_DELIVERED_BUYER = "Hey style diva! We hope you loved your stylish parcel tied with love. In the case you didn't, you have 24 hours to return it with a valid reason. Toodles!"
+ACCOUNT_CREDITED_SELLER = "Good fashion tidings! Your account has been credited with earnings from your Zapyle sale, and you know what that means - more shopping! Check out your Admirers' latest listings here {}"
+RETURN_APPROVED_BUYER = 'Hey Zapyler! Your request for the return of your Zapyle purchase has been approved. Please hand it over for pick up to our Zap rep and check your mail for the returning document.'
+RETURN_PICKED_SELLER = 'Hi Zapyler. Your returned item has been picked up from your buyer and will reach you shortly. Keep a look out!'
+RETURN_DELIVERED_SELLER = "Hello! Just confirming that your returned item is safely back with you. It's going to be listed on your Zapyle Closet again - all the best with scoring some great deals!"
+RETURN_DELIVERED_BUYER = 'Hey! Your returned item has reached the seller, thanks a bunch. You will be credited soon with ZapCash of the same amount, so happy shopping!'

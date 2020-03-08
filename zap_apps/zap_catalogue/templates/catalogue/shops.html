@@ -1,0 +1,428 @@
+{% extends "account/base.html" %}
+{% block extra_head %}
+	{% if not filter_data %}
+		<title>Buy Designer and Luxury Fashion Online India for Women</title>
+		<meta name="description" content="Shop for Discounted Luxury and Designer Handbags, Lehengas, Sarees, Footwear, Accessories & more Online India. Free Shipping, Easy Returns & Cash on Delivery.">
+ 	{% else %}
+		<title>{{filter_data.page_title}}</title>
+		<meta name="description" content="{{filter_data.meta_description}}">
+		{% if filter_data.header_image_mobile %}
+		<meta property="og:image" content="{{ filter_data.header_image_mobile }}" />
+		{% endif %}
+    {% endif %}
+    <script src="/zapstatic/catalogue/buy.js?v={{ZAP_ENV_VERSION}}"></script>
+    <!-- <script src="/zapstatic/catalogue/designer.js"></script> -->
+
+{% endblock %}
+{% block body %}
+	<main class="buy" ng-controller="BuyController" ng-class="subscriptionPage ? 'subscription_page' : ''">
+		<div class="page_content">
+			<div class="products_view">
+				<div id="loading" style="height: 100%;width: 100%;position: absolute;background-color: rgba(255, 255, 255, 0.5);z-index:2 !important;"></div>
+				<div class="side_bar" ng-class="{'is_visible':filtersExist && !isMobile}">
+					<div class="screen_header mobile_only">
+					   <div class="screen_title">Filters</div>
+					   <a ng-click="applyMobileFilter()" class="close_btn"> </a>
+					</div>
+					<div class="side_bar_inner">
+						<div class="custom_scroll_inner">
+							<div id="shops" class="shop_from accordion_item top_level" ng-class="{'is_visible':shops!=null}">
+								<h3>Shop From</h3>
+								<ul class="shop_options_list">
+									<li class="shop_option_item" ng-if="shops[0].id==1 || shops[shops.length-1].id==4">
+										<span class="shop_option_item parent">
+											<input class="filled-in" type="checkbox" id="brand_new" ng-disabled="shopFromDisabledOptions(shops, 'brandnew')"/>
+			      							<label for="brand_new">Brand New</label>
+										</span>
+										<ul class="shop_options_list">
+											<li class="shop_option_item" ng-repeat="c in shops" ng-if="c.id==1 || c.id==4">
+												<input data-name="[[c.id]]" class="with-gap filled-in brand_new_option" type="checkbox" id="[[c.value]]"  ng-checked="[[c.selected]]" ng-disabled="[[c.disabled]]"/>
+												<label for="[[c.value]]">[[c.name]]</label>
+											</li>
+										</ul>
+									</li>
+									<li class="shop_option_item" ng-if="shops[0].id == 2 || shops[0].id == 3 || shops[1].id == 2 || shops[1].id == 3 || shops.length >2">
+										<span class="shop_option_item parent">
+											<input class="filled-in" type="checkbox" id="pre_loved" ng-disabled="shopFromDisabledOptions(shops, 'preloved')"/>
+			      							<label for="pre_loved">Pre Owned</label>
+										</span>
+										<ul class="shop_options_list">
+											<li class="shop_option_item" ng-repeat="c in shops"  ng-if="c.id==2 || c.id==3">
+												<input data-name="[[c.id]]" class="with-gap filled-in pre_loved_option" type="checkbox" id="[[c.value]]"  ng-checked="[[c.selected]]" ng-disabled="[[c.disabled]]"  />
+			      								<label for="[[c.value]]">[[c.name]]</label>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</div>
+							<div class="filters accordion open_one web">
+								<h3>Filter By</h3>
+								<div id="category" data-name="product_category" class="accordion_item open top_level" ng-class="{'is_visible':category!=null}">
+									<h6><span class="title">Category</span><a class="clear_btn" href="" ng-class="{is_visible:selected_filters['product_category'].length}">Clear</a></h6>
+									<div id="loading" class="product_category"></div>
+									<div class="accordion_item_inner" id="category_filters" ng-class="{'only_one' : category.length == 1 }">
+										<ul class="filter_options_list content">
+											<li class="accordion_item" ng-repeat="c in category" ng-class="{'closed' : category.length > 1 }">
+												<span class="filter_option_item parent" ng-class="(c.value | totalunselectedsubcats) == 0 ? 'selected' : (c.value | totalselectedsubcats) > 0 ? 'partly_selected' : ''">
+													<input class="cat_option filled-in" type="checkbox" id="cat_[[c.id]]" ng-disabled="[[!(c.value | totalenabledsubcats)]]" ng-checked="[[!(c.value | totalunselectedsubcats)]]"/>
+				      								<label for="cat_[[c.id]]">[[c.name]]</label>
+				      								<h6 class="expand"></h6>
+												</span>
+												<div class="accordion_item_inner">
+													<ul class="filter_options_list">
+														<li class="filter_option_item" ng-repeat="s in c.value" ng-class="{'selected':s.selected}">
+															<input class="product_category_option filled-in" data-ids="[[s.id]]" type="checkbox" id="subcat_[[c.id]]_[[s.id]]" ng-disabled="[[s.disabled]]" ng-checked="[[s.selected]]"/>
+					      									<label for="subcat_[[c.id]]_[[s.id]]">[[s.name]]</label>
+														</li>
+													</ul>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<div id="brands" data-name="brand" class="accordion_item open top_level" ng-class="{'is_visible':brands!=null}">
+									<h6><span class="title">Brand</span><a class="clear_btn" href="" ng-class="{is_visible:selected_filters['brand'].length}">Clear</a></h6>
+									<div id="loading" class="product_category"></div>
+									<div class="accordion_item_inner scroll_parent">
+										<div class="search">
+											<!--<input class="full_width" type="search_query" name="search" placeholder="Search for your favourite brands" ng-model="searchBrand">-->
+											<div class="a_z_navigator">
+												<ul class="letters_list">
+													<li class="letter_item uppercase" ng-repeat="alpha in brand_alphas">alpha</li>
+												</ul>
+											</div>
+										</div>
+										<ul class="filter_options_list scroll_this">
+											<li class="filter_option_item" class="brand_item" id="scroll_[[ b.name[0] ]]" ng-repeat="b in brands | orderBy:'name' | filter:searchBrand" ng-class="{'selected':b.selected}">
+												<input class="brand_option filled-in" data-ids="[[b.id]]" type="checkbox" id="brand_pc_[[b.id]]" ng-disabled="[[b.disabled]]" ng-checked="[[b.selected]]"/>
+												<label for="brand_pc_[[b.id]]">[[b.name]]</label>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<div id="size_type" data-name="size" class="accordion_item open top_level" ng-class="{'is_visible':size_type[0].name=='CLOTHING SIZE' || size_type[0].name=='FOOTWEAR SIZE'}">
+									<h6><span class="title">Size</span><a class="clear_btn" style="z-index:999999px;" ng-class="{is_visible:selected_filters['size'].length}">Clear</a></h6>
+									<div id="loading" class="size"></div>
+									<div class="accordion_item_inner">
+										<div ng-class="{'is_visible':size_type[0].name=='CLOTHING SIZE'}">
+											<h6 class="header" ng-class="{'is_visible':size_type.length>1 && size_type[0].size.length && size_type[1].size.length}">Clothing</h6>
+											<ul class="filter_options_list">
+												<li class="filter_option_item" ng-repeat="s in size_type[0].size" ng-class="{'selected':s.selected}">
+													<input class="size_option filled-in" data-ids="[[s.value]]" type="checkbox" id="size_web_[[s.value]]" ng-disabled="[[s.disabled]]" ng-checked="[[s.selected]]" />
+													<label for="size_web_[[s.value]]">[[s.value]]</label>
+												</li>
+											</ul>
+										</div>
+										<div ng-class="{'is_visible':size_type.length>1 || size_type[0].name=='FOOTWEAR SIZE'}">
+											<h6 class="header" ng-class="{'is_visible':size_type.length>1 && size_type[0].size.length && size_type[1].size.length}">Footwear</h6>
+											<ul class="filter_options_list">
+												<li class="filter_option_item tooltipped" ng-repeat="s in size_type[size_type.length-1].size" ng-class="{'selected':s.selected}" data-position="top" data-delay="50" data-tooltip="[[s.tooltip]]" >
+													<input class="size_option filled-in" data-ids="[[s.value]]" type="checkbox" id="size_web_[[s.value]]" ng-disabled="[[s.disabled]]" ng-checked="[[s.selected]]" />
+													<label for="size_web_[[s.value]]">[[s.display]]</label>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div id="price" data-name="price" class="accordion_item open top_level"ng-class="{'is_visible':price!=null}">
+									<h6 ng-class="{'show_clear':selected_filters['price'][0]!= -1 || selected_filters['price'][1]!=-1}"><span class="title">Price</span><a class="clear_btn price_clear" href="">Clear</a></h6>
+									<div id="loading" class="price"></div>
+									<div class="accordion_item_inner">
+										<ul class="filter_options_list">
+											<li class="filter_option_item min_price">
+												<div class="input-field">
+													<select id="minprice" ng-model="startValue" ng-options="i.start_value as i.start_value for i in price" ng-change="minpriceChange()">
+														<option value="" selected>Min. Price</option>
+														<!--<option value="p.start_value" ng-repeat="p in price.min_price_list">p.start_value</option>-->
+													</select>
+											  	</div>
+											</li>
+											<li class="filter_option_item max_price">
+												<div class="input-field">
+													<select id="maxprice" ng-model="endValue" ng-options="i.end_value as i.end_value for i in price" ng-change="maxpriceChange()">
+														<option value="" selected>Max. Price</option>
+														<!--<option value="p.start_value" ng-repeat="p in price.max_price_list">p.start_value</option>-->
+													</select>
+											  	</div>
+											</li>
+										</ul>
+									</div>
+								</div>
+                                <div id="colors" data-name="color" class="accordion_item open top_level" ng-class="{'is_visible':colors!=null}">
+									<h6><span class="title">Color</span><a class="clear_btn" href="" ng-class="{is_visible:selected_filters['color'].length}">Clear</a></h6>
+									<div id="loading" class="color"></div>
+									<div class="accordion_item_inner">
+										<ul class="filter_options_list">
+											<li class="filter_option_item" ng-repeat="c in colors | orderBy:'disabled'" ng-class="{'selected':c.selected}">
+												<input class="color_option" data-ids="[[c.id]]" type="checkbox" id="[[c.name | lowercase | spaceless]]" ng-disabled="[[c.disabled]]" ng-checked="[[c.selected]]"/>
+												<label for="[[c.name | lowercase | spaceless]]">[[c.name]]</label>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<div id="disc" data-name="disc" class="accordion_item open top_level" ng-class="{'is_visible':disc!=null}">
+									<h6><span class="title">Discount</span><a class="clear_btn" href="" ng-class="{is_visible:selected_filters['disc'].length}">Clear</a></h6>
+									<div id="loading" class="disc"></div>
+									<div class="accordion_item_inner">
+										<ul class="filter_options_list">
+											<li class="filter_option_item" ng-repeat="d in disc | orderBy:'disabled'" ng-class="{'selected':d.selected}">
+												<input data-ids="[[d.id]]" ng-model="disc_pc_[[d.id]]" class="disc_option filled-in" type="checkbox" id="disc_pc_[[d.id]]" ng-disabled="[[d.disabled]]" ng-checked="[[d.selected]]"/>
+												<label for="disc_pc_[[d.id]]">[[d.value]]</label>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<div id="condition" data-name="condition" class="accordion_item closed top_level" ng-class="{'is_visible':condition!=null}">
+									<h6><span class="title">Condition</span><a class="clear_btn" href="" ng-class="{is_visible:selected_filters['condition'].length}">Clear</a></h6>
+									<div id="loading" class="condition"></div>
+									<div class="accordion_item_inner">
+										<ul class="filter_options_list">
+											<li class="filter_option_item" ng-repeat="c in condition | orderBy:'disabled'" ng-class="{'selected':c.selected}">
+												<input class="condition_option filled-in"  data-ids="[[c.id]]" type="checkbox" id="cond_pc_[[c.id]]" ng-disabled="[[c.disabled]]" ng-checked="[[c.selected]]"/>
+												<label for="cond_pc_[[c.id]]">[[c.value]]</label>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<div id="age" data-name="age" class="accordion_item closed top_level" ng-class="{'is_visible':age!=null}">
+									<h6><span class="title">Age</span><a class="clear_btn" href="" ng-class="{is_visible:selected_filters['age'].length}">Clear</a></h6>
+									<div id="loading" class="age"></div>
+									<div class="accordion_item_inner">
+										<ul class="filter_options_list">
+											<li class="filter_option_item" ng-repeat="a in age | orderBy:'disabled'" ng-class="{'selected':a.selected}">
+												<input class="age_option filled-in" data-ids="[[a.id]]" type="checkbox" id="age_pc_[[a.id]]" ng-disabled="[[a.disabled]]" ng-checked="[[a.selected]]" />
+												<label for="age_pc_[[a.id]]">[[a.value]]</label>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<div id="styles" data-name="style" class="accordion_item closed top_level" ng-class="{'is_visible':styles!=null}">
+									<h6><span class="title">Style</span><a class="clear_btn" href="" ng-class="{is_visible:selected_filters['style'].length}">Clear</a></h6>
+									<div id="loading" class="style"></div>
+									<div class="accordion_item_inner">
+										<ul class="filter_options_list">
+											<li class="filter_option_item" ng-repeat="s in styles | orderBy:'disabled'" ng-class="{'selected':s.selected}">
+												<input class="style_option filled-in" data-ids="[[s.id]]" type="checkbox" id="sty_pc_[[s.id]]" ng-disabled="[[s.disabled]]" ng-checked="[[s.selected]]" />
+												<label for="sty_pc_[[s.id]]">[[s.name]]</label>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<div id="occasions" data-name="occasion" class="accordion_item closed top_level" ng-class="{'is_visible':occasions!=null}">
+									<h6><span class="title">Ocassion</span><a class="clear_btn" href="" ng-class="{is_visible:selected_filters['occasion'].length}">Clear</a></h6>
+									<div id="loading" class="occasion"></div>
+									<div class="accordion_item_inner">
+										<ul class="filter_options_list">
+											<li class="filter_option_item" ng-repeat="o in occasions | orderBy:'disabled'" ng-class="{'selected':o.selected}">
+												<input type="checkbox" class="occasion_option filled-in" data-ids="[[o.id]]" id="occ_pc_[[o.id]]" ng-disabled="[[o.disabled]]" ng-checked="[[o.selected]]"/>
+												<label for="occ_pc_[[o.id]]">[[o.name]]</label>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="screen_footer inline mobile_only">
+					   <div class="size6of12 no_padding">
+						  <a ng-click="clearMobileFilter()" class="waves-effect waves-pink btn-flat center_align full_width">Clear</a>
+					   </div>
+					   <div class="size6of12 no_padding">
+						  <a ng-click="applyMobileFilter()" class="waves-effect waves-light btn center_align full_width">Apply</a>
+					   </div>
+					</div>
+				</div>
+				<div class="mobile_filters_opener" ng-if="isMobile">
+					<div class="options_header inline mobile_only">
+						<div class="size6of12" data-activates=".sort">
+							<span>Sort by</span>
+						</div>
+						<div class="size6of12" data-activates=".mobile_filters .filters" ng-click="refine()">
+							<span>Refine</span>
+						</div>
+					</div>
+				</div>
+                <div class="products_area">
+					{% if filter_data %}
+                    <div class="collection_banner inline">
+                    	{% if filter_data.header_image_mobile %}
+						<div {% if filter_data.header_title or filter_data.description or filter_data.custom_collection == 1 %}class="size6of12_nomargin image"{% endif %}>
+							<img ng-src="{{filter_data.header_image_mobile}}">
+						</div>
+                    	{% endif %}
+                    	<!-- random image -->
+                    	{% if filter_data.header_title or filter_data.description %}
+                        <div class="caption {% if filter_data.header_image_mobile %}size6of12_nomargin{% else %}only{% endif %}">
+                            {% if filter_data.header_title %}
+                            <h3 class="full_width">{{filter_data.header_title}}</h3>
+                            {% endif %}
+							<p class="small_font sale_info" ng-if="custom_collection.sale_info" ng-bind="custom_collection.sale_info"></p>
+                            {% if filter_data.description %}
+                            <p class="small_font">{{filter_data.description}}</p>
+                            {% endif %}
+							<span class="flash_sale_timer is_hidden">
+                                <span class="block label small_font">HURRY! SALE ENDS IN</span>
+                                <span id="countdown" class="timer pink"></span>
+                            </span>
+                        </div>
+                        <!--<div class="caption {% if filter_data.header_image_mobile %}size6of12_nomargin{% else %}only{% endif %}">-->
+                            <!--<h3 class="full_width" ng-if="custom_collection.title" ng-bind="custom_collection.title"></h3>-->
+                            <!--<p class="small_font sale_info" ng-if="custom_collection.sale_info" ng-bind="custom_collection.sale_info"></p>-->
+                            <!--<p class="small_font" ng-if="custom_collection.description" ng-bind="custom_collection.description"></p>-->
+                        <!--</div>-->
+                    	{% endif %}
+                    </div>
+					{% endif %}
+					<div class="sort is_hidden">
+						<ul class="sort_options_list inline">
+							<li class="sort_option_item selected">What's New</li>
+							<li data-ids="2" class="sort_option_item">Price (Low to High)</li>
+							<li data-ids="1" class="sort_option_item">Price (High to Low)</li>
+							<li data-ids="4" class="sort_option_item">Discount</li>
+							<li data-ids="3" class="sort_option_item">Popularity</li>
+							<li class="close_btn black mobile_only"></li>
+						</ul>
+						<div class="glass mobile_only"></div>
+					</div>
+					<div id="page" class="products">
+						<div class="product_item big icon-[[p.category | spacetounderscore]]" ng-class="{'sold_out':!p.available, 'designer_product':p.user.user_type == 'designer'}" ng-repeat="p in products" ng-cloak>
+							<div class="product_item_inner">
+								<div class="offer" ng-if="p.offer">Get [[p.offer.extra_discount]]</div>
+								<div class="product_display">
+									<a ng-href="/product/[[p.id]]/[[p.title | spaceless]]">
+										<div class="image_holder">
+											<img ng-src="[[p.images[0].image || p.images[0] ]]" alt="[[ p.title ]]">
+										</div>
+									</a>
+								</div>
+								<div class="product_details">
+									<div class="user_type">[[p.user.user_type == 'store_front' || p.user.user_type == 'designer' ? 'BRAND NEW' : 'PRE OWNED' ]]</div>
+									<a ng-href="/product/[[p.id]]/[[p.title | spaceless]]"><h1 class="title uppercase brand">[[ p.brand.brand ]]</h1><h3 class="title">[[ p.title ]]</h3></a>
+									<div class="price">
+										<span class="new">[[p.listing_price | number ]]</span>
+										<span class="old" ng-show="p.original_price>p.listing_price">[[p.original_price | number ]]</span>
+										<span class="discount" ng-class="{'show_percent':!p.discount.indexOf('off')}" ng-show="p.original_price>p.listing_price || !p.available">[[p.discount]]</span>
+									</div>
+									<div class="relative">
+		                               <a ng-click="love(p)" ng-class="{'loved':p.liked_by_user}" class="love_btn"></a>
+		                            </div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="view_all center is_hidden" ng-class="{'is_hidden':!nextPage}">
+						<div class="relative inline_block">
+							<a ng-click="loadMore()" class="btn">Load More</a>
+							<div class="absolute full_width loading_wrapper">
+						 		<div class="preloader-wrapper small active">
+						   			<div class="spinner-layer spinner-white-only">
+						     			<div class="circle-clipper left">
+						       				<div class="circle"></div>
+						     			</div>
+							     		<div class="gap-patch">
+							       			<div class="circle"></div>
+							     		</div>
+							     		<div class="circle-clipper right">
+							       			<div class="circle"></div>
+							     		</div>
+						   			</div>
+						 		</div>
+							</div>
+						</div>
+					</div>
+					<!-- <div class="view_all center" ng-show="nextPage"><a ng-click="loadMore()" class="btn">Load More</a></div> -->
+				</div>
+			</div>
+
+            <div class="seller_view closets" ng-cloak>
+                <div class="seller_list inline">
+                    <div class="seller_item size6of12 mobile_also" ng-repeat="d in closests">
+                        <div class="user_block_min inline">
+                            <div class="user_details inline">
+                                <a ng-href="/profile/[[d.id]]/[[d.zap_username]]" class="block">
+                                    <img ng-src="[[d.profile_pic]]">
+                                    <h6 class="name black">[[d.full_name]]</h6>
+                                    <span class="closet_handle black">[[d.zap_username]]</span>
+                                </a>
+                            </div>
+                            <a class="admire_btn" ng-click="admire(d)" ng-class="{'admired':d.admiring}"></a>
+                        </div>
+                        <div class="products inline">
+                            <ul class="products_list inline full_width no_margin mobile_also center_align">
+                                <li class="product_item tiny" ng-repeat="p in d.product | limitTo:3">
+                                    <div class="product_item_inner">
+                                        <div class="product_display">
+                                            <a href="/product/[[p.id]]/[[p.title]]" class="no_color image_holder">
+                                                <img ng-src="[[p.image]]">
+                                            </a>
+                                        </div>
+                                        <div class="product_details no_padding">
+                                            <h5 class="title">[[p.title]]</h5>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- View More tile -->
+                                <li class="product_item tiny">
+                                    <a class="view_more no_color mobile_also block" ng-if="d.more_product.length" ng-href="/profile/[[d.id]]/[[d.zap_username]]">
+                                        <ul class="products_list inline no_margin image_holder">
+                                            <li class="product_item absolute size6of12_nomargin mobile_also" ng-repeat="m in d.more_product | orderBy:'id':true">
+                                                <img ng-src="[[m.image]]">
+                                            </li>
+                                        </ul>
+                                        <div class="rest_products center_align"><span class="num">[[d.total_more_product]]</span></div>
+                                    </a>
+                                </li>
+                                <!-- View More tile End -->
+                            </ul>
+                        </div>
+                        <a ng-href="/profile/[[d.id]]/[[d.zap_username]]" class="inline_btn no_color center_align block small underline">Go to Store</a>
+                    </div>
+                </div>
+
+
+                <div class="view_all center" ng-show="nextPageCloset">
+                    <div class="relative inline_block">
+                        <a ng-click="loadMoreCloset()" class="btn">Load More</a>
+                        <div class="absolute full_width loading_wrapper">
+                            <div class="preloader-wrapper small active">
+                                <div class="spinner-layer spinner-white-only">
+                                    <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                    </div>
+                                    <div class="gap-patch">
+                                        <div class="circle"></div>
+                                    </div>
+                                    <div class="circle-clipper right">
+                                        <div class="circle"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+		</div>
+        {% if filter_data.seo_description %}
+        <div class="about_collection">
+            {{ filter_data.seo_description|safe }}
+        </div>
+        {% endif %}
+	</main>
+<style>
+#page {
+    display: block;
+}
+#loading {
+    display: none;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    height: 100%;
+    background-image: url("/zapstatic/frontend/images/loading.gif");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100px;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,27 @@
+<div class="screen_header">
+	<div class="screen_title">My Sizes</div>
+	<a href="#rp_my_preferences" class="screen_back" data-activates="#my_preferences">Back</a>
+</div>
+<div class="screen_content give_padding">
+	<div id="general_sizes" class="sizes_block">
+		<h6 class="title">Clothing Size</h6>
+		<ul class="sizes_list">
+			<li class="size_item1 size_item cloth_sizes" ng-class="{selected: checkValue1(s)}" data-id="[[s.id]]" ng-repeat="s in allsize.cloth_sizes">[[s.size]]</li>
+		</ul>
+	</div>
+	<div id="waist_sizes" class="sizes_block">
+		<h6 class="title">Waist Size</h6>
+		<ul class="sizes_list">
+			<li class="size_item1 size_item waist_sizes" ng-class="{selected: checkValue3(s)}" data-id="[[s.id]]" ng-repeat="s in allsize.waist_sizes">[[s.size]]</li>
+		</ul>
+	</div>
+	<div id="footwear_sizes" class="sizes_block">
+		<h6 class="title">Footwear Size</h6>
+		<ul class="sizes_list">
+			<li class="size_item1 size_item foot_sizes" ng-class="{selected: checkValue2(s)}" data-id="[[s.id]]" ng-repeat="s in allsize.foot_sizes">[[s.us_size]]</li>
+		</ul>
+	</div>
+</div>
+<div class="screen_footer" ng-if="onboardingStep==4">
+	<a href="/buy" class="btn waves-effect waves-light full_width" type="submit" name="action">Start Shopping</a>
+</div>

@@ -1,0 +1,64 @@
+<div>
+     <form ng-submit="search_order(search_id)"><span><input type="text" ng-model="search_id" required placeholder="Enter Order Id"></span><span><input type="submit" value="search"></span></form>
+</div>
+<br><br>
+<div class="CSSTableGenerator" style="width:100%">
+<table>
+       <tr>
+           <th>ORDER ID</th>
+           <th>ORDER DATE</th>
+           <th>PRODUCT TITLE</th>
+           <th>PRODUCT IMAGE</th>
+           <th>PRICE</th>
+           <th>SELLER</th>
+           <th>BUYER</th>
+           <th>PAYMENT MODE</th>
+           <th>PROCUREMENT</th>
+           <th>VERIFICATION</th>
+           <th>SHIIPPING/RETURN</th>
+           <th>RETURN BY BUYER</th>
+           <th>PAYOUT MODE</th>
+           <th>PAYOUT STATUS</th>
+       </tr>
+       <tr ng-class="{'cancelled':order.cancelled == true}" ng-repeat="order in orders">
+           <td>[[order.order_id]]</td>
+           <td>[[order.order_date]]</td>
+           <td>[[order.product.title]]</td>
+           <td><img class="product-image" height="15px" width="125px" src="[[order.product.image1]]"></td>
+           <td ng-class= >Listing Price:
+                <div>Total Price:</div>
+                <div>Final Price:</div>
+           </td>
+           <td ng-if="order.confirmed_with_seller==false">
+                Seller's Name:[[order.seller_name]]<br>
+                Seller's Address:[[order.seller_address]]<br>
+                Seller's Phone no.:[[order.seller_phone]]<br><br>
+                <input type="button" value="Confirm" ng-click="confirm_order(order,'seller')" /><br><button ng-click="order.change_seller='true'">Edit</button>
+                <select ng-show="order.change_seller" name="sub-category" ng-model="pick_seller" ng-change="change_buyer_seller(pickup_seller,'seller',order)" ng-options="i as (i.name+' '+i.phone) for i in all_address" required><option value="">Select Pickup Address with phone number</option></select>
+           </td>
+           <td ng-if="order.confirmed_with seller==true">
+           	    Seller's Name: [[order.seller_name]]<br>
+                Seller's Address: [[order.seller_address]]<br>
+                Seller's Phone no.: [[order.seller_phone]]<br><br>
+                <button ng-click="order.change_seller='true'">Edit</button>
+                <span><select ng-show="order.change_seller" name="sub-category" ng-model="pickup_seller" ng-change="change_buyer_seller(pickup_seller,'seller',order) ng-options="i as (iname+' '+i.phone) for i in all_address" requireed><option value="">Select Pickup Address</option></select><span><b>Confirmed</b></span></span></span>
+           </td>     
+           <td ng-if="order.confirmed_with_buyer==false">
+           	   Buyer's Name: [[order.buyer_name]]<br>
+           	   Buyer's Address: [[order.buyer_address]]<br>
+           	   Buyer's Phone No.: [[order.buyer_phone]]<br><br>
+           	   <input type="button" value="Confirm" ng-click="confirm_order(order,'buyer')"> <button ng-show="order.change_buyer='true'">Edit</button>
+               <select ng-show="order.change_buyer" name="sub-category" ng-model="pickup_buyer" ng-change="change-buyer_seller(pickup_buyer,'buyer',order)" ng-options="i as (i.name+' '+i.phone) for i in all_address" required><option value="">Select Pickup Address</option></select>
+           </td>
+           <td ng-if="order.confirmed_with_buyer==true">
+               Buyer's Name: [[order.buyer_name]]<br>
+               Buyer's Address: [[order.buyer_address]]<br>
+               Buyer's Phone No.: [[order.buyer_phone]]<br><br>
+               <button ng-click="order.change_buyer='true'">Edit</button>
+               <span><select ng-show="order.change_buyer" name="sub-category" ng-model="pickup_buyer" ng-change="change_buyer_seller(pickup_buyer,'buyer',order)" ng-options="i as (i.name+' '+i.phone) for i in all_address" required><option value="">Select Pickup Address</option></select></span><span><b>Confirmed</b></span>
+           </td>
+           <td>[[order.payment_mode]]</td>
+           <td></td>
+       </tr> 
+</table>
+</div>           

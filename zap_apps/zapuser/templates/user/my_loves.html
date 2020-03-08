@@ -1,0 +1,211 @@
+{% extends "account/base.html" %}
+{% block extra_head %}
+	<script>
+		zapyle.controller('MyLovesController', function($scope, $http, loveService){
+			if(ZL=='True'){
+		        $http.get('/user/my_loved_products')
+		        .success(function(rs){
+		            $scope.lovedProducts = rs.data
+		        })
+			    $http.get('/analytics/recently_viewed_products')
+		        .success(function(rs){
+		            $scope.recentProducts = rs.data
+		        })
+		    }
+	        $scope.addToCart = function(p){
+	        	product_id = p.id
+	        	$http.get('/catalogue/get_product_sizes?product_id='+product_id).
+	        	success(function(rs){
+	        		if(rs.status == 'success'){
+	        			$scope.sizes = rs.data
+	        			// alert(JSON.stringify(rs.data))
+			        	$('.get_quantity').addClass('is_hidden')
+			        	$('.get_size_quantity').addClass('is_visible')
+			        	id = ''
+			        	for(i in $scope.sizes){
+			        		if($scope.sizes[i]['qty']>0){
+			        			if(id){
+			        				return false;
+			        			}
+			        			id = $scope.sizes[i]['id']
+			        		}
+			        	}
+			        	setTimeout(function(){
+				        	$("[data-id="+id+"].size_item").addClass('selected')        		
+			        	})
+	        		}
+	        	})
+	        	$('.confirm_btn').removeClass('is_hidden')
+	        	$scope.product_category = p.category
+	        }
+	        $('body').on('click', '.popupCart .size_item', function() {
+		        if(!$(this).hasClass('soldout')){
+		            $('.size_item').removeClass('selected')
+		            $(this).addClass('selected')
+		            $('.get_quantity').removeClass('is_hidden')
+		            $('.max_quantity').addClass('is_hidden')
+		            $scope.availble_qty = $(this).data('qty')
+		            $scope.qty =  1
+		            $scope.$apply()
+		            if($scope.availble_qty>1){
+		                $('.get_quantity').removeClass('is_hidden')
+		            }
+		            else{$('.get_quantity').addClass('is_hidden')}
+		        }
+		    })
+		    $('.plus').click(function(){
+		        if($scope.availble_qty>$scope.qty){
+		            $scope.qty=$scope.qty+1
+		            $scope.$apply()
+		        }else{
+		            $('.max_quantity').removeClass('is_hidden') 
+		        }
+		    })
+		    $('.minus').click(function(){
+		        if($scope.qty>1){
+		            $scope.qty=$scope.qty-1
+		            $scope.$apply()
+		        }
+		    })
+		    
+	        var product_id = ''
+		    $scope.confirmCart = function(){
+			    if(!$('.size_item.selected').length){
+		            Materialize.toast('Please select a Size.', 3000);
+		            return false;
+			    }
+		        var size = $('.size_item.selected').data('id')
+		        if(ZL == 'True' && USER_NAME!='None'){
+		            $http.post('/zapcart/?web=true',{'cart_data':{'quantity':$scope.qty,'product':product_id,'size':size}}).
+			            success(function(rs, status, headers, config) {
+			            if (rs.status == "success"){
+			                $('.get_size_quantity').removeClass('is_visible')      
+			                Materialize.toast(rs.data.message, 3000);
+			                $('#toteBadge').text(rs.data.count)
+			                $('#select_size_myloves').closeModal();
+			            }else{
+			                Materialize.toast(JSON.stringify(rs.detail), 3000);
+			            }
+			        })  
+		        }	
+		    }
+		    $scope.love = function(p){
+		        if(ZL == 'True' && USER_NAME!='None'){
+		            p.loved=!p.loved
+		            if(p.loved){
+		                loveService.postlove(p.id,'like');
+		            }else{
+		                loveService.postlove(p.id,'unlike');
+		            }      
+		        }
+		    }
+		})
+	</script>
+	<style>
+		.popupCart{
+			position: fixed;
+    		top: 25%;
+    		margin: 0 auto;
+    		width: 300px;
+
+    	}.soldout {
+            text-decoration: line-through;
+        }
+    </style>
+{% endblock %}
+{% block body %} 
+<main ng-controller="MyLovesController" ng-cloak>
+	<div class="page_content">
+		<h4 class="title spaced_out">My Loves</h4>
+		<div class="products">
+			<div class="products_list">
+                <div class="product_item big" ng-repeat="p in lovedProducts" ng-if="p.sale" ng-class="{'sold_out':!p.available, 'designer_product':p.user.user_type == 'designer'}">
+					<div class="product_item_inner">
+						<div class="product_display">
+							<a ng-href="/product/[[p.id]]/[[p.title | spaceless]]" class="image_holder">
+								<img ng-src="[[p.image]]">
+							</a>
+						</div>
+						<div class="product_details">
+							<div class="user_type">[[p.user.user_type == 'store_front' || p.user.user_type == 'designer' ? 'BRAND NEW' : 'PRE OWNED' ]]</div>
+							<a ng-href="/product/[[p.id]]/[[p.title]]"><h3 class="title">[[ p.title ]]</h3></a>
+							<div class="price">
+								<span class="new">[[p.listing_price | number ]]</span>
+								<span class="old" ng-if="p.original_price>p.listing_price">[[p.original_price | number ]]</span>
+								<span class="discount" ng-if="p.original_price>p.listing_price">[[p.discount]]</span>
+							</div>
+							<div class="relative">
+							   <a ng-click="love(p)" ng-class="{'loved':p.loved==true}" class="love_btn"></a>
+							   <a ng-if="p.available" class="btn waves-effect waves-light ng-scope modal-trigger small" ng-click="addToCart(p)" href="#select_size_myloves">Add to tote</a>
+								<!--<div class="product_sold_out size6of12 small left_align" ng-hide="p.available">Sold out</div>-->
+						   </div>
+						</div>
+					</div>
+				</div>
+            </div>
+		</div>
+		<h4 class="title spaced_out" ng-show="recentProducts.length">Recently Viewed</h4>
+		<div class="products">
+			<div class="products_list">
+                <div class="product_item big" ng-repeat="p in recentProducts | orderBy:'-time'" ng-if="p.sale" ng-class="{'sold_out':!p.available, 'designer_product':p.user.user_type == 'designer'}">
+					<div class="product_item_inner">
+						<div class="product_display">
+							<a ng-href="/product/[[p.id]]/[[p.title | spaceless]]" class="image_holder">
+								<img ng-src="[[p.image]]">
+							</a>
+						</div>
+
+						<div class="product_details">
+							<div class="user_type">[[p.user.user_type == 'store_front' || p.user.user_type == 'designer' ? 'BRAND NEW' : 'PRE OWNED' ]]</div>
+							<a ng-href="/product/[[p.id]]/[[p.title]]"><h3 class="title">[[ p.title ]]</h3></a>
+							<div class="price">
+								<span class="new">[[p.listing_price | number ]]</span>
+								<span class="old" ng-if="p.original_price>p.listing_price">[[p.original_price | number ]]</span>
+								<span class="discount" ng-if="p.original_price>p.listing_price">[[p.discount]]</span>
+							</div>
+							<div class="relative">
+							   <a ng-click="love(p)" ng-class="{'loved':p.loved==true}" class="love_btn"></a>
+							   <a ng-if="p.available" class="btn waves-effect waves-light ng-scope modal-trigger small" ng-click="addToCart(p)" href="#select_size_myloves">Add to tote</a>
+								<!--<div class="product_sold_out size6of12 small left_align" ng-hide="p.available">Sold out</div>-->
+						   </div>
+						</div>
+					</div>
+				</div>
+            </div>
+		</div>
+		<div class="popupCart modal" id="select_size_myloves">
+            <div class="get_size_quantity">
+                <div class="inner">
+                    <div class="get_size">
+                        <h6 class="small uppercase">Size</h6>
+                        <ul class="inline">
+                            
+                            <li class="size_item" data-id="[[s.id]]" data-qty="[[s.qty]]" ng-repeat="s in sizes" ng-class="{'soldout':!s.qty}">[[s.size]]</li>
+                            
+                        </ul>
+                        <span class="modal-trigger" data-position="left" data-delay="50" data-target="size_guide"><a href="" class="inline_btn grey small underline">See Size Guide</a></span>
+                    </div>
+                    <div class="get_quantity is_hidden">
+                        <h6 class="small uppercase">Quantity</h6>
+                        <div class="change_quantity">
+                            <span class="change minus">-</span>
+                            <span class="quantity">[[qty || 1]]</span>
+                            <span class="change plus">+</span>
+                        </div>
+                        <p class="small grey max_quantity is_hidden">[[availble_qty]]</p>
+                    </div>
+                </div>
+            	<a class="confirm_btn btn waves-effect waves-light full_width" ng-click="confirmCart()">Confirm</a>
+            </div>
+        </div>
+        <div id="size_guide" class="modal">
+	        <div class="modal-content">
+	            <h4>Size Guide:</h4>
+	            <div class="body">
+	                <img ng-src="[[product_category == 'Foot Wear' ? '/zapstatic/frontend/images/size_guide_shoe.jpg' : '/zapstatic/frontend/images/size_guide.jpg']]">
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</main>
+{% endblock %}

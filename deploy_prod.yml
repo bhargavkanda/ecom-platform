@@ -1,0 +1,58 @@
+---
+- hosts: prod_server
+  remote_user: zapyle
+  vars:
+    folder: /home/zapyle/zapyle_new
+    git_repo: git@github.com:Zapyle/zapyle_new.git
+    branch: production
+    zapenv: /home/zapyle/zapyle_new/env
+  tasks:
+  - name: Pulling 'production' branch from 'zapyle_new' Repository.
+    git: 
+      repo: "{{git_repo}}" 
+      dest: "{{folder}}" 
+      version: "{{branch}}"
+      force: yes
+  - name: Minification of js Files 
+    shell: "{{zapenv}}/bin/python manage.py minifyjs --settings=zapyle_new.settings.prod"
+    args:
+      chdir: "{{folder}}"
+  - name: Collecting static files
+    shell: "{{zapenv}}/bin/python manage.py collectstatic --noinput --settings=zapyle_new.settings.prod"
+    args:
+      chdir: "{{folder}}"
+  - name: Database makemigrations
+    shell: "{{zapenv}}/bin/python manage.py makemigrations --settings=zapyle_new.settings.prod"
+    args:
+      chdir: "{{folder}}"
+  - name: Database migrate
+    shell: "{{zapenv}}/bin/python manage.py migrate --settings=zapyle_new.settings.prod"
+    args:
+      chdir: "{{folder}}"
+  - name: Production server is restarting gunicorn
+    shell: sudo supervisorctl restart zapyle_server_prod
+    sudo: yes
+  - name: Production server is restarting zapcelery1
+    shell: sudo supervisorctl restart zapcelery1
+    sudo: yes 
+  - name: Production server is restarting zapcelery2
+    shell: sudo supervisorctl restart zapcelery2
+    sudo: yes 
+  - name: Production server is restarting zapcelery3
+    shell: sudo supervisorctl restart zapcelery3
+    sudo: yes
+  - name: Production server is restarting zapcelerycam
+    shell: sudo supervisorctl restart zapcelerycam
+    sudo: yes 
+  - name: Production server is restarting tornado-8005
+    shell: sudo supervisorctl restart tornado-8005
+    sudo: yes 
+  - name: Production server is restarting tornado-8006
+    shell: sudo supervisorctl restart tornado-8006
+    sudo: yes 
+  - name: Production server is restarting tornado-8007
+    shell: sudo supervisorctl restart tornado-8007
+    sudo: yes  
+  - name: Production server is restarting nginx
+    service: name=nginx state=restarted
+    sudo: yes      

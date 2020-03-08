@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>A Simple Responsive HTML Email</title>
+        <style type="text/css">
+        body {margin: 0; padding: 0; min-width: 100%!important;}
+        .content {width: 100%; max-width: 600px;}
+        @media only screen and (max-width: 480px){
+            .templateColumnContainer{
+                display:block !important;
+                width:100% !important;
+            }.vertical-spacer-container {
+                height: 0 !important;
+            }.text-on-girl{
+                padding-top: 340px !important;
+            }
+            
+        }
+        
+        </style>
+    </head>
+    <body yahoo bgcolor="#f6f8f1" >
+        <table width="100%" bgcolor="#f2f2f2" border="0" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;" >
+            <tr class="logo" bgcolor="#000000">
+                <td>
+                    <table class="content" align="center" cellpadding="7" cellspacing="0" border="0">
+                        <tr>
+                            <td style="text-align:center;">
+                                <img alt="ZAPYLE" src="http://zapmob.cloudapp.net/media/email/welcome/logo.png" style="height: 46px;" style="font-size:40px; color:#fff;">
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr class="green-bar">
+                <td height="10" bgcolor="#52FDB9"></td>
+            </tr>
+            <tr>
+                <td>
+                    <h4 style="text-align:left;margin:10px;">Hi {{buyer_name}},</h4>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">Your item(s) has been successfully delivered to you.</p>
+                </td>
+            </tr>
+            
+            
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">Here are the details of your order:</p>
+                </td>
+            </tr>
+            <tr>
+
+                <td>
+                <table width=100% style="border-top:1px solid; border-bottom:1px solid; border-collapse:collapse !important;" >
+                    <tr class="border_bottom">
+                        <td colspan="2" style="text-align:right; padding-right:30px; border-bottom:1pt solid black !important; font-size: small !important;" width=50%>PRODUCT NAME</td> 
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;" width=10%>SIZE</td> 
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;" width=20%>COLOUR</td> 
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;" width=20%; >QTY.</td>
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;" width=20%; >PRICE</td> 
+                    </tr>
+                    {% for pro in products %}
+                    <tr class="border_bottom">
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;"  width=20%><a href={{pro.productLink}} target="_blank"><img src={{pro.img}} height="150px;" style="padding-top: 10px; padding-bottom: 10px;"></a></td> 
+                        <td style="text-align:left; border-bottom:1pt solid black !important; font-size: small !important;"  width=30%>{{pro.productName}}</td> 
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;"  width=10%>{{pro.productSize}}</td> 
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;"  width=20%>{{pro.productColor}}</td>
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;"  width=20%>{{pro.productQuantity}}</td> 
+                        <td style="text-align:center; border-bottom:1pt solid black !important; font-size: small !important;" width=20%>Rs. {{pro.productPrice}}</td> 
+                    </tr>
+                    {% endfor %}
+                </table>
+                </td>
+            </tr>
+            
+            <tr class="user_type" >
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;" >Do you love it? Not so happy with it? We'd love to know! Mail us at support@zapyle.com and we'll get right back to you.</p>
+                </td>
+            </tr>
+            
+           {% if accountDecider == 0 %}
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">Also, have you checked out our new <a href="http://www.zapyle.com/#/feeds">collection</a> yet? <a href="http://www.zapyle.com/#/feeds">It's a steal</a></p>
+                </td>
+            </tr>
+            {% endif %}
+           
+            
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">Here's to more fun and easy shopping!</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p style="padding-left:10px; padding-right:10px;">Love,<br>The Zapyle Team</p>
+                </td>
+            </tr>
+
+        </table>
+    </body>
+</html>

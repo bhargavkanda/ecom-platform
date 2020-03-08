@@ -1,0 +1,94 @@
+<!-- analytics_products page starts here -->
+    Total Approved : [[productsCount.approved]]<br>
+    Total Disapproved : [[productsCount.disapproved]]<br>
+    Total ToBeApproved : [[productsCount.tobeapproved]]<br>
+    Total Incomplete : [[productsCount.incomplete]]<br>
+    <b><u>Segmentation</u></b><br>
+    <select ng-model="p_type" ng-init="p_type='all'" ng-change="change_table_flag('segment')">
+        <option value="all">All</option>
+        <option value="approved">Approved</option>
+        <option value="disapproved">Disapproved</option>
+        <option value="tobeapproved">ToBeApproved</option>
+        <option value="curated">Curated</option>
+        <option value="market">Market</option>
+    </select> products by
+    <select ng-model="api" ng-change="change_table_flag('segment')">
+        <option value="brands">Brand</option>
+        <option value="occasions">Occasion</option>
+        <option value="colors">Color</option>
+        <option value="categories">Category</option>
+        <option value="styles">Style</option>
+        <option>Age</option>
+        <option>Condition</option>
+        <option>Size</option>
+        <option>sale</option>
+    </select>
+
+    <button ng-show="api" ng-click="load_filtered_products(p_type,api)">Load</button><br>
+    <table ng-show="table_flag==true">
+        <tr>
+            <th>Name</th>
+            <th ng-show="p_type=='all' || p_type=='approved' || p_type=='curated' || p_type=='market'">Approved</th>
+            <th ng-show="p_type=='all' || p_type=='tobeapproved'">ToBeApproved</th>
+            <th ng-show="p_type=='all' || p_type=='disapproved'">Disapproved</th>
+        </tr>
+        <tr ng-repeat="pc in productCount">
+            <td>[[pc.name]]</td>
+            <td ng-show="p_type=='all' || p_type=='approved' || p_type=='curated' || p_type=='market'"><a ng-click="showBrandProducts(pc.name,'approved',p_type)">[[pc.approved]]</a></td>
+            <td ng-show="p_type=='all' || p_type=='tobeapproved'"><a ng-click="showBrandProducts(pc.name,'tobeapproved',p_type)"</a>[[pc.tobeapproved]]</td>
+            <td ng-show="p_type=='all' || p_type=='disapproved'">[[pc.disapproved]]</td>
+        </tr>
+    </table>
+    <b><u>Interaction</u></b><br>
+    <select ng-model="iu_type" ng-init="iu_type='byview'" ng-change="change_table_flag('interaction')">
+        <option value="byview">By Views</option>
+        <option value="bylove">By Loves</option>
+        <option value="bycomment">By Comments</option>
+        <option value="byprice">By Price</option>
+    </select>
+    <button ng-click="load_filtered_products('interaction',iu_type)">Load</button><br>
+    <table ng-hide="iu_type=='byprice' || table_flag2==false">
+        <tr ng-repeat="mx in interact.max">
+            <td><span ng-if="$index==0">Maximum</span></td>
+            <td>[[mx]]</td>
+        </tr>
+        <tr>
+            <td>Average</td>
+            <td>[[interact.avg]]</td>
+        </tr>
+        <tr>
+            <td>No.Of Products With Zero</td>
+            <td>[[interact.with0]]</td>
+        </tr>
+    </table>
+    <table ng-show="iu_type=='byprice' && table_flag2==true">
+        <tr>
+            <td>Average Listing Price : </td>
+            <td>[[interact.listing]]</td>
+        </tr>
+        <tr>
+            <td>Average Original Price : </td>
+            <td>[[interact.original]]</td>
+        </tr>
+        <tr>
+            <td>Average Discount : </td>
+            <td>[[interact.discount]]</td>
+        </tr>
+    </table>
+
+<div id="show_brand_products" class="pri-overlay">
+    <div class="glass"></div>
+    <div class="content">
+        <div class="header">Product Details</div>
+        <div class="body">
+            <table border="1">
+                <tr><th>Id</th><th>Title</th><th>url</th></tr>
+                <tr ng-repeat="i in brandProducts"><td>[[i.id]]</td><td>[[i.title]]</td><td>zapyle.com/product/[[i.id]]/[[i.title]]</td></tr>
+            </table>
+        </div>
+        <div class="footer">
+            <span class="button cancel" new-address>
+                <a ng-click="showBrandProducts('','','','close')">Close</a></span>
+        </div>
+    </div>
+</div>
