@@ -3,7 +3,7 @@ Fabric==1.10.2
 Jinja2==2.8
 MarkupSafe==0.23
 Pillow==2.8.2
-PyYAML==3.11
+PyYAML==5.1
 SQLAlchemy==1.0.8
 Scrapy==1.0.5
 Twisted==15.5.0
