@@ -52,7 +52,7 @@ jdcal==1.2
 jsmin==2.2.0
 juspay==1.1.1
 kombu==3.0.35
-lxml==3.6.0
+lxml==4.6.2
 meld3==1.0.2
 mixpanel==4.3.0
 mongoengine==0.10.6
