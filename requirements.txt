@@ -6,7 +6,7 @@ Pillow==2.8.2
 PyYAML==3.11
 SQLAlchemy==1.0.8
 Scrapy==1.0.5
-Twisted==15.5.0
+Twisted==20.3.0
 amqp==1.4.9
 anyjson==0.3.3
 argparse==1.2.1
